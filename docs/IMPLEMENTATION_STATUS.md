@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-25 (Asia/Karachi).
-Authorized scope: **Modules 00–04**. Modules 05–11 require separate explicit authorization.
+Authorized scope: **Modules 00–05**. Modules 06–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Next approval required: `START MODULE 05`.
+- Stop after each module. Current stop: **Module 05 BLOCKED**; resolve live verification before `START MODULE 06`.
 
 ## Module checklist
 
@@ -23,7 +23,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 02 | SQLite domain memory, versioned corrections | DONE | 2026-10-25 | 32 passing tests; CLI init twice; SQLite integrity/FK checks; fresh-process retrieval | Domain persistence implemented; checkpoints and live integrations pending |
 | 03 | Curated cases and versioned local Git fixture | DONE | 2026-10-25 | 62 passing tests; actual seed twice; three real Git SHAs; SQLite counts/integrity checked | Fictional baseline only; candidate v2 remains a file; no model results |
 | 04 | Read-only Git and memory tools | DONE | 2026-10-25 | 101 passing tests; actual v1/v2/v3 reads/diff, bounded memory and approved-policy lookup, audit read-back | No provider calls, evaluator, graph or workflow CLI implemented |
-| 05 | Provider adapter, executor, deterministic validator | PENDING | — | Not run | Provider not connected; key required locally |
+| 05 | Provider adapter, executor, deterministic validator | BLOCKED | 2026-10-25 | 158 tests passed; offline SDK transport/replay verified; live check exits 2 | Implemented/offline-tested; GEMINI_API_KEY and GEMINI_MODEL unset; no real API result |
 | 06 | LLM planner and persistent LangGraph workflow | PENDING | — | Not run | No agent decisions or checkpoints verified |
 | 07 | Workflow CLI, approvals, corrections | PENDING | — | Not run | No approval functionality implemented |
 | 08 | Three cycles and full process restart | PENDING | — | Not run | Live/replay outputs and restart evidence absent |
@@ -423,3 +423,124 @@ results are invented. Runtime tools need trusted local configuration and an
 available writable domain audit store; their evaluated Git repo remains read-only.
 
 MODULE 04 COMPLETE — STOPPED. Awaiting: START MODULE 05
+
+## Module 05 — Provider adapter, executor and deterministic validator
+
+Status: **BLOCKED**, not DONE. The user's “do it” authorized Module 05 after the
+Module 04 handoff. Initial tree was clean at `458d2fc`. Inspected the module plan,
+status, configuration, shared models, dependency pins, and runtime prerequisites.
+Both `GEMINI_API_KEY` and `GEMINI_MODEL` were **not set**; values were never printed.
+Provider authentication/quota/model support and live inference remain unverified.
+Teacher approval remains pending/unverified. Module 06 was not started.
+
+### Implemented (within authorized offline scope)
+
+- `model_provider.py`: thin installed `google-genai` adapter with explicit key,
+  Google endpoint, JSON Schema generation, purpose field, bounded settings,
+  request timeout, response identity/version/usage/latency, and client cleanup.
+  SDK retry attempts are 1 (no retries); automatic continuation and automatic
+  function calling are disabled. Executor owns visible bounded retry attempts.
+- Model purposes are explicit `candidate_execution` and `planner`. Returned
+  metadata preserves purpose; executor rejects a planner response substituted for
+  candidate execution. No planner decisions or LangGraph code are implemented.
+- Default request budget: 2048 output tokens, temperature 0, optional seed unset,
+  20-second SDK HTTP timeout, maximum 2 executor attempts (configurable 1–3), and
+  0.2-second retry delay. The live smoke check uses exactly 1 allowed attempt.
+- Safe error codes omit SDK/HTTP exception text and credentials. Provider timeout,
+  quota, transport, invalid request, and incomplete/blocked response errors do not
+  become extraction pass/fail results. No fallback is silently counted as live.
+- `evaluator.py`: strict JSON/Pydantic response contract, duplicate-key/nonfinite
+  rejection, Decimal absolute/relative tolerance, number/null comparison,
+  source-substring and supporting number/unit checks with whitespace collapse.
+  Distinct discrepancies include invalid JSON, missing key, invalid shape/type,
+  incorrect numeric value, unjustified non-null, absent supporting quote,
+  unsupported unit, and ambiguous source. No model judges the reference answer.
+- Approved ambiguity/unsupported-unit metadata produces uncertainty for an
+  otherwise correct response, not a clean pass. Invalid reference evidence or
+  unsupported policy shape blocks before provider execution.
+- `executor.py`: validates project/source/reference provenance, cycle-pinned
+  approved policy, allowed test/catalog budget, response purpose/mode identity,
+  and input/output limits; records real supplied usage and raw/parsed response
+  with source IDs. Cost is left null, not invented. Completion/result writes use
+  the existing atomic operation ledger. Completed keys reuse results, changed
+  requests fail closed, failed attempt budgets survive repeated invocations,
+  and interrupted external attempts require review rather than blind resubmission.
+- Handwritten replay fixtures and `ReplayProvider` are explicitly separate from
+  Gemini. Replay results persist `provider=replay`, `mode=replay`, fixture ID,
+  empty usage, null cost, and zero live-model-call completion telemetry.
+- `scripts/check_live_provider.py` performs a fixed v3/T02 integration smoke
+  check, not an agent review/release. It uses a stable operation identity and
+  safe preflight logging, and never falls back to replay. Missing configuration
+  exits 2 before creating a cycle, operation, provider call, or test result.
+
+### SDK verification and sources
+
+Installed **google-genai 2.33.0**, **httpx 0.28.1**, and actual dependencies in the
+project virtual environment. Direct runtime dependencies and 31 installed
+development/runtime package pins were recorded. No model ID/version was guessed.
+
+Consulted primary documentation: [Google SDK reference](https://googleapis.github.io/python-genai/),
+[Gemini getting started](https://ai.google.dev/gemini-api/docs/get-started), and
+[structured output](https://ai.google.dev/gemini-api/docs/structured-output).
+Verified installed Client/generate_content signatures, HTTP timeout units, retry
+attempt semantics, response fields, and continuation behavior using local inspection.
+An exploratory lookup for `AutomaticContinuationConfig` raised AttributeError;
+the installed field is boolean, and implementation uses `automatic_continuation=False`.
+No guessed compatibility shim or deprecated provider import is used.
+
+### Files changed
+
+Added `src/promptpatch/model_provider.py`, `src/promptpatch/evaluator.py`,
+`src/promptpatch/executor.py`, `scripts/check_live_provider.py`,
+`samples/replay/module05_responses.json`, `tests/test_model_provider.py`,
+`tests/test_evaluator.py`, and `tests/test_executor.py`.
+Updated `pyproject.toml`, `requirements-dev.txt`, README, and this status document.
+Existing domain schema, source fixtures, operational Git tools, and configuration
+semantics are preserved. No new application CLI/review/graph functionality added.
+
+### Actual commands and results
+
+| Command / check | Actual outcome |
+|---|---|
+| Environment presence/package metadata probe | Key/model unset; SDK/HTTPX initially absent; no secret values displayed |
+| `.venv/bin/python -m pip install --no-cache-dir google-genai` (network-enabled) | PASS: SDK 2.33.0 and dependencies installed |
+| Installed-signature/source inspection | Verified request/response fields, milliseconds timeout, retries including first request; corrected boolean continuation lookup as noted above |
+| `.venv/bin/python -m pytest -q tests/test_evaluator.py` | PASS: 34 deterministic tests in 0.21 seconds |
+| Initial `.venv/bin/python -m pytest -q tests/test_model_provider.py` | 7 failed, 3 passed: test harness supplied a custom HTTP client whose lifetime the SDK deliberately leaves to its owner |
+| Corrected SDK test harness | Mock transport is now injected into SDK-owned client options; cleanup acceptance assertion retained; no test skipped or criterion weakened |
+| Repeated provider test file | PASS: 10 tests in 1.58 seconds, 1 SDK deprecation warning |
+| Initial executor test file | PASS: 10 tests in 2.96 seconds, 1 SDK warning; further ambiguity/budget checks added before full run |
+| `.venv/bin/python -m pip install --no-build-isolation -e '.[dev]'` | PASS: editable package updated against installed pinned dependencies |
+| Final `.venv/bin/python -m pytest -q` | PASS: **158 tests in 15.78 seconds**, 1 SDK deprecation warning, no failing tests |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `.venv/bin/python scripts/check_live_provider.py` | **BLOCKED / exit 2**: key and model absent; no API call or test result created |
+| Scoped SQLite read-back after live preflight | `demo`: 0 review cycles, 0 test executions; safe `provider_preflight_blocked` event records missing variable names only |
+| `git diff --check` | PASS: no whitespace errors |
+
+### Evidence and remaining acceptance
+
+Tests exercise actual SDK request serialization through a **mock HTTP transport**;
+all synthetic SDK usage/model-version fields are test values, not observed Gemini
+performance. Replay executor tests persist to isolated real SQLite files and
+verify fresh-process retrieval, retries with one completed logical result,
+provider failures with zero extraction-result rows, strict purpose separation,
+request-hash conflicts, interruption handling, cycle budget, and stored ambiguity.
+These are **offline evidence only**. No live response or real provider result has
+been persisted in the demo database, so Module 05's live acceptance is unmet.
+
+Known warning: SDK imports Python's `_UnionGenericAlias`, deprecated toward Python
+3.17; current verified interpreter is Python 3.14.4. Tests pass; warning not hidden.
+SDK timeouts are HTTP request timeouts, not an independent hard wall-clock process
+deadline. Sequential logical result deduplication does not guarantee exactly-once
+external billing after network failure; concurrent workers are not supported here.
+Broader hardening remains Module 09, and no claim of complete security is made.
+
+**Implemented:** Module 05 adapter, replay provider, validator, executor, live check script.
+**Tested:** 158 offline tests plus installed SDK signature/transport checks.
+**Pending:** successful authorized real API call, actual returned model identity,
+real usage/latency, persistent live result, then review of Module 05 acceptance.
+**Blocked:** configure `GEMINI_API_KEY` and `GEMINI_MODEL` locally in the process
+environment, then run `python scripts/check_live_provider.py` from that terminal.
+Never send the key in chat. Resume with `FIX MODULE 05`; do not advance to Module 06.
+
+MODULE 05 BLOCKED — STOPPED

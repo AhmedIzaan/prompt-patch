@@ -7,7 +7,10 @@ is for regression testing, not engineering judgment.
 **Current status: Modules 00–04 complete.** The installable package, configuration,
 local diagnostics, persistent SQLite domain store, curated cases, versioned local
 Git fixture, audited evidence/memory retrieval tools, and test harness work.
-The review workflow, model calls, and agent/checkpoint integration await later modules.
+The review workflow and agent/checkpoint integration await later modules.
+**Module 05 code is implemented and offline-tested, but acceptance is BLOCKED:**
+`GEMINI_API_KEY` and `GEMINI_MODEL` are unset in the inspected session. No live
+provider call/result has been verified. Module 06 has not started.
 See [implementation status](docs/IMPLEMENTATION_STATUS.md) and
 [requirement traceability](docs/REQUIREMENT_TRACEABILITY.md).
 
@@ -30,8 +33,10 @@ promptpatch doctor
 `requirements-dev.txt` records all installed development dependency versions.
 Direct dependencies are also pinned in `pyproject.toml`: Pydantic **2.14.1**,
 pytest **9.1.1**, and setuptools **84.2.1** (build backend). CLI parsing and SQLite
-use the Python standard library. Gemini and LangGraph dependencies are deferred
-until their authorized integration modules.
+use the Python standard library. Module 05 additionally pins Google GenAI SDK
+**2.33.0** and HTTPX **0.28.1** after installation and offline transport verification.
+LangGraph remains deferred. The full installed dependency snapshot is recorded;
+no model version is guessed or pinned before a real provider response is available.
 
 ## Configuration
 
@@ -131,6 +136,80 @@ projects fail without writing another project's log; archived projects cannot
 accept the required audit writes, although direct store reads remain available.
 These are read-only evidence tools with deliberate SQLite audit writes.
 
+## Provider/executor/validator (Module 05 — live acceptance blocked)
+
+Set `GEMINI_API_KEY` and a supported `GEMINI_MODEL` through your local environment
+or secret manager, then run this in that same terminal:
+
+```bash
+python scripts/check_live_provider.py
+```
+
+The script performs one real v3/T02 smoke request (one attempt maximum), stores the
+response and deterministic score, and prints IDs/status/usage without raw source
+or credentials. It requires the seeded fixture. This is a fixed integration smoke
+check, not an LLM planner decision or full review workflow. No release approval
+is granted. With credentials/model absent it exits 2, records a safe preflight
+blocker when the demo store exists, and creates no cycle/test result. No `.env`
+file is auto-loaded, and keys must never be placed in chat or committed files.
+
+Repeated identical checks reuse the completed operation. A changed model/settings
+or an exhausted/failed attempt needs review; `--cycle-key` can explicitly identify
+a new smoke check after fixing prerequisites, preserving the earlier failure.
+Do not continue to Module 06 until Module 05's live acceptance is actually verified.
+
+The adapter uses `google.genai.Client.models.generate_content`, JSON Schema output,
+an explicit Google endpoint, and client cleanup. Official references consulted:
+[Google GenAI SDK](https://googleapis.github.io/python-genai/) and
+[Gemini structured output](https://ai.google.dev/gemini-api/docs/structured-output).
+Installed signatures and request serialization were checked locally using a mocked
+HTTP transport; that is not a successful real API integration.
+
+`ModelSettings` defaults: temperature 0, optional unset seed, 2048 output tokens,
+20-second SDK request timeout, 2 executor attempts (allowed maximum 3), and a
+0.2-second delay between retryable failures. The SDK's own retries and automatic
+continuation/function calling are disabled. The smoke script limits attempts to 1.
+Inputs/outputs are capped at 64 KiB each, and the policy limits logical tests per
+cycle. Model ID is explicit. Request timeouts are SDK HTTP timeouts, not an
+independent process-wide wall-clock deadline. Low temperature does not guarantee
+deterministic live responses.
+
+Provider responses keep purpose (`candidate_execution` versus `planner`), requested
+and returned model identity, SDK version, raw text/parsed JSON, response ID when
+available, actual supplied token counts, elapsed time, and finish reason. No
+planner logic is implemented here. Quota/network/timeouts have bounded retries;
+non-retryable failures stop. A provider failure produces error/attempt audit
+evidence without a fabricated extraction pass/fail. Incomplete/blocked model
+responses require review. Usage/cost remain unavailable when not supplied; no
+estimated price is invented.
+
+`SettlementEvaluator` enforces strict JSON and required shape/types (including
+rejection of duplicate keys, booleans-as-numbers, strings-as-numbers, and nonfinite
+values), compares values with Decimal arithmetic using
+`max(absolute_tolerance, relative_tolerance * abs(reference))`, and verifies
+normalized source substrings containing the reported measurement and supported
+unit. Missing values require null evidence. Fabricated quotes fail even if the
+number matches. Ambiguous/unsupported sources identified by approved reference
+metadata produce `uncertain` when the otherwise valid response matches the
+reference; malformed output or invented values still fail. Invalid reference or
+policy evidence blocks scoring before a model call. No LLM judge is used.
+
+`TestExecutor` validates project/cycle/prompt/case/policy provenance, enforces the
+allowed case catalog and test budget, and uses a request hash plus operation key.
+The cycle's approved policy is pinned for historical reproducibility. Completed
+operations return saved results without a new model request; failed attempt
+budgets persist across invocations. Unfinished external attempts fail closed
+instead of blindly repeating a potentially billed request. Persistence guarantees
+one completed logical result per key; provider-side exactly-once billing and
+concurrent-worker scheduling are not promised by this module.
+
+`samples/replay/module05_responses.json` is separately identified **handwritten
+replay**, not captured Gemini output. `ReplayProvider` always labels results
+`provider=replay`, `mode=replay`, with fixture ID, no fabricated tokens/cost, and
+zero live-model-call telemetry. It is never an automatic fallback from Gemini.
+The test databases are isolated and synthetic. Current verification: **158 tests
+passed**, one SDK Python deprecation warning; live integration remains **not verified**.
+
 ## Current CLI contract
 
 | Command | Behavior / exit code |
@@ -195,10 +274,10 @@ log redaction hardening, and safe exports await later authorized modules.
 Tests cover fresh connections and a fresh Python process, corrections, isolation,
 foreign keys, retries/deduplication, atomic writes/audits, immutable history,
 concurrent initialization, and CLI behavior. All stored test outputs are explicitly
-synthetic offline fixtures; no model integration is claimed tested.
+synthetic offline fixtures; no live model integration is claimed tested.
 
-Codex assisted with inspection, documentation, and the Modules 01–04 implementation.
+Codex assisted with inspection, documentation, and the Modules 01–05 implementation.
 The student must review, understand, and be able to modify submitted code.
 No external datasets have been imported. Third-party dependencies are listed
 above. Development proceeds one explicitly authorized module at a time; next is
-Module 05, after approval.
+completing Module 05's live check after local configuration. Module 06 remains gated.

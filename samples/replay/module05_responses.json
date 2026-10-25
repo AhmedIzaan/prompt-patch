@@ -1,0 +1,17 @@
+{
+  "fixture_id": "module05-handwritten-replay-v1",
+  "live_inference": false,
+  "provenance": "Handwritten offline unit fixtures authored with Codex assistance; not recorded Gemini responses or live performance evidence.",
+  "scenarios": {
+    "decimal_ok": [{"raw_text": "{\"estimated_settlement_mm\":4.5,\"allowable_settlement_mm\":10.0,\"evidence\":{\"estimated\":\"The estimated settlement is 4.5 mm\",\"allowable\":\"the allowable settlement is 10 mm\"}}"}],
+    "decimal_wrong": [{"raw_text": "{\"estimated_settlement_mm\":5.0,\"allowable_settlement_mm\":10.0,\"evidence\":{\"estimated\":\"The estimated settlement is 4.5 mm\",\"allowable\":\"the allowable settlement is 10 mm\"}}"}],
+    "malformed": [{"raw_text": "This is not JSON."}],
+    "clarification": [{"raw_text": "{\"estimated_settlement_mm\":null,\"allowable_settlement_mm\":10.0,\"evidence\":{\"estimated\":null,\"allowable\":\"Allowable settlement: 10 mm\"}}"}],
+    "timeout_then_decimal": [
+      {"error_code": "timeout"},
+      {"raw_text": "{\"estimated_settlement_mm\":4.5,\"allowable_settlement_mm\":10.0,\"evidence\":{\"estimated\":\"The estimated settlement is 4.5 mm\",\"allowable\":\"the allowable settlement is 10 mm\"}}"}
+    ],
+    "two_timeouts": [{"error_code": "timeout"}, {"error_code": "timeout"}],
+    "invalid_request": [{"error_code": "invalid_request"}]
+  }
+}
