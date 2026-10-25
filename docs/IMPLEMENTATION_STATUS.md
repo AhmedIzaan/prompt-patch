@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-25 (Asia/Karachi).
-Authorized scope: **Modules 00–05**. Modules 06–11 require separate explicit authorization.
+Authorized scope: **Modules 00–06**. Modules 07–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Module 05 is now verified; next approval required: `START MODULE 06`.
+- Stop after each module. Module 06 is now verified; next approval required: `START MODULE 07`.
 
 ## Module checklist
 
@@ -24,7 +24,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 03 | Curated cases and versioned local Git fixture | DONE | 2026-10-25 | 62 passing tests; actual seed twice; three real Git SHAs; SQLite counts/integrity checked | Fictional baseline only; candidate v2 remains a file; no model results |
 | 04 | Read-only Git and memory tools | DONE | 2026-10-25 | 101 passing tests; actual v1/v2/v3 reads/diff, bounded memory and approved-policy lookup, audit read-back | No provider calls, evaluator, graph or workflow CLI implemented |
 | 05 | Provider adapter, executor, deterministic validator | DONE | 2026-10-25 | 158 tests passed; actual Gemini request and SQLite result verified; fresh-process reuse makes no additional call | Live `gemini-3.5-flash-lite` v3/T02 passed; see follow-up evidence below |
-| 06 | LLM planner and persistent LangGraph workflow | PENDING | — | Not run | No agent decisions or checkpoints verified |
+| 06 | LLM planner and persistent LangGraph workflow | DONE | 2026-10-25 | 180 tests; real planner and selected executions; matched live memory diagnostic; strict SQLite checkpoints and fresh-process reuse | Approval pending; Module 07 not started; see evidence below |
 | 07 | Workflow CLI, approvals, corrections | PENDING | — | Not run | No approval functionality implemented |
 | 08 | Three cycles and full process restart | PENDING | — | Not run | Live/replay outputs and restart evidence absent |
 | 09 | Reliability, security, isolation, retries | PENDING | — | Not run | Negative cases and telemetry pending |
@@ -616,3 +616,110 @@ formal scenario/ablation evaluation remain pending. Teacher approval remains unv
 **Blocked:** None within Module 05. Existing SDK warning and unmeasured cost are disclosed.
 
 MODULE 05 COMPLETE — STOPPED. Awaiting: START MODULE 06
+
+
+## Module 06 — LLM planner and persistent LangGraph workflow — 2026-10-25
+
+Status: **DONE**. User explicitly authorized Module 06 and local commits. The
+previous preparation turn was interrupted; it was not a failed stop gate. Only
+Module 06 was implemented. No review CLI, human correction commands, full
+three-cycle runner, formal evaluation suite, or later deliverables were added.
+
+### Implemented
+
+- `src/promptpatch/planner.py`: strict Pydantic decision contract; actual catalog
+  IDs, permission/budget/required-test checks, concise reason, supplied memory and
+  source reference checks; no fixed fallback list. Actual prompt, structured
+  schema, response, settings, supplied history refs and errors persist in SQLite.
+- `src/promptpatch/graph.py`: typed state and the ten specified LangGraph nodes,
+  conditional executing/pending/error routes, real Git/memory/executor tools,
+  deterministic durable-output revalidation, failure reconciliation, audit and
+  evidence-grounded recommendations. Uncertain results and untested open risks
+  prevent promotion recommendations; release approval is always separate.
+- Separate real SQLite checkpoint file, thread `project_id:cycle_id`, explicit
+  empty dynamic-type deserialization allowlists and disabled pickle fallback.
+  Optional hosted tracing is disabled. Domain SQLite remains authoritative.
+- Bounded project history retrieval; memory-off excludes history from the planner
+  while retaining current source/catalog/policy/settings. Current human rejection
+  and unresolved risks still constrain final recommendations in Python.
+- Idempotent re-entry uses saved decisions/results and skips identical risk
+  cycle/evidence writes. Interrupted unknown external calls fail closed. A planner
+  has one terminal attempt per cycle; candidate retries remain executor-bounded.
+- `scripts/check_graph.py`: one live developer integration check, output/export,
+  without implementing Module 07 CLI commands. `tests/test_graph.py`: 22 new
+  offline tests, explicitly labeled replay; old modules remain intact.
+- Pins: LangGraph **1.2.17**, checkpoint SQLite **3.1.2**, installed checkpoint
+  core **4.3.0**; full installed dependency snapshot updated. API/signatures and
+  strict serializer behavior checked against installed source and official docs.
+
+### Actual live evidence and repairs
+
+Isolated data under `data/module06/` used the existing fictional Git fixture;
+Module 05's default database was not used for these review cycles. Environment
+values were safely parsed as data by temporary local runners; keys were never
+printed, supplied as model context, or committed.
+
+| Run | Actual selected/executed IDs | Observed recommendation |
+|---|---|---|
+| Initial v1 | T01, T02, T06, T07 | `revise`; T02/T06 numeric and quote failures stored as two open risks |
+| v2 matched comparison | Same T01, T02, T06, T07 with and without history | Four passes each, `promote_candidate`, approval pending; **no selection difference** |
+| Final matched v3, history on | T01, T02, T06, T07 | Four passes; specifically retested/resolved original failures; `promote_candidate`, approval pending |
+| Final matched v3, history off | T01, T02, T08, T11 | Two passes, two uncertain; original untested T06 risk remains; `needs_review` |
+
+The final memory-enabled planner explicitly cited the original two risk refs and
+said it prioritized those earlier failures. Current inputs and model settings were
+programmatically compared and matched; only long-term history and its derived
+citation allowlist differ. This demonstrates an actual model-driven discretionary
+selection difference. It is diagnostic evidence, not statistical proof or a claim
+that memory always improves coverage; v2's identical selections are preserved.
+
+Two earlier planner responses were rejected without execution: one cited supplied
+UUIDs while the initial guard required prefixed refs (fixed to accept both), and
+one confused catalog case refs with historical memory refs. An expanded schema
+then produced HTTP 400, confirmed by one separately audited sanitized probe.
+The final smaller schema constrains only historical citations and was accepted
+by both live arms. All rejected responses/API errors remain in the exports and
+SQLite audit trail; no failed cycle was overwritten/reused as a successful run.
+
+Artifacts and detailed chronology: `artifacts/module06/README.md`, raw per-run
+JSON snapshots, pre-execution expectations/repair notes, and `verification.json`.
+The final pair each made **5** model calls (1 planner + 4 candidate), created
+**12** checkpoints, saved exactly **4** results, and created **0** human decisions.
+Memory-on usage: **7541 input / 635 output / 8176 total** tokens; summed provider
+elapsed **8087.338 ms**. Memory-off: **4318 / 540 / 4858**, **6949.296 ms**.
+Elapsed sums exclude graph/DB overhead; cost remains `null` rather than guessed.
+
+### Commands and verified checks
+
+| Command/check actually executed | Result |
+|---|---|
+| Install LangGraph/checkpoint packages; inspect installed serializer/saver signatures | PASS; actual versions pinned; strict settings supported |
+| `.venv/bin/python -m pip install --no-deps --no-build-isolation -e .` | PASS; editable metadata updated |
+| `.venv/bin/python -m pytest -q` | PASS: 180 tests, one existing Google SDK Python deprecation warning |
+| `scripts/check_graph.main(...)` via temporary safe local environment runners | Real initial graph and all documented comparisons executed; failed attempts retained |
+| Fresh child process reran both final graph checks | PASS; all domain table counts unchanged, no new model requests or writes |
+| New-process strict SqliteSaver read-back in offline tests | PASS; recommendation restored from persisted checkpoint |
+| Simulated interruption after committed planner/results, before node checkpoint | PASS; resume reused calls/results and did not duplicate actions |
+| Final SQLite integrity / foreign keys / duplicate results | PASS; `ok`, zero FK errors, **0** duplicate results |
+| Credential absence scan over exports and isolated databases | PASS; key not present; never printed |
+| `.venv/bin/python -m pip check` | PASS; no broken requirements |
+| `.venv/bin/python -m compileall -q src scripts tests` | PASS |
+| `git diff --check` | PASS |
+
+**Implemented/tested:** Module 06 planner, graph, real decision-controlled tool
+execution, conditional paths, strict checkpoint creation, restart read-back,
+resume deduplication, memory isolation, memory-on/off context equality and actual
+live selection difference. Source/domain/tool implementations from Modules 00–05
+were preserved; only additive dependencies/current documentation changed.
+
+**Pending:** Module 07 onward, including the complete approval/correction CLI,
+full three-cycle process-restart demo, formal three-comparison evaluation,
+report, and teacher approval. The small integration checks are not substitutes.
+
+**Known limits:** One worker per cycle; unknown in-flight calls need review.
+Recommendations cover selected evidence only, so untested cases may fail.
+Actual model decisions vary; earlier failures are disclosed. The pre-existing
+user deletion of `.env.example` remains untouched and excluded from the commit.
+No secrets or runtime databases are committed. Nothing pushed.
+
+MODULE 06 COMPLETE — STOPPED. Awaiting: START MODULE 07

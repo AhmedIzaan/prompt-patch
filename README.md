@@ -4,13 +4,12 @@ PromptPatch is a planned persistent memory-driven agent for testing settlement
 measurement extraction prompts across versions. This fictional domain example
 is for regression testing, not engineering judgment.
 
-**Current status: Modules 00–05 complete.** The installable package, configuration,
-local diagnostics, persistent SQLite domain store, curated cases, versioned local
-Git fixture, audited evidence/memory retrieval tools, and test harness work.
-The review workflow and agent/checkpoint integration await later modules.
-**Module 05 live acceptance is verified:** one real `gemini-3.5-flash-lite` request
-passed deterministic validation and was saved to SQLite. A fresh-process repeat
-reused that result without another model call. Module 06 has not started.
+**Current status: Modules 00–06 complete.** The package includes the persistent
+SQLite domain store, curated Git fixtures, audited tools, real Gemini execution,
+and a single LangGraph coordinator with SQLite checkpoints. A typed planner
+chooses actual tests; deterministic guards validate the selection and score
+results. Developer release approval remains separate and pending.
+The complete review/approval CLI awaits Module 07.
 See [implementation status](docs/IMPLEMENTATION_STATUS.md) and
 [requirement traceability](docs/REQUIREMENT_TRACEABILITY.md).
 
@@ -35,13 +34,14 @@ Direct dependencies are also pinned in `pyproject.toml`: Pydantic **2.14.1**,
 pytest **9.1.1**, and setuptools **84.2.1** (build backend). CLI parsing and SQLite
 use the Python standard library. Module 05 additionally pins Google GenAI SDK
 **2.33.0** and HTTPX **0.28.1** after installation and offline transport verification.
-LangGraph remains deferred. The full installed dependency snapshot is recorded;
+Module 06 pins LangGraph **1.2.17** and SQLite checkpointer **3.1.2**.
+The full installed dependency snapshot is recorded;
 no model version is guessed or pinned before a real provider response is available.
 
 ## Configuration
 
-The application reads the process environment. `.env.example` documents variable
-names and defaults; `.env` files are **not loaded automatically**. Supply an
+The application reads the process environment. Variables and defaults are listed
+below; `.env` files are **not loaded automatically**. Supply an
 authorized key using your local environment or secret manager, never chat,
 source, or committed files. Modules 01–04 do not require a key or make API calls.
 
@@ -55,8 +55,8 @@ source, or committed files. Modules 01–04 do not require a key or make API cal
 | `PROMPTPATCH_MODE` | `live`; allowed values: `live`, `replay` |
 
 Blank environment values use defaults. Relative paths use the current working
-directory. Reading settings creates no files. Mode selection is configuration
-only at this stage; neither live inference nor replay execution is implemented.
+directory. Reading settings creates no files. Live inference and explicitly
+labeled replay are implemented. The integration check below requires live mode.
 
 ## Demo data (Module 03)
 
@@ -156,7 +156,7 @@ file is auto-loaded, and keys must never be placed in chat or committed files.
 Repeated identical checks reuse the completed operation. A changed model/settings
 or an exhausted/failed attempt needs review; `--cycle-key` can explicitly identify
 a new smoke check after fixing prerequisites, preserving the earlier failure.
-Module 05's live acceptance is now verified; Module 06 still requires explicit approval.
+Module 05's live acceptance is verified; Module 06 adds the planner below.
 
 The adapter uses `google.genai.Client.models.generate_content`, JSON Schema output,
 an explicit Google endpoint, and client cleanup. Official references consulted:
@@ -208,8 +208,8 @@ concurrent-worker scheduling are not promised by this module.
 replay**, not captured Gemini output. `ReplayProvider` always labels results
 `provider=replay`, `mode=replay`, with fixture ID, no fabricated tokens/cost, and
 zero live-model-call telemetry. It is never an automatic fallback from Gemini.
-The test databases are isolated and synthetic. Current verification: **158 tests
-passed** in 15.73 seconds, one SDK Python deprecation warning. The separate live
+The test databases are isolated and synthetic. Current verification: **180 tests
+passed** in 24.63 seconds, one SDK Python deprecation warning. The separate live
 v3/T02 check returned estimated **4.5 mm**, allowable **10.0 mm**, and zero validator
 discrepancies. The provider returned model version `gemini-3.5-flash-lite`, SDK
 version `2.33.0`, **167 input + 66 output = 233 total tokens**, and approximately
@@ -251,8 +251,8 @@ Teacher approval remains
 promptpatch init
 ```
 
-Only the domain database is initialized. The checkpoint database remains separate
-and awaits Module 06. Doctor performs no database reads or writes. Domain and
+Only the domain database is initialized by this command. The graph creates its
+separate checkpoint database when run. Doctor performs no database reads or writes. Domain and
 checkpoint paths must differ. Schema migrations use SQLite `user_version`; schema
 1 creation is transactional and repeatable, including concurrent initialization.
 A newer schema is rejected without changing it.
@@ -295,11 +295,57 @@ log redaction hardening, and safe exports await later authorized modules.
 Tests cover fresh connections and a fresh Python process, corrections, isolation,
 foreign keys, retries/deduplication, atomic writes/audits, immutable history,
 concurrent initialization, and CLI behavior. All stored test outputs are explicitly
-synthetic offline fixtures; the separate Module 05 smoke check above supplies the
-live model integration evidence.
+synthetic offline fixtures; separate Module 05/06 live checks supply the actual
+model integration evidence.
 
-Codex assisted with inspection, documentation, and the Modules 01–05 implementation.
+Codex assisted with inspection, documentation, and the Modules 01–06 implementation.
 The student must review, understand, and be able to modify submitted code.
 No external datasets have been imported. Third-party dependencies are listed
 above. Development proceeds one explicitly authorized module at a time; next is
-Module 06, after explicit approval.
+Module 07, after explicit approval.
+
+
+## Planner and persisted graph (Module 06)
+
+With already seeded data and Gemini variables in the process environment:
+
+```bash
+python scripts/check_graph.py --version v2 --base-version v1 \
+  --cycle-key my-module06-check --output data/module06-check.json
+```
+
+This developer integration check runs one graph, displays the planner's selected
+and executed IDs, deterministic results, recommendation, evidence, and pending
+approval. `--memory-off` hides long-term planner history while keeping current
+sources, catalog, approved policy, model, and generation settings. It never
+approves a release. This script is separate from the Module 07 workflow CLI.
+Repeated identical checks reuse the checkpoint and completed operations.
+
+The Python entry point is `ReviewGraph.run(project_id, cycle_id,
+memory_enabled=True, base_version_id=None)` for an explicitly created cycle.
+The ten nodes follow the master plan. Domain records are authoritative;
+`PROMPTPATCH_CHECKPOINT_DB_PATH` must identify a separate trusted local SQLite
+file. Thread IDs are `project_id:cycle_id`; strict serializer allowlists are empty
+and pickle fallback is disabled. Hosted LangSmith tracing is disabled for runs.
+See the [official persistence distinction](https://docs.langchain.com/oss/python/langgraph/persistence).
+
+Current bounds: at most 50 catalog entries/64 KiB, 64 KiB current prompt,
+16 KiB diff, memory retrieval limit 10 per collection/128 KiB overall, and the
+approved policy's execution budget (fixture: four tests, one required and three
+discretionary). Planner calls have one terminal attempt per cycle; candidate
+calls use bounded `ModelSettings` retries. Unknown interrupted API calls require
+review rather than automatic reissue. One worker per cycle is supported.
+
+Planner raw responses, supplied evidence, schema, settings, selected IDs and
+errors are stored in the domain DB. Citation enums expose only actual evidence;
+they do not choose tests. Guard rejection never substitutes a fixed test list.
+Checkpoints retain bounded current evidence and result summaries rather than
+candidate-response transcripts. Graph re-entry reuses durable planner/results,
+and failure-memory updates skip identical cycle/evidence writes.
+
+[Module 06 artifacts](artifacts/module06/) retain actual live checks, including
+rejected planner attempts and a comparison with identical selections. They are
+small diagnostics, not the formal three-case evaluation or complete three-cycle
+restart demonstration required in later modules. Recommendations concern only
+the tests actually selected; untested cases can still fail. Teacher approval,
+formal evaluation, and the full restart/approval workflow remain pending.

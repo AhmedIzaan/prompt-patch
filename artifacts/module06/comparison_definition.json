@@ -1,0 +1,22 @@
+{
+  "scope": "Module 06 single diagnostic comparison; not the three-case Module 10 evaluation",
+  "recorded_before_execution": true,
+  "current_version": "v2",
+  "base_version": "v1",
+  "starting_state": "Two SQLite backups of the same state after the live v1 Module 06 check",
+  "expected_behavior": "With history, prioritize the actual unresolved T02 and T06 failures; without history, select from current source and diff risks. At least one discretionary choice may differ. A live difference is not guaranteed.",
+  "controlled_settings": "Identical source/catalog/policy IDs and contents; model gemini-3.5-flash-lite, temperature 0, max output tokens 2048, timeout 20000 ms, max attempts 1; only long-term planner history differs.",
+  "approval": "Always pending; no human approval is created",
+  "second_diagnostic_before_execution": {
+    "current_version": "v3",
+    "base_version": "v2",
+    "starting_state": "Fresh equivalent backups of the same original live-v1 database, retaining unresolved T02/T06 risks",
+    "expected_behavior": "The broader v3 changes address absence/evidence as well as decimals. Memory may prioritize prior T02/T06 failures while no history may prioritize missing-value cases. Preserve the first comparison, which selected identical tests.",
+    "limit": "One further pair of graph runs, no repeated sampling until success."
+  },
+  "repair_verification_before_execution": {
+    "reason": "The first v3 memory-enabled response cited catalog case refs as memory records and was correctly rejected. Add schema citation enums derived exclusively from supplied evidence; verify the concrete repair in one new matched pair, preserving all previous attempts.",
+    "control": "Same v3/v2 sources, catalog, policy, original history snapshot, model and generation settings; only available historical evidence changes. Schema memory enum is mechanically derived from that evidence.",
+    "expected": "A valid history-based plan will cite actual memories and prioritize T02/T06; the no-history plan can select other discretionary cases. No guaranteed result; no further sampling."
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "approval": "pending",
+  "credential_scan": "PASS; configured key absent from artifacts and isolated databases",
+  "current_input_and_settings_equal_except_history": true,
+  "databases": {
+    "off": {
+      "approximate_cost": null,
+      "checkpoint_count": 12,
+      "cycle_id": "87bb647c-de54-488d-9f7d-691339aaf200",
+      "duplicate_results": 0,
+      "executed": [
+        "T01",
+        "T02",
+        "T08",
+        "T11"
+      ],
+      "human_decisions": 0,
+      "model_calls": 5,
+      "recommendation": "needs_review",
+      "selected": [
+        "T01",
+        "T02",
+        "T08",
+        "T11"
+      ],
+      "statuses": [
+        "pass",
+        "pass",
+        "uncertain",
+        "uncertain"
+      ],
+      "summed_provider_elapsed_ms": 6949.295910002547,
+      "usage": {
+        "candidates_token_count": 540,
+        "prompt_token_count": 4318,
+        "total_token_count": 4858
+      }
+    },
+    "on": {
+      "approximate_cost": null,
+      "checkpoint_count": 12,
+      "cycle_id": "25613af9-2e1a-4fdf-9e03-6aa2e0820bed",
+      "duplicate_results": 0,
+      "executed": [
+        "T01",
+        "T02",
+        "T06",
+        "T07"
+      ],
+      "human_decisions": 0,
+      "model_calls": 5,
+      "recommendation": "promote_candidate",
+      "selected": [
+        "T01",
+        "T02",
+        "T06",
+        "T07"
+      ],
+      "statuses": [
+        "pass",
+        "pass",
+        "pass",
+        "pass"
+      ],
+      "summed_provider_elapsed_ms": 8087.33790799306,
+      "usage": {
+        "candidates_token_count": 635,
+        "prompt_token_count": 7541,
+        "total_token_count": 8176
+      }
+    }
+  },
+  "diagnostic_not_statistical": true,
+  "fresh_process_repeat": "PASS; both graphs returned saved state without calls or writes",
+  "selection_difference_observed": true,
+  "table_counts_unchanged": {
+    "off": {
+      "audit_events": 138,
+      "failure_memories": 2,
+      "human_decisions": 0,
+      "operation_attempts": 10,
+      "planner_decisions": 2,
+      "test_executions": 8,
+      "tool_operations": 10
+    },
+    "on": {
+      "audit_events": 142,
+      "failure_memories": 2,
+      "human_decisions": 0,
+      "operation_attempts": 10,
+      "planner_decisions": 2,
+      "test_executions": 8,
+      "tool_operations": 10
+    }
+  }
+}
