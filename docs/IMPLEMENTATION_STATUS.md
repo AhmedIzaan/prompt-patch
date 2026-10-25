@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Current stop: **Module 05 BLOCKED**; resolve live verification before `START MODULE 06`.
+- Stop after each module. Module 05 is now verified; next approval required: `START MODULE 06`.
 
 ## Module checklist
 
@@ -23,7 +23,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 02 | SQLite domain memory, versioned corrections | DONE | 2026-10-25 | 32 passing tests; CLI init twice; SQLite integrity/FK checks; fresh-process retrieval | Domain persistence implemented; checkpoints and live integrations pending |
 | 03 | Curated cases and versioned local Git fixture | DONE | 2026-10-25 | 62 passing tests; actual seed twice; three real Git SHAs; SQLite counts/integrity checked | Fictional baseline only; candidate v2 remains a file; no model results |
 | 04 | Read-only Git and memory tools | DONE | 2026-10-25 | 101 passing tests; actual v1/v2/v3 reads/diff, bounded memory and approved-policy lookup, audit read-back | No provider calls, evaluator, graph or workflow CLI implemented |
-| 05 | Provider adapter, executor, deterministic validator | BLOCKED | 2026-10-25 | 158 tests passed; offline SDK transport/replay verified; live check exits 2 | Implemented/offline-tested; GEMINI_API_KEY and GEMINI_MODEL unset; no real API result |
+| 05 | Provider adapter, executor, deterministic validator | DONE | 2026-10-25 | 158 tests passed; actual Gemini request and SQLite result verified; fresh-process reuse makes no additional call | Live `gemini-3.5-flash-lite` v3/T02 passed; see follow-up evidence below |
 | 06 | LLM planner and persistent LangGraph workflow | PENDING | — | Not run | No agent decisions or checkpoints verified |
 | 07 | Workflow CLI, approvals, corrections | PENDING | — | Not run | No approval functionality implemented |
 | 08 | Three cycles and full process restart | PENDING | — | Not run | Live/replay outputs and restart evidence absent |
@@ -426,12 +426,17 @@ MODULE 04 COMPLETE — STOPPED. Awaiting: START MODULE 05
 
 ## Module 05 — Provider adapter, executor and deterministic validator
 
-Status: **BLOCKED**, not DONE. The user's “do it” authorized Module 05 after the
+Current status: **DONE after live verification**, recorded in the follow-up below.
+The initial implementation was **BLOCKED**, not DONE. The user's “do it” authorized Module 05 after the
 Module 04 handoff. Initial tree was clean at `458d2fc`. Inspected the module plan,
 status, configuration, shared models, dependency pins, and runtime prerequisites.
 Both `GEMINI_API_KEY` and `GEMINI_MODEL` were **not set**; values were never printed.
 Provider authentication/quota/model support and live inference remain unverified.
 Teacher approval remains pending/unverified. Module 06 was not started.
+
+The sections through the first blocked stop line below preserve the **initial,
+historical implementation evidence**; the live-verification follow-up supersedes
+the missing-configuration blocker without changing those earlier observations.
 
 ### Implemented (within authorized offline scope)
 
@@ -544,3 +549,70 @@ environment, then run `python scripts/check_live_provider.py` from that terminal
 Never send the key in chat. Resume with `FIX MODULE 05`; do not advance to Module 06.
 
 MODULE 05 BLOCKED — STOPPED
+
+## Module 05 live-verification follow-up — 2026-10-25
+
+Status: **DONE**. The user supplied a key in the local `.env`, selected
+`gemini-3.5-flash-lite` after official-model lookup, and explicitly requested
+“test the module 5 now”. The missing-configuration blocker has been resolved.
+Only Module 05 was tested; Module 06 remains pending and unimplemented.
+
+### Commands and actual results
+
+| Command / check | Actual result |
+|---|---|
+| Initial `git status --short` | Existing user deletion of `.env.example`; preserved and excluded from this follow-up commit |
+| Network-enabled `.venv/bin/python` wrapper: parse allowlisted `.env` assignments with `shlex`, populate process environment, run `scripts/check_live_provider.py` via `runpy` | PASS / exit 0: **actual Gemini API request**, `mode=live`, `reused=false`, deterministic status `pass` |
+| Separate fresh `.venv/bin/python` process: same safe environment loading, `check_live_provider.main([])`, scoped SQLite read-back before/after | PASS: `reused=true`, same execution ID and identical saved row; call/attempt/result counts unchanged |
+| `.venv/bin/python -m pytest -q` | PASS: **158 tests in 15.73 seconds**, 1 existing SDK Python deprecation warning, 0 failures |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `git diff --check` | PASS: no whitespace errors |
+
+The wrapper interpreted `.env` values as data, did not execute shell content,
+did not display key values, and did not change production configuration behavior.
+No `.env` or runtime database is staged/committed. The application itself still
+reads process environment variables, not `.env` automatically.
+
+### Persistent live evidence (actual observed values)
+
+| Field | Observed value |
+|---|---|
+| Project / version / case | `demo` / `v3` / `T02` |
+| Smoke cycle key | `module05-live-check` |
+| Execution ID | `ca208013-6806-4c2b-bb70-e732fbbd124b` |
+| Provider / mode / purpose | `gemini` / `live` / `candidate_execution` |
+| Requested and returned model | `gemini-3.5-flash-lite` |
+| Actual SDK version | `2.33.0` |
+| Estimated settlement | **4.5 mm** |
+| Allowable settlement | **10.0 mm** |
+| Validation | **pass**, zero discrepancies |
+| Input / output / total usage | **167 / 66 / 233 tokens** |
+| Thinking-token usage | Not supplied (`null`), not assumed zero |
+| Provider elapsed | **1561.428 ms** |
+| Logical execution elapsed | **1625.994 ms** |
+| Fresh-process repeat | Returned the same stored result; no additional model request |
+| Persisted call starts / attempts / results for smoke cycle | **1 / 1 / 1** |
+| Duplicate completed results after repeat | **0** |
+| Approximate cost | Not calculated; retained as `null` |
+
+The live result is stored in the configured gitignored SQLite domain database,
+including raw response, parsed JSON, source/policy/test IDs, validation, usage,
+latency, completed operation/attempt, and audit records. A fresh process verified
+it and reused it, establishing persistence and sequential idempotency without a
+second external model request. A credential-presence check confirmed the stored
+response and validation do not contain the configured API key; no key was printed.
+
+README and this status file now describe verified Module 05 acceptance. No
+implementation/dependency changes were necessary in this follow-up. Historical
+preflight failure events remain auditable; the successful live result does not
+erase them. This fixed smoke case is **not** an LLM planner decision, a completed
+three-cycle review demonstration, or developer release approval.
+
+**Implemented:** Module 05 code from commit `560923d`, unchanged in this follow-up.
+**Tested:** 158 tests, real Gemini v3/T02 execution, persisted live result, fresh-process
+read-back and duplicate prevention, dependency/whitespace checks.
+**Pending:** Module 06 and later modules. Live coverage of other catalog cases and
+formal scenario/ablation evaluation remain pending. Teacher approval remains unverified.
+**Blocked:** None within Module 05. Existing SDK warning and unmeasured cost are disclosed.
+
+MODULE 05 COMPLETE — STOPPED. Awaiting: START MODULE 06

@@ -4,13 +4,13 @@ PromptPatch is a planned persistent memory-driven agent for testing settlement
 measurement extraction prompts across versions. This fictional domain example
 is for regression testing, not engineering judgment.
 
-**Current status: Modules 00–04 complete.** The installable package, configuration,
+**Current status: Modules 00–05 complete.** The installable package, configuration,
 local diagnostics, persistent SQLite domain store, curated cases, versioned local
 Git fixture, audited evidence/memory retrieval tools, and test harness work.
 The review workflow and agent/checkpoint integration await later modules.
-**Module 05 code is implemented and offline-tested, but acceptance is BLOCKED:**
-`GEMINI_API_KEY` and `GEMINI_MODEL` are unset in the inspected session. No live
-provider call/result has been verified. Module 06 has not started.
+**Module 05 live acceptance is verified:** one real `gemini-3.5-flash-lite` request
+passed deterministic validation and was saved to SQLite. A fresh-process repeat
+reused that result without another model call. Module 06 has not started.
 See [implementation status](docs/IMPLEMENTATION_STATUS.md) and
 [requirement traceability](docs/REQUIREMENT_TRACEABILITY.md).
 
@@ -48,7 +48,7 @@ source, or committed files. Modules 01–04 do not require a key or make API cal
 | Variable | Default / meaning |
 |---|---|
 | `GEMINI_API_KEY` | Unset; secret, excluded from configuration repr/export |
-| `GEMINI_MODEL` | Unset; choose and verify a supported model in Module 05 |
+| `GEMINI_MODEL` | Unset by default; verified local selection: `gemini-3.5-flash-lite` |
 | `PROMPTPATCH_DB_PATH` | `data/promptpatch.sqlite3` |
 | `PROMPTPATCH_CHECKPOINT_DB_PATH` | `data/checkpoints.sqlite3` |
 | `PROMPTPATCH_DEMO_REPO` | `samples/demo_git_repo` |
@@ -136,7 +136,7 @@ projects fail without writing another project's log; archived projects cannot
 accept the required audit writes, although direct store reads remain available.
 These are read-only evidence tools with deliberate SQLite audit writes.
 
-## Provider/executor/validator (Module 05 — live acceptance blocked)
+## Provider/executor/validator (Module 05 — live verified)
 
 Set `GEMINI_API_KEY` and a supported `GEMINI_MODEL` through your local environment
 or secret manager, then run this in that same terminal:
@@ -156,14 +156,15 @@ file is auto-loaded, and keys must never be placed in chat or committed files.
 Repeated identical checks reuse the completed operation. A changed model/settings
 or an exhausted/failed attempt needs review; `--cycle-key` can explicitly identify
 a new smoke check after fixing prerequisites, preserving the earlier failure.
-Do not continue to Module 06 until Module 05's live acceptance is actually verified.
+Module 05's live acceptance is now verified; Module 06 still requires explicit approval.
 
 The adapter uses `google.genai.Client.models.generate_content`, JSON Schema output,
 an explicit Google endpoint, and client cleanup. Official references consulted:
 [Google GenAI SDK](https://googleapis.github.io/python-genai/) and
 [Gemini structured output](https://ai.google.dev/gemini-api/docs/structured-output).
-Installed signatures and request serialization were checked locally using a mocked
-HTTP transport; that is not a successful real API integration.
+Installed signatures and request serialization were first checked using a mocked
+HTTP transport. A separate actual API smoke check then verified the live integration;
+the synthetic transport tests remain labelled offline evidence.
 
 `ModelSettings` defaults: temperature 0, optional unset seed, 2048 output tokens,
 20-second SDK request timeout, 2 executor attempts (allowed maximum 3), and a
@@ -208,7 +209,25 @@ replay**, not captured Gemini output. `ReplayProvider` always labels results
 `provider=replay`, `mode=replay`, with fixture ID, no fabricated tokens/cost, and
 zero live-model-call telemetry. It is never an automatic fallback from Gemini.
 The test databases are isolated and synthetic. Current verification: **158 tests
-passed**, one SDK Python deprecation warning; live integration remains **not verified**.
+passed** in 15.73 seconds, one SDK Python deprecation warning. The separate live
+v3/T02 check returned estimated **4.5 mm**, allowable **10.0 mm**, and zero validator
+discrepancies. The provider returned model version `gemini-3.5-flash-lite`, SDK
+version `2.33.0`, **167 input + 66 output = 233 total tokens**, and approximately
+**1.56 seconds** provider time (**1.63 seconds** logical execution time).
+
+Live execution ID: `ca208013-6806-4c2b-bb70-e732fbbd124b`, persisted in the configured
+local SQLite domain database with raw/parsed response, policy/reference IDs,
+validation, usage, timing, and attempt/audit records. Fresh-process verification
+confirmed one model-call start, one completed attempt, one result, and zero duplicate
+results after repeat. No additional model call was made by the repeat. Cost remains
+unmeasured/null, and absent thinking-token usage is not reported as zero.
+
+For this verification, only known `.env` variables were parsed as data and loaded
+into the check process's environment; no shell code was sourced and no secret was
+displayed. The application's environment-only configuration contract is unchanged:
+plain `python scripts/check_live_provider.py` still requires those variables to be
+exported in the invoking terminal. This one fixed smoke case does not establish
+live performance on the entire catalog or a planner-driven review workflow.
 
 ## Current CLI contract
 
@@ -221,7 +240,9 @@ passed**, one SDK Python deprecation warning; live integration remains **not ver
 
 Invalid configuration or command syntax exits 2. Doctor displays whether the key
 and model are set without displaying their contents. Provider remains **not
-connected** until a real integration is tested. Teacher approval remains
+connected** in doctor, which does not inspect stored integration evidence or make
+network requests. The separate Module 05 check has verified the real provider.
+Teacher approval remains
 **pending/unverified**.
 
 ## Domain memory (Module 02)
@@ -274,10 +295,11 @@ log redaction hardening, and safe exports await later authorized modules.
 Tests cover fresh connections and a fresh Python process, corrections, isolation,
 foreign keys, retries/deduplication, atomic writes/audits, immutable history,
 concurrent initialization, and CLI behavior. All stored test outputs are explicitly
-synthetic offline fixtures; no live model integration is claimed tested.
+synthetic offline fixtures; the separate Module 05 smoke check above supplies the
+live model integration evidence.
 
 Codex assisted with inspection, documentation, and the Modules 01–05 implementation.
 The student must review, understand, and be able to modify submitted code.
 No external datasets have been imported. Third-party dependencies are listed
 above. Development proceeds one explicitly authorized module at a time; next is
-completing Module 05's live check after local configuration. Module 06 remains gated.
+Module 06, after explicit approval.
