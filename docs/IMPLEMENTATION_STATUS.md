@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-25 (Asia/Karachi).
-Authorized scope: **Modules 00–02**. Modules 03–11 require separate explicit authorization.
+Authorized scope: **Modules 00–03**. Modules 04–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Next approval required: `START MODULE 03`.
+- Stop after each module. Next approval required: `START MODULE 04`.
 
 ## Module checklist
 
@@ -21,7 +21,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 00 | Inspection, requirements, execution contract | DONE | 2026-10-25 | Workspace/runtime inspection and document read-back; see verification below and REQUIREMENT_TRACEABILITY.md | Documentation implemented and checked; application not started |
 | 01 | Python foundation, config, CLI, test harness | DONE | 2026-10-25 | Editable install, 8 pytest tests, help/doctor, pip check; see Module 01 evidence below | No DB tables, provider adapter, or graph implemented |
 | 02 | SQLite domain memory, versioned corrections | DONE | 2026-10-25 | 32 passing tests; CLI init twice; SQLite integrity/FK checks; fresh-process retrieval | Domain persistence implemented; checkpoints and live integrations pending |
-| 03 | Curated cases and versioned local Git fixture | PENDING | — | Not run | Samples and fixture not created |
+| 03 | Curated cases and versioned local Git fixture | DONE | 2026-10-25 | 62 passing tests; actual seed twice; three real Git SHAs; SQLite counts/integrity checked | Fictional baseline only; candidate v2 remains a file; no model results |
 | 04 | Read-only Git and memory tools | PENDING | — | Not run | Real evidence retrieval not implemented |
 | 05 | Provider adapter, executor, deterministic validator | PENDING | — | Not run | Provider not connected; key required locally |
 | 06 | LLM planner and persistent LangGraph workflow | PENDING | — | Not run | No agent decisions or checkpoints verified |
@@ -228,3 +228,103 @@ is still pending/unverified. No keys, model calls, or approval claims invented.
 Next authorized step requires `START MODULE 03`. No Module 03 code/data was created.
 
 MODULE 02 COMPLETE — STOPPED. Awaiting: START MODULE 03
+
+## Module 03 — Curated cases and actual versioned local Git fixture
+
+Status: **DONE**. The user's “do it” authorized Module 03 after the Module 02 stop.
+Inspected the clean repository, plan's Module 03 instructions, existing store API,
+package configuration, status, and ignore rules. Existing Modules 01–02 code is preserved.
+
+### Implemented and design decisions
+
+- Twelve fictional main-project cases cover integer/decimal extraction, both/one
+  missing value, different wording, decimal zero, conflicting estimates, embedded
+  untrusted instructions, distractor measurements, unsupported units, and explicit
+  absence. One separate I01 case provides a disjoint isolation-project catalog.
+- `SettlementExtraction` and `SettlementEvidence` in `models.py` define only the
+  shared strict response shape and finite number/null types needed to validate
+  fixture references. No evaluator, source-reading tool, or model adapter is implemented.
+- References use source excerpts for numeric values and null evidence for missing
+  or uncertain values. T08/T11 explicitly require clarification. Their expected
+  status/reason/source reference are persisted in `fixture_case_imported` audit
+  events linked to case IDs, alongside persisted ambiguity/category tags. This
+  preserves the extraction JSON contract without changing Module 02's schema.
+- Policy v1 defines fields, null behavior, evidence whitespace/substring rules,
+  numeric tolerance, supported units, budget, and allowed/required IDs. Main budget
+  4 with T01 required leaves 3 discretionary choices. Isolation has only I01 and budget 1.
+- Candidate v2 changes exactly one rule: absolute tolerance 0.01 → 0.001 mm.
+  It remains a file; seeding does not propose, approve, or activate this correction.
+- `scripts/seed_demo.py` requires explicit `--approve-baseline` and `--actor` for
+  fictional initial reference/policy setup. The actual seed used actor
+  `fixture-bootstrap`; this records fixture initialization by the assistant, not
+  teacher approval or a human release/prompt promotion decision.
+- The script builds only its own empty fixture destination, with trusted tracked
+  templates, three linear commits and tags, a marker, deterministic author/times,
+  and raw prompt content hashes. It disables inherited Git routing/user hooks and
+  rejects foreign/dirty/changed fixtures, remotes, unexpected local config, source
+  ancestors, and Git-metadata destinations. No source text is executed.
+- Reseeding verifies baseline identities, adds only missing rows, preserves IDs,
+  timestamps, audit history, and later approved corrections. Separate durable
+  transactions make partial DB imports resumable; no global all-or-nothing import
+  is claimed. Partial Git creation is retained rather than deleted/reset automatically.
+- Stable projects: `demo` (three prompt versions, twelve cases), `isolation` (own
+  v1 prompt row and one case). Source SHA may be shared across projects while
+  domain identities/policies/catalogs remain project-scoped.
+
+### Files and runtime evidence
+
+Added `samples/test_cases.json`, `samples/evaluation_policy_v1.json`,
+`samples/evaluation_policy_v2.json`, `samples/prompts/v1.txt`, `v2.txt`, `v3.txt`,
+`samples/README.md`, `scripts/seed_demo.py`, `src/promptpatch/models.py`, and
+`tests/test_demo_fixtures.py`. Updated `.gitignore`, `README.md`, and this status file.
+No dependency changes or existing-store repairs were required.
+
+Created local, gitignored runtime files: `data/promptpatch.sqlite3` and
+`samples/demo_git_repo/`. Only tracked templates/JSON/script/docs are committed;
+runtime databases and nested Git metadata are excluded.
+
+Verified fixture commits:
+
+| Version | Actual Git SHA-1 |
+|---|---|
+| v1 | `514d7be901ecca503bd5832e83e7834537fe4eaa` |
+| v2 | `e1e119c53028325d0dbd63deb4cf353b918ba644` |
+| v3 | `1fed5a700edb94ddff2568531ee3f80f76f42ddc` |
+
+The application repository HEAD before/after running the fixture script was
+`2b704dd9761857cda4b5aad839ed8df6a8543479`. The script did not change parent history.
+The separately authorized implementation commit is created only after verification.
+
+### Actual commands/checks
+
+| Command / check | Result |
+|---|---|
+| `.venv/bin/python scripts/seed_demo.py --help` | PASS: destination overrides and explicit baseline actor/approval documented |
+| Inline Python temporary-directory seed/reseed smoke check | PASS: same three Git SHAs and fixture summary on both calls |
+| Initial `.venv/bin/python -m pytest -q` | PASS: 60 tests in 6.50 seconds |
+| Final `.venv/bin/python -m pytest -q` | PASS: **62 tests in 5.32 seconds**, no failures |
+| `.venv/bin/python scripts/seed_demo.py --actor fixture-bootstrap --approve-baseline` (twice) | PASS: same summary/SHAs; demo 12 cases and isolation 1; v2 file only; zero model calls |
+| `git -C samples/demo_git_repo log --oneline --decorate --all` | PASS: v1/v2/v3 tags on three distinct linear commits, HEAD at v3 |
+| `git rev-parse HEAD` before/after seeding | PASS: application HEAD unchanged as recorded above |
+| Inline Python repository/SQLite read-back | PASS: 2 projects, 4 prompt rows, 13 case rows, 2 approved v1 policy rows, 0 review cycles, 0 test executions, 36 audit events; `integrity_check` = `ok`; 0 foreign-key violations |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `git diff --check`, `git check-ignore` for fixture/DB, master-plan SHA-256 | PASS: clean whitespace, runtime paths ignored, master plan unchanged |
+
+Tests verify every reference shape, numeric excerpt and source substring; unique
+IDs and required tag coverage; exactly one changed candidate policy criterion;
+three actual Git commits; prompt SHA-256/source identity; complete DB snapshots
+unchanged under repeated seeds (including audit timestamps); preservation of later
+corrections; parent repository preservation even with inherited Git routing;
+refusal to overwrite existing files/dirty fixtures; approval and metadata-destination
+guards; duplicate catalog rejection; seed/reseed from separate processes; and a
+fresh Python process reading saved cases/policy without reimporting source samples.
+
+**Implemented:** Module 03 fixtures and repeatable seed setup.
+**Tested:** 62 offline tests and actual local Git/SQLite fixture creation/read-back.
+**Pending:** Module 04 operational read-only tools; real provider, planner,
+checkpoint/review workflow, three live review cycles, and formal evaluation.
+**Blocked:** None. Teacher approval remains pending/unverified; provider remains
+not connected. Prompt failure/recovery patterns are anticipated wording effects,
+not observed live outcomes. T09 contains an attack example, not proof of resistance.
+
+MODULE 03 COMPLETE — STOPPED. Awaiting: START MODULE 04

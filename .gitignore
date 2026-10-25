@@ -19,3 +19,4 @@ data/*
 *.log
 logs/
 artifacts/raw/
+samples/demo_git_repo/
