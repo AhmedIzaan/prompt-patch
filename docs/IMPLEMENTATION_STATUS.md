@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-25 (Asia/Karachi).
-Authorized scope: **Modules 00–01**. Modules 02–11 require separate explicit authorization.
+Authorized scope: **Modules 00–02**. Modules 03–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Next approval required: `START MODULE 02`.
+- Stop after each module. Next approval required: `START MODULE 03`.
 
 ## Module checklist
 
@@ -20,7 +20,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 |---|---|---|---|---|---|
 | 00 | Inspection, requirements, execution contract | DONE | 2026-10-25 | Workspace/runtime inspection and document read-back; see verification below and REQUIREMENT_TRACEABILITY.md | Documentation implemented and checked; application not started |
 | 01 | Python foundation, config, CLI, test harness | DONE | 2026-10-25 | Editable install, 8 pytest tests, help/doctor, pip check; see Module 01 evidence below | No DB tables, provider adapter, or graph implemented |
-| 02 | SQLite domain memory, versioned corrections | PENDING | — | Not run | Persistence and isolation not implemented/tested |
+| 02 | SQLite domain memory, versioned corrections | DONE | 2026-10-25 | 32 passing tests; CLI init twice; SQLite integrity/FK checks; fresh-process retrieval | Domain persistence implemented; checkpoints and live integrations pending |
 | 03 | Curated cases and versioned local Git fixture | PENDING | — | Not run | Samples and fixture not created |
 | 04 | Read-only Git and memory tools | PENDING | — | Not run | Real evidence retrieval not implemented |
 | 05 | Provider adapter, executor, deterministic validator | PENDING | — | Not run | Provider not connected; key required locally |
@@ -136,3 +136,95 @@ Local commit preparation initially hit the sandbox's read-only `.git/index.lock`
 No API requests, database files/tables, graph, demo fixture, or later-module functionality created.
 
 MODULE 01 COMPLETE — STOPPED. Awaiting: START MODULE 02
+
+## Module 02 — SQLite persistent domain memory and versioned corrections
+
+Status: **DONE**. The user's “do it” authorized Module 02 following the Module 01 handoff.
+Starting repository was clean on `main`, with the Module 01 implementation present.
+The plan, status, configuration, CLI, and foundation tests were inspected first;
+no additional workspace `AGENTS.md` was found.
+
+### Implemented
+
+- `db.py`: atomic schema migration 1 using SQLite `user_version`, foreign keys,
+  indexes, unique project/cycle/operation identities, and immutable-history guards.
+  Initialization is repeatable, including concurrent calls, and refuses newer schemas.
+- `repository.py`: stable caller-supplied project IDs and UUID record IDs; scoped
+  APIs for projects, prompts, cases, policy proposals/approvals, cycles, risks,
+  planner decisions, human decisions, tool operations/attempts, results, and audits.
+- Every mutation and its audit records share one `BEGIN IMMEDIATE` transaction.
+  All project-scoped record lookups and updates filter by project. Composite
+  foreign keys prevent cross-project relationships even outside the API.
+- Policy proposals do not activate themselves. An explicit actor is required for
+  approval, old policies remain queryable, stale proposals are rejected, and new
+  cycles select only the currently approved policy. Existing cycles keep their policy ID.
+- Test references use actor-attributed immutable content revisions and canonical
+  content hashes. Prompt Git SHA/hash values are stored as supplied; actual Git
+  evidence verification is not implemented until Module 04.
+- Risks have current-state rows plus preserved evidence in append-only audit history.
+  Failure resolution and recurrence preserve first/last cycle provenance.
+- Logical operations have stable unique keys. Failed attempts remain visible;
+  saving a result and completing its operation are atomic. Replays cannot create
+  duplicate completed results or duplicate cycle approval decisions.
+- Domain exceptions distinguish missing/foreign records (same safe message), duplicate
+  operations, invalid transitions, superseded policies, and general store errors.
+- `promptpatch init` now creates the persistent domain DB and parent directory;
+  retries preserve records. It never initializes checkpoints or contacts a provider.
+  Doctor remains read-only. CLI errors avoid echoing paths/environment values.
+
+### Files changed and design decisions
+
+Added `src/promptpatch/db.py`, `src/promptpatch/repository.py`,
+`src/promptpatch/errors.py`, and `tests/test_store.py`.
+Updated `src/promptpatch/cli.py`, `tests/test_foundation.py`, `README.md`, and this file.
+
+The only required Module 01 behavior change was replacing the authorized `init`
+placeholder and its test; help and doctor text now describe current capability.
+No dependency changes or folder-layout deviations were needed.
+
+Schema adjustment: **one additional `operation_attempts` table** separates retry
+attempt history from the unique logical operation/result. All eleven proposed
+domain tables are present (12 total). SQLite triggers enforce immutable source
+payloads and append-only decisions/results/audits. Risk summaries, active flags,
+cycle state, and operation state are mutable; their transitions are audited.
+
+Actor strings are attribution supplied by trusted local caller code, not authentication.
+Policy/human approval CLI workflows await Module 07. Test-case revision creation
+is an explicit developer-attributed store call, not a model-controlled correction.
+The README documents archive/read-only semantics and retained history; no deletion
+API or automatic expiry is introduced. Further redaction/security hardening awaits
+Module 09. Checkpoint working memory remains separate and unimplemented.
+
+### Commands and verified evidence
+
+| Command / check | Actual result |
+|---|---|
+| Initial `git status --short` and existing file inspection | Clean tree; existing Module 01 functionality preserved |
+| `.venv/bin/python -m pytest -q` after CLI/schema integration | PASS: existing 8 tests, with init test updated, in 1.55 seconds |
+| `.venv/bin/python -m pytest -q` after initial store tests | PASS: 28 tests in 2.01 seconds |
+| Final `.venv/bin/python -m pytest -q` | PASS: **32 passed in 2.42 seconds**, no failures |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements; no new dependencies |
+| Inline Python CLI/database check using isolated temporary paths | PASS: real `promptpatch init` executed twice with a project write between; project retained; schema version 1; 12 tables; `PRAGMA integrity_check` = `ok`; zero `foreign_key_check` violations; no checkpoint DB created |
+| `.venv/bin/promptpatch --help` | PASS: current init/doctor contract displayed |
+| `.venv/bin/promptpatch doctor` | PASS: Python 3.14.4, SQLite 3.46.1, key/model unset; provider not connected; initialization available, readiness not claimed |
+| `git diff --check` | PASS: no whitespace errors |
+
+Tests prove close/reopen persistence **and retrieval in a new Python subprocess
+without reseeding**. They also exercise policy v1→v2 supersession with pending v3,
+stale proposals, cross-project reads/writes and raw composite FK rejection,
+duplicate cycle/operation/approval protection, retained failed/completed attempts,
+immutable history, audit timestamps/references, concurrent initialization, archive
+write blocking, safe CLI errors, and rollback when an audit insert itself fails.
+All model-like test records use explicitly synthetic offline values; they are not
+live inference, actual extraction-validation results, or formal evaluation metrics.
+
+**Implemented:** Module 02 domain storage and initialization.
+**Tested:** 32 offline tests plus isolated real CLI/database checks above.
+**Pending:** Module 03 fixtures; Git/provider integration, graph/checkpoints,
+workflow approvals, demo cycles, reliability hardening, and formal evaluations.
+**Blocked:** None in Module 02. Provider remains not connected; teacher approval
+is still pending/unverified. No keys, model calls, or approval claims invented.
+
+Next authorized step requires `START MODULE 03`. No Module 03 code/data was created.
+
+MODULE 02 COMPLETE — STOPPED. Awaiting: START MODULE 03

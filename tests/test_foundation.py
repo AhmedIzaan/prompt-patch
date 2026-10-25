@@ -79,8 +79,28 @@ def test_doctor_invalid_configuration(tmp_path):
     assert "secret-in-wrong-field" not in result.stdout + result.stderr
 
 
-def test_init_placeholder_creates_nothing(tmp_path):
+def test_init_creates_domain_database_idempotently(tmp_path):
     result = run_cli(tmp_path, "init")
+    assert result.returncode == 0
+    assert "Domain database initialized" in result.stdout
+    assert (tmp_path / "data/promptpatch.sqlite3").is_file()
+    assert not (tmp_path / "data/checkpoints.sqlite3").exists()
+    assert run_cli(tmp_path, "init").returncode == 0
+
+
+def test_init_rejects_colliding_database_paths(tmp_path):
+    result = run_cli(tmp_path, "init", env={
+        "PROMPTPATCH_DB_PATH": "same.sqlite3",
+        "PROMPTPATCH_CHECKPOINT_DB_PATH": "same.sqlite3",
+    })
     assert result.returncode == 1
-    assert "Not implemented" in result.stderr
+    assert "initialization failed" in result.stderr
     assert list(tmp_path.iterdir()) == []
+
+
+def test_init_reports_filesystem_error_without_echoing_path(tmp_path):
+    (tmp_path / "blocked").write_text("existing file")
+    result = run_cli(tmp_path, "init", env={"PROMPTPATCH_DB_PATH": "blocked/private-value.sqlite3"})
+    assert result.returncode == 1
+    assert "initialization failed" in result.stderr
+    assert "private-value" not in result.stderr
