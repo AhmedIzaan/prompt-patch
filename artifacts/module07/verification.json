@@ -1,0 +1,53 @@
+{
+  "module": "07",
+  "databases": {
+    "live": {
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_completed_results": 0,
+      "human_decisions": 0,
+      "policy_revisions": [
+        [
+          1,
+          "approved"
+        ]
+      ],
+      "model_call_starts": 5,
+      "live_inference": true
+    },
+    "replay": {
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_completed_results": 0,
+      "human_decisions": 1,
+      "policy_revisions": [
+        [
+          1,
+          "superseded"
+        ],
+        [
+          2,
+          "approved"
+        ]
+      ],
+      "model_call_starts": 4,
+      "live_inference": false
+    }
+  },
+  "checks": {
+    "fictional_source_shas_unchanged": {
+      "v1": "514d7be901ecca503bd5832e83e7834537fe4eaa",
+      "v2": "e1e119c53028325d0dbd63deb4cf353b918ba644",
+      "v3": "1fed5a700edb94ddff2568531ee3f80f76f42ddc"
+    },
+    "configured_credential_absent_from_exports_and_databases": true
+  },
+  "human_actions": "Replay owner actions are synthetic; live approval remains pending.",
+  "tests": {
+    "full_suite_passed": 200,
+    "new_module07_integration_tests": 20,
+    "warnings": 1,
+    "warning": "Existing Google SDK Python deprecation",
+    "elapsed_seconds": 104.84
+  }
+}

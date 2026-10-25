@@ -1,0 +1,1726 @@
+{
+  "scope": "Module 07 single live CLI check; not Module 08 three-cycle demonstration",
+  "mode": "live",
+  "commands": [
+    {
+      "args": [
+        "init"
+      ],
+      "exit_code": 0,
+      "output": "Domain database initialized (schema 1); existing records preserved."
+    },
+    {
+      "args": [
+        "demo",
+        "seed",
+        "--actor",
+        "module07-live-fictional-baseline",
+        "--approve-baseline"
+      ],
+      "exit_code": 0,
+      "output": {
+        "candidate_policy_v2": "file only; not imported or approved",
+        "fixture_only": true,
+        "isolation_cases": 1,
+        "main_cases": 12,
+        "model_calls": 0,
+        "project_ids": [
+          "demo",
+          "isolation"
+        ],
+        "prompt_shas": {
+          "v1": "514d7be901ecca503bd5832e83e7834537fe4eaa",
+          "v2": "e1e119c53028325d0dbd63deb4cf353b918ba644",
+          "v3": "1fed5a700edb94ddff2568531ee3f80f76f42ddc"
+        }
+      }
+    },
+    {
+      "args": [
+        "review",
+        "start",
+        "--project",
+        "demo",
+        "--version",
+        "v3",
+        "--base-version",
+        "v2",
+        "--cycle",
+        "module07-live-cli"
+      ],
+      "exit_code": 0,
+      "output": {
+        "approval": "pending",
+        "cycle": "module07-live-cli",
+        "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+        "errors": [],
+        "human_decision": null,
+        "mode": "live",
+        "next_action": "needs_review",
+        "planner": {
+          "decision": "RUN_TESTS",
+          "memory_evidence_ids": [],
+          "needs_developer_approval": false,
+          "reason_summary": "Run required test T01 and discretionary tests T02, T07, and T11 to cover decimal handling, zero values, and unsupported unit policies following the prompt diff changes.",
+          "source_evidence_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+            "policy:5377c578-968c-4bc9-8d43-676179dd9c83",
+            "case:5ae01de2-f22f-4209-bf17-c017952ddead",
+            "case:f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+            "case:0001c87a-e5da-44c5-938c-c9dfa4d16105",
+            "case:aa83292b-01d3-4436-a7d3-d1f61135517a"
+          ],
+          "test_ids": [
+            "T01",
+            "T02",
+            "T07",
+            "T11"
+          ],
+          "test_mode": "targeted_regression"
+        },
+        "planner_error": null,
+        "policy_id": "5377c578-968c-4bc9-8d43-676179dd9c83",
+        "policy_revision": 1,
+        "policy_status": "approved",
+        "project_id": "demo",
+        "recommendation": {
+          "action": "needs_review",
+          "approval": "pending",
+          "error": null,
+          "open_risk_ids": [],
+          "planner_action": "run_tests",
+          "planner_decision_id": "7133f00b-fdf9-4dc1-b6d5-621d0a551c25",
+          "prior_rejection": false,
+          "results": [
+            {
+              "case_id": "5ae01de2-f22f-4209-bf17-c017952ddead",
+              "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+              "status": "pass",
+              "test_id": "T01",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+              "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+              "status": "pass",
+              "test_id": "T02",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.5,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4.5 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "0001c87a-e5da-44c5-938c-c9dfa4d16105",
+              "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+              "status": "pass",
+              "test_id": "T07",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 0.0,
+                  "evidence": {
+                    "allowable": "10.00 mm",
+                    "estimated": "0.00 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "aa83292b-01d3-4436-a7d3-d1f61135517a",
+              "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+              "status": "uncertain",
+              "test_id": "T11",
+              "validation": {
+                "discrepancies": [
+                  {
+                    "code": "unsupported_unit",
+                    "field": null,
+                    "message": "Approved source metadata requires developer clarification."
+                  }
+                ],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": null,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": null
+                  }
+                },
+                "status": "uncertain"
+              }
+            }
+          ],
+          "source_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+            "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ]
+        },
+        "results": [
+          {
+            "elapsed_ms": 1358.0691370007116,
+            "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+            "status": "pass",
+            "test_id": "T01",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": "4 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1189.1388869989896,
+            "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+            "status": "pass",
+            "test_id": "T02",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.5,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": "4.5 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1287.9084680025699,
+            "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+            "status": "pass",
+            "test_id": "T07",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 0.0,
+                "evidence": {
+                  "allowable": "10.00 mm",
+                  "estimated": "0.00 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1170.775335005601,
+            "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+            "status": "uncertain",
+            "test_id": "T11",
+            "validation": {
+              "discrepancies": [
+                {
+                  "code": "unsupported_unit",
+                  "field": null,
+                  "message": "Approved source metadata requires developer clarification."
+                }
+              ],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": null,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": null
+                }
+              },
+              "status": "uncertain"
+            }
+          }
+        ],
+        "selected_test_ids": [
+          "T01",
+          "T02",
+          "T07",
+          "T11"
+        ],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+          "policy:5377c578-968c-4bc9-8d43-676179dd9c83",
+          "case:5ae01de2-f22f-4209-bf17-c017952ddead",
+          "case:f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+          "case:420fdf1a-c719-4e85-b9f0-59ab310e768b",
+          "case:55e14fc8-2a75-4d83-9e1c-e73f2e0bd351",
+          "case:25f79027-c504-4403-9767-a361e3f6966d",
+          "case:eabeadbe-4f64-4c62-bf88-695e77355606",
+          "case:0001c87a-e5da-44c5-938c-c9dfa4d16105",
+          "case:87f85fd4-7306-4769-855f-6d534771da21",
+          "case:668e025e-c371-4304-ab8e-b04f7d64ef39",
+          "case:7465fc35-6ab0-41fc-b475-c1ab3b95716a",
+          "case:aa83292b-01d3-4436-a7d3-d1f61135517a",
+          "case:33381a08-c7a7-4152-a66f-d9e309991d92"
+        ],
+        "status": "completed",
+        "supplied_memory_refs": [],
+        "version": "v3",
+        "version_id": "11a3f674-655c-4521-a997-ca8009bce9aa"
+      }
+    },
+    {
+      "args": [
+        "review",
+        "status",
+        "--project",
+        "demo",
+        "--cycle",
+        "module07-live-cli"
+      ],
+      "exit_code": 0,
+      "output": {
+        "approval": "pending",
+        "cycle": "module07-live-cli",
+        "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+        "errors": [],
+        "human_decision": null,
+        "mode": "live",
+        "next_action": "needs_review",
+        "planner": {
+          "decision": "RUN_TESTS",
+          "memory_evidence_ids": [],
+          "needs_developer_approval": false,
+          "reason_summary": "Run required test T01 and discretionary tests T02, T07, and T11 to cover decimal handling, zero values, and unsupported unit policies following the prompt diff changes.",
+          "source_evidence_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+            "policy:5377c578-968c-4bc9-8d43-676179dd9c83",
+            "case:5ae01de2-f22f-4209-bf17-c017952ddead",
+            "case:f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+            "case:0001c87a-e5da-44c5-938c-c9dfa4d16105",
+            "case:aa83292b-01d3-4436-a7d3-d1f61135517a"
+          ],
+          "test_ids": [
+            "T01",
+            "T02",
+            "T07",
+            "T11"
+          ],
+          "test_mode": "targeted_regression"
+        },
+        "planner_error": null,
+        "policy_id": "5377c578-968c-4bc9-8d43-676179dd9c83",
+        "policy_revision": 1,
+        "policy_status": "approved",
+        "project_id": "demo",
+        "recommendation": {
+          "action": "needs_review",
+          "approval": "pending",
+          "error": null,
+          "open_risk_ids": [],
+          "planner_action": "run_tests",
+          "planner_decision_id": "7133f00b-fdf9-4dc1-b6d5-621d0a551c25",
+          "prior_rejection": false,
+          "results": [
+            {
+              "case_id": "5ae01de2-f22f-4209-bf17-c017952ddead",
+              "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+              "status": "pass",
+              "test_id": "T01",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+              "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+              "status": "pass",
+              "test_id": "T02",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.5,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4.5 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "0001c87a-e5da-44c5-938c-c9dfa4d16105",
+              "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+              "status": "pass",
+              "test_id": "T07",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 0.0,
+                  "evidence": {
+                    "allowable": "10.00 mm",
+                    "estimated": "0.00 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "aa83292b-01d3-4436-a7d3-d1f61135517a",
+              "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+              "status": "uncertain",
+              "test_id": "T11",
+              "validation": {
+                "discrepancies": [
+                  {
+                    "code": "unsupported_unit",
+                    "field": null,
+                    "message": "Approved source metadata requires developer clarification."
+                  }
+                ],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": null,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": null
+                  }
+                },
+                "status": "uncertain"
+              }
+            }
+          ],
+          "source_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+            "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ]
+        },
+        "results": [
+          {
+            "elapsed_ms": 1358.0691370007116,
+            "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+            "status": "pass",
+            "test_id": "T01",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": "4 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1189.1388869989896,
+            "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+            "status": "pass",
+            "test_id": "T02",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.5,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": "4.5 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1287.9084680025699,
+            "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+            "status": "pass",
+            "test_id": "T07",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 0.0,
+                "evidence": {
+                  "allowable": "10.00 mm",
+                  "estimated": "0.00 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1170.775335005601,
+            "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+            "status": "uncertain",
+            "test_id": "T11",
+            "validation": {
+              "discrepancies": [
+                {
+                  "code": "unsupported_unit",
+                  "field": null,
+                  "message": "Approved source metadata requires developer clarification."
+                }
+              ],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": null,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": null
+                }
+              },
+              "status": "uncertain"
+            }
+          }
+        ],
+        "selected_test_ids": [
+          "T01",
+          "T02",
+          "T07",
+          "T11"
+        ],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+          "policy:5377c578-968c-4bc9-8d43-676179dd9c83",
+          "case:5ae01de2-f22f-4209-bf17-c017952ddead",
+          "case:f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+          "case:420fdf1a-c719-4e85-b9f0-59ab310e768b",
+          "case:55e14fc8-2a75-4d83-9e1c-e73f2e0bd351",
+          "case:25f79027-c504-4403-9767-a361e3f6966d",
+          "case:eabeadbe-4f64-4c62-bf88-695e77355606",
+          "case:0001c87a-e5da-44c5-938c-c9dfa4d16105",
+          "case:87f85fd4-7306-4769-855f-6d534771da21",
+          "case:668e025e-c371-4304-ab8e-b04f7d64ef39",
+          "case:7465fc35-6ab0-41fc-b475-c1ab3b95716a",
+          "case:aa83292b-01d3-4436-a7d3-d1f61135517a",
+          "case:33381a08-c7a7-4152-a66f-d9e309991d92"
+        ],
+        "status": "completed",
+        "supplied_memory_refs": [],
+        "version": "v3",
+        "version_id": "11a3f674-655c-4521-a997-ca8009bce9aa"
+      }
+    },
+    {
+      "args": [
+        "review",
+        "resume",
+        "--project",
+        "demo",
+        "--cycle",
+        "module07-live-cli"
+      ],
+      "exit_code": 0,
+      "output": {
+        "approval": "pending",
+        "cycle": "module07-live-cli",
+        "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+        "errors": [],
+        "human_decision": null,
+        "mode": "live",
+        "next_action": "needs_review",
+        "planner": {
+          "decision": "RUN_TESTS",
+          "memory_evidence_ids": [],
+          "needs_developer_approval": false,
+          "reason_summary": "Run required test T01 and discretionary tests T02, T07, and T11 to cover decimal handling, zero values, and unsupported unit policies following the prompt diff changes.",
+          "source_evidence_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+            "policy:5377c578-968c-4bc9-8d43-676179dd9c83",
+            "case:5ae01de2-f22f-4209-bf17-c017952ddead",
+            "case:f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+            "case:0001c87a-e5da-44c5-938c-c9dfa4d16105",
+            "case:aa83292b-01d3-4436-a7d3-d1f61135517a"
+          ],
+          "test_ids": [
+            "T01",
+            "T02",
+            "T07",
+            "T11"
+          ],
+          "test_mode": "targeted_regression"
+        },
+        "planner_error": null,
+        "policy_id": "5377c578-968c-4bc9-8d43-676179dd9c83",
+        "policy_revision": 1,
+        "policy_status": "approved",
+        "project_id": "demo",
+        "recommendation": {
+          "action": "needs_review",
+          "approval": "pending",
+          "error": null,
+          "open_risk_ids": [],
+          "planner_action": "run_tests",
+          "planner_decision_id": "7133f00b-fdf9-4dc1-b6d5-621d0a551c25",
+          "prior_rejection": false,
+          "results": [
+            {
+              "case_id": "5ae01de2-f22f-4209-bf17-c017952ddead",
+              "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+              "status": "pass",
+              "test_id": "T01",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+              "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+              "status": "pass",
+              "test_id": "T02",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.5,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4.5 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "0001c87a-e5da-44c5-938c-c9dfa4d16105",
+              "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+              "status": "pass",
+              "test_id": "T07",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 0.0,
+                  "evidence": {
+                    "allowable": "10.00 mm",
+                    "estimated": "0.00 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_id": "aa83292b-01d3-4436-a7d3-d1f61135517a",
+              "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+              "status": "uncertain",
+              "test_id": "T11",
+              "validation": {
+                "discrepancies": [
+                  {
+                    "code": "unsupported_unit",
+                    "field": null,
+                    "message": "Approved source metadata requires developer clarification."
+                  }
+                ],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": null,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": null
+                  }
+                },
+                "status": "uncertain"
+              }
+            }
+          ],
+          "source_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+            "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ]
+        },
+        "results": [
+          {
+            "elapsed_ms": 1358.0691370007116,
+            "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+            "status": "pass",
+            "test_id": "T01",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": "4 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1189.1388869989896,
+            "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+            "status": "pass",
+            "test_id": "T02",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.5,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": "4.5 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1287.9084680025699,
+            "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+            "status": "pass",
+            "test_id": "T07",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 0.0,
+                "evidence": {
+                  "allowable": "10.00 mm",
+                  "estimated": "0.00 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "elapsed_ms": 1170.775335005601,
+            "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+            "status": "uncertain",
+            "test_id": "T11",
+            "validation": {
+              "discrepancies": [
+                {
+                  "code": "unsupported_unit",
+                  "field": null,
+                  "message": "Approved source metadata requires developer clarification."
+                }
+              ],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": null,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": null
+                }
+              },
+              "status": "uncertain"
+            }
+          }
+        ],
+        "selected_test_ids": [
+          "T01",
+          "T02",
+          "T07",
+          "T11"
+        ],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+          "policy:5377c578-968c-4bc9-8d43-676179dd9c83",
+          "case:5ae01de2-f22f-4209-bf17-c017952ddead",
+          "case:f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+          "case:420fdf1a-c719-4e85-b9f0-59ab310e768b",
+          "case:55e14fc8-2a75-4d83-9e1c-e73f2e0bd351",
+          "case:25f79027-c504-4403-9767-a361e3f6966d",
+          "case:eabeadbe-4f64-4c62-bf88-695e77355606",
+          "case:0001c87a-e5da-44c5-938c-c9dfa4d16105",
+          "case:87f85fd4-7306-4769-855f-6d534771da21",
+          "case:668e025e-c371-4304-ab8e-b04f7d64ef39",
+          "case:7465fc35-6ab0-41fc-b475-c1ab3b95716a",
+          "case:aa83292b-01d3-4436-a7d3-d1f61135517a",
+          "case:33381a08-c7a7-4152-a66f-d9e309991d92"
+        ],
+        "status": "completed",
+        "supplied_memory_refs": [],
+        "version": "v3",
+        "version_id": "11a3f674-655c-4521-a997-ca8009bce9aa"
+      }
+    },
+    {
+      "args": [
+        "memory",
+        "show",
+        "--project",
+        "demo"
+      ],
+      "exit_code": 0,
+      "output": {
+        "active_policy": {
+          "approved_at": "2026-10-25T15:18:22.723914+00:00",
+          "approved_by": "module07-live-fictional-baseline",
+          "created_at": "2026-10-25T15:18:22.660860+00:00",
+          "id": "5377c578-968c-4bc9-8d43-676179dd9c83",
+          "project_id": "demo",
+          "revision": 1,
+          "rules": {
+            "allow_null": true,
+            "allowed_test_ids": [
+              "T01",
+              "T02",
+              "T03",
+              "T04",
+              "T05",
+              "T06",
+              "T07",
+              "T08",
+              "T09",
+              "T10",
+              "T11",
+              "T12"
+            ],
+            "contradiction_action": "needs_clarification",
+            "evidence_rule": "Non-null measurements need nonempty supporting substrings in the original input after collapsing whitespace; null measurements have null evidence.",
+            "evidence_whitespace": "collapse",
+            "extra_fields_allowed": false,
+            "max_tests_per_review": 4,
+            "missing_value_rule": "Use null for an absent measurement and its evidence; never replace absence with zero.",
+            "numeric_absolute_tolerance_mm": 0.01,
+            "numeric_fields": [
+              "estimated_settlement_mm",
+              "allowable_settlement_mm"
+            ],
+            "numeric_relative_tolerance": 0.0,
+            "required_fields": [
+              "estimated_settlement_mm",
+              "allowable_settlement_mm",
+              "evidence"
+            ],
+            "required_test_ids": [
+              "T01"
+            ],
+            "source_instructions": "untrusted_data_only",
+            "supported_units": [
+              "mm"
+            ],
+            "unsupported_unit_action": "needs_clarification"
+          },
+          "source_ref": "policy:5377c578-968c-4bc9-8d43-676179dd9c83",
+          "status": "approved",
+          "supersedes_id": null
+        },
+        "history": {
+          "case_corrections": [],
+          "failure_history": [],
+          "human_decisions": [],
+          "outcomes": [
+            {
+              "case_key": "T11",
+              "created_at": "2026-10-25T15:18:39.920822+00:00",
+              "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+              "id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+              "operation_key": "graph:34b486f9-71e1-40c4-95e8-ab832e778fb0:aa83292b-01d3-4436-a7d3-d1f61135517a",
+              "project_id": "demo",
+              "status": "uncertain",
+              "tags": [
+                "unit",
+                "ambiguous"
+              ],
+              "test_case_id": "aa83292b-01d3-4436-a7d3-d1f61135517a",
+              "validation": {
+                "discrepancies": [
+                  {
+                    "code": "unsupported_unit",
+                    "field": null,
+                    "message": "Approved source metadata requires developer clarification."
+                  }
+                ],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": null,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": null
+                  }
+                },
+                "status": "uncertain"
+              }
+            },
+            {
+              "case_key": "T07",
+              "created_at": "2026-10-25T15:18:38.488758+00:00",
+              "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+              "id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+              "operation_key": "graph:34b486f9-71e1-40c4-95e8-ab832e778fb0:0001c87a-e5da-44c5-938c-c9dfa4d16105",
+              "project_id": "demo",
+              "status": "pass",
+              "tags": [
+                "decimal",
+                "decimal_zero"
+              ],
+              "test_case_id": "0001c87a-e5da-44c5-938c-c9dfa4d16105",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 0.0,
+                  "evidence": {
+                    "allowable": "10.00 mm",
+                    "estimated": "0.00 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_key": "T02",
+              "created_at": "2026-10-25T15:18:36.968349+00:00",
+              "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+              "id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+              "operation_key": "graph:34b486f9-71e1-40c4-95e8-ab832e778fb0:f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+              "project_id": "demo",
+              "status": "pass",
+              "tags": [
+                "decimal"
+              ],
+              "test_case_id": "f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.5,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4.5 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            },
+            {
+              "case_key": "T01",
+              "created_at": "2026-10-25T15:18:35.551665+00:00",
+              "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+              "id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+              "operation_key": "graph:34b486f9-71e1-40c4-95e8-ab832e778fb0:5ae01de2-f22f-4209-bf17-c017952ddead",
+              "project_id": "demo",
+              "status": "pass",
+              "tags": [
+                "smoke",
+                "integer"
+              ],
+              "test_case_id": "5ae01de2-f22f-4209-bf17-c017952ddead",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "10 mm",
+                    "estimated": "4 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            }
+          ],
+          "per_collection_limit": 10,
+          "policy_corrections": [],
+          "project_id": "demo",
+          "risks": [],
+          "source_refs": [
+            "execution:b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+            "execution:af8392b4-bac8-46b8-b2ad-a07048f26697",
+            "execution:5d5ed28d-e310-4fb5-a4b9-68609194b734",
+            "execution:cd3db307-faac-4b4e-b732-c4c66621f5a5"
+          ],
+          "truncated": {
+            "case_corrections": false,
+            "failure_history": false,
+            "human_decisions": false,
+            "outcomes": false,
+            "policy_corrections": false,
+            "risks": false
+          }
+        }
+      }
+    },
+    {
+      "args": [
+        "logs",
+        "show",
+        "--project",
+        "demo",
+        "--cycle",
+        "module07-live-cli"
+      ],
+      "exit_code": 0,
+      "output": {
+        "cycle": "module07-live-cli",
+        "events": [
+          {
+            "created_at": "2026-10-25T15:18:28.021334+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "cycle_created",
+            "id": "604292ea-3ec7-4430-b8c5-a18194a9d2c3",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:28.085550+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "base_version_id": "dd762267-84dd-4464-8f31-137cbbed0461",
+              "memory_enabled": true,
+              "mode": "live",
+              "model": {
+                "max_attempts": 2,
+                "max_output_tokens": 2048,
+                "model_id": "gemini-3.5-flash-lite",
+                "seed": null,
+                "temperature": 0.0,
+                "timeout_ms": 20000
+              },
+              "replay_file": null,
+              "replay_hash": null,
+              "replay_scenario": null,
+              "version_id": "11a3f674-655c-4521-a997-ca8009bce9aa"
+            },
+            "event_type": "review_requested",
+            "id": "25dc464d-9f20-4d58-9eb4-210b8d1a6893",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:28.690099+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "source_refs": [
+                "policy:5377c578-968c-4bc9-8d43-676179dd9c83"
+              ],
+              "tool": "read_active_policy"
+            },
+            "event_type": "review_memory_read",
+            "id": "b47c5ba2-eecb-4afa-b0e9-5142afaa5926",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:28.757773+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "status": "running"
+            },
+            "event_type": "cycle_status_changed",
+            "id": "09aa0bcd-1e2c-4333-977f-01165d5c5edb",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:28.826415+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "load_context",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_load_context",
+            "id": "be1a7a36-bb37-453c-8866-52a66796f12b",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:29.167099+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "source_refs": [
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+              ],
+              "tool": "read_git_prompt"
+            },
+            "event_type": "review_source_read",
+            "id": "e7e0a253-f57c-4432-ab87-ca18a7ca50eb",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:29.420442+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "source_refs": [
+                "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+              ],
+              "tool": "compare_prompt_versions"
+            },
+            "event_type": "review_source_read",
+            "id": "e18795dc-3f45-45b0-bf5d-3d59f73c02d9",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:29.479910+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "read_sources",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_read_sources",
+            "id": "de9a5688-af65-48e4-bc5f-245e5d5fe163",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:29.822682+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "source_refs": [],
+              "tool": "retrieve_memory"
+            },
+            "event_type": "review_memory_read",
+            "id": "721df40b-b850-4696-a68a-7333571b9d5b",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:29.882075+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "read_long_term_memory",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_read_long_term_memory",
+            "id": "8639f367-8f14-4b8f-ad20-cd24250cf7ba",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:29.942897+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "tool_operation_started",
+            "id": "23096168-f593-4af2-b14f-15a9def2dd4d",
+            "project_id": "demo",
+            "ref_id": "497c3155-d6c0-4763-bfed-5178662a221a"
+          },
+          {
+            "created_at": "2026-10-25T15:18:30.071027+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "purpose": "planner"
+            },
+            "event_type": "model_call_started",
+            "id": "30a77108-af56-4a29-a0ed-de8aafd54c5b",
+            "project_id": "demo",
+            "ref_id": "497c3155-d6c0-4763-bfed-5178662a221a"
+          },
+          {
+            "created_at": "2026-10-25T15:18:33.361354+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "planner_decision_recorded",
+            "id": "2904141f-9384-4e3e-b607-de2459856037",
+            "project_id": "demo",
+            "ref_id": "7133f00b-fdf9-4dc1-b6d5-621d0a551c25"
+          },
+          {
+            "created_at": "2026-10-25T15:18:33.452427+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error_code": null,
+              "purpose": "planner"
+            },
+            "event_type": "tool_operation_completed",
+            "id": "c09baf25-d683-4c0d-a35d-9795d423a47d",
+            "project_id": "demo",
+            "ref_id": "497c3155-d6c0-4763-bfed-5178662a221a"
+          },
+          {
+            "created_at": "2026-10-25T15:18:33.516089+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "elapsed_ms": 3227.5729819957633,
+              "error_code": null,
+              "purpose": "planner"
+            },
+            "event_type": "model_call_completed",
+            "id": "c7871073-b366-45b0-af93-24b28b955572",
+            "project_id": "demo",
+            "ref_id": "497c3155-d6c0-4763-bfed-5178662a221a"
+          },
+          {
+            "created_at": "2026-10-25T15:18:33.587544+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "plan_tests",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_plan_tests",
+            "id": "e66dc90f-4b33-498e-839e-b7c6c405481b",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:33.675609+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "validate_plan",
+              "selected_test_ids": [
+                "T01",
+                "T02",
+                "T07",
+                "T11"
+              ]
+            },
+            "event_type": "graph_node_validate_plan",
+            "id": "cc78ff33-7163-4539-907b-96ee44136206",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:34.061111+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "source_refs": [
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+              ],
+              "tool": "read_git_prompt"
+            },
+            "event_type": "review_source_read",
+            "id": "c09797d3-7ec2-45b9-9dab-14fc24d63d90",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:34.129115+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "tool_operation_started",
+            "id": "74bd5610-3f52-4a32-adec-e47134c9806b",
+            "project_id": "demo",
+            "ref_id": "da1725e9-a7ed-400c-85bd-f7e20e0df5f2"
+          },
+          {
+            "created_at": "2026-10-25T15:18:34.193497+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution"
+            },
+            "event_type": "model_call_started",
+            "id": "c86079a0-087a-4df6-905f-77546e6ceb2f",
+            "project_id": "demo",
+            "ref_id": "da1725e9-a7ed-400c-85bd-f7e20e0df5f2"
+          },
+          {
+            "created_at": "2026-10-25T15:18:35.552540+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5"
+            },
+            "event_type": "tool_operation_completed",
+            "id": "81a197be-8c71-489b-81dc-89b4f1f9787a",
+            "project_id": "demo",
+            "ref_id": "da1725e9-a7ed-400c-85bd-f7e20e0df5f2"
+          },
+          {
+            "created_at": "2026-10-25T15:18:35.552698+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "test_execution_recorded",
+            "id": "3a63a10e-eef2-434b-aa2f-9fda73dab69c",
+            "project_id": "demo",
+            "ref_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5"
+          },
+          {
+            "created_at": "2026-10-25T15:18:35.629223+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "elapsed_ms": 1290.5763410090003,
+              "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+              "live_model_calls": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution",
+              "usage": {
+                "candidates_token_count": 64,
+                "prompt_token_count": 165,
+                "thoughts_token_count": null,
+                "total_token_count": 229
+              }
+            },
+            "event_type": "model_call_completed",
+            "id": "d47accab-07a9-4b72-b630-7610dea32a54",
+            "project_id": "demo",
+            "ref_id": "da1725e9-a7ed-400c-85bd-f7e20e0df5f2"
+          },
+          {
+            "created_at": "2026-10-25T15:18:35.708516+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "tool_operation_started",
+            "id": "b2a98237-e99a-48f2-bbc9-e690ae2921e1",
+            "project_id": "demo",
+            "ref_id": "c055af82-8b3e-4bc3-a51e-0d3ab0b0a0db"
+          },
+          {
+            "created_at": "2026-10-25T15:18:35.778983+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution"
+            },
+            "event_type": "model_call_started",
+            "id": "9226e8e7-e2cd-4cca-b998-2f434ed4add9",
+            "project_id": "demo",
+            "ref_id": "c055af82-8b3e-4bc3-a51e-0d3ab0b0a0db"
+          },
+          {
+            "created_at": "2026-10-25T15:18:36.969415+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734"
+            },
+            "event_type": "tool_operation_completed",
+            "id": "8a8099ec-c667-46de-a1c4-89a0f4c9cd8f",
+            "project_id": "demo",
+            "ref_id": "c055af82-8b3e-4bc3-a51e-0d3ab0b0a0db"
+          },
+          {
+            "created_at": "2026-10-25T15:18:36.969598+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "test_execution_recorded",
+            "id": "4b4387ba-5b94-4b6a-8e1d-c80f9fb41146",
+            "project_id": "demo",
+            "ref_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734"
+          },
+          {
+            "created_at": "2026-10-25T15:18:37.041369+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "elapsed_ms": 1111.634449000121,
+              "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+              "live_model_calls": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution",
+              "usage": {
+                "candidates_token_count": 66,
+                "prompt_token_count": 167,
+                "thoughts_token_count": null,
+                "total_token_count": 233
+              }
+            },
+            "event_type": "model_call_completed",
+            "id": "fe91c7ba-e3ff-4c30-aab2-6a7a81e7701b",
+            "project_id": "demo",
+            "ref_id": "c055af82-8b3e-4bc3-a51e-0d3ab0b0a0db"
+          },
+          {
+            "created_at": "2026-10-25T15:18:37.105445+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "tool_operation_started",
+            "id": "b03e3ff2-f974-471e-b775-283e7283d946",
+            "project_id": "demo",
+            "ref_id": "0744f665-48f5-4dd7-bbc2-4e5af94b983b"
+          },
+          {
+            "created_at": "2026-10-25T15:18:37.200801+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution"
+            },
+            "event_type": "model_call_started",
+            "id": "4ebc9a08-299b-48a7-900c-7fb7b4eed447",
+            "project_id": "demo",
+            "ref_id": "0744f665-48f5-4dd7-bbc2-4e5af94b983b"
+          },
+          {
+            "created_at": "2026-10-25T15:18:38.489467+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697"
+            },
+            "event_type": "tool_operation_completed",
+            "id": "396c195c-d6fe-4346-956f-d664185a4213",
+            "project_id": "demo",
+            "ref_id": "0744f665-48f5-4dd7-bbc2-4e5af94b983b"
+          },
+          {
+            "created_at": "2026-10-25T15:18:38.489597+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "test_execution_recorded",
+            "id": "55f21da6-c433-4751-adc3-a0970e58a028",
+            "project_id": "demo",
+            "ref_id": "af8392b4-bac8-46b8-b2ad-a07048f26697"
+          },
+          {
+            "created_at": "2026-10-25T15:18:38.579068+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "elapsed_ms": 1220.1406140084146,
+              "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+              "live_model_calls": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution",
+              "usage": {
+                "candidates_token_count": 70,
+                "prompt_token_count": 169,
+                "thoughts_token_count": null,
+                "total_token_count": 239
+              }
+            },
+            "event_type": "model_call_completed",
+            "id": "e4edd76e-de43-4dd1-8c39-d15d6870afdb",
+            "project_id": "demo",
+            "ref_id": "0744f665-48f5-4dd7-bbc2-4e5af94b983b"
+          },
+          {
+            "created_at": "2026-10-25T15:18:38.676281+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "tool_operation_started",
+            "id": "4953d3f0-a683-4e21-aa3e-e905b6cb3b98",
+            "project_id": "demo",
+            "ref_id": "ecad2f04-00a4-4ef0-8eea-2aefba56b482"
+          },
+          {
+            "created_at": "2026-10-25T15:18:38.749860+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution"
+            },
+            "event_type": "model_call_started",
+            "id": "a2af2143-0c93-41dd-a362-3e6c08b65df4",
+            "project_id": "demo",
+            "ref_id": "ecad2f04-00a4-4ef0-8eea-2aefba56b482"
+          },
+          {
+            "created_at": "2026-10-25T15:18:39.921649+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56"
+            },
+            "event_type": "tool_operation_completed",
+            "id": "58b23991-c04d-40f1-815e-70323876b815",
+            "project_id": "demo",
+            "ref_id": "ecad2f04-00a4-4ef0-8eea-2aefba56b482"
+          },
+          {
+            "created_at": "2026-10-25T15:18:39.921833+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {},
+            "event_type": "test_execution_recorded",
+            "id": "e208baff-3a65-491b-931f-4afdac3742b3",
+            "project_id": "demo",
+            "ref_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.003252+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "attempt": 1,
+              "elapsed_ms": 1089.3466909910785,
+              "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+              "live_model_calls": 1,
+              "mode": "live",
+              "model_id": "gemini-3.5-flash-lite",
+              "provider": "gemini",
+              "purpose": "candidate_execution",
+              "usage": {
+                "candidates_token_count": 59,
+                "prompt_token_count": 165,
+                "thoughts_token_count": null,
+                "total_token_count": 224
+              }
+            },
+            "event_type": "model_call_completed",
+            "id": "494a882c-74f0-400f-940a-950c64c4d260",
+            "project_id": "demo",
+            "ref_id": "ecad2f04-00a4-4ef0-8eea-2aefba56b482"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.072802+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "run_tests",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_run_tests",
+            "id": "a0a23856-6d42-465c-81f4-cd9b7868d49b",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.153240+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "validate_outputs",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_validate_outputs",
+            "id": "f07a3de5-5f61-412b-b26d-9d94ea2ef2d5",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.298069+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "reconcile_failures",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_reconcile_failures",
+            "id": "13491df8-9871-4cb9-9b8f-cb1c8556f3d8",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.467524+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "executed": [
+                "T01",
+                "T02",
+                "T07",
+                "T11"
+              ],
+              "risk_changes": [],
+              "selected": [
+                "T01",
+                "T02",
+                "T07",
+                "T11"
+              ]
+            },
+            "event_type": "graph_memory_written",
+            "id": "f8021e7f-5ec9-4f19-8263-d2c992eaa620",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.609685+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "write_memory_and_audit",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_write_memory_and_audit",
+            "id": "dc3fe8e1-7748-44a4-9db8-c627d6ad39ab",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.666736+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "status": "completed"
+            },
+            "event_type": "cycle_status_changed",
+            "id": "19d2b48a-0af2-4bbb-914a-8c1ff80f771a",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.847349+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "action": "needs_review",
+              "approval": "pending",
+              "error": null,
+              "open_risk_ids": [],
+              "planner_action": "run_tests",
+              "planner_decision_id": "7133f00b-fdf9-4dc1-b6d5-621d0a551c25",
+              "prior_rejection": false,
+              "results": [
+                {
+                  "case_id": "5ae01de2-f22f-4209-bf17-c017952ddead",
+                  "execution_id": "cd3db307-faac-4b4e-b732-c4c66621f5a5",
+                  "status": "pass",
+                  "test_id": "T01",
+                  "validation": {
+                    "discrepancies": [],
+                    "parsed_json": {
+                      "allowable_settlement_mm": 10.0,
+                      "estimated_settlement_mm": 4.0,
+                      "evidence": {
+                        "allowable": "10 mm",
+                        "estimated": "4 mm"
+                      }
+                    },
+                    "status": "pass"
+                  }
+                },
+                {
+                  "case_id": "f7562d97-7aad-454a-86e3-ef2a3f2be1d3",
+                  "execution_id": "5d5ed28d-e310-4fb5-a4b9-68609194b734",
+                  "status": "pass",
+                  "test_id": "T02",
+                  "validation": {
+                    "discrepancies": [],
+                    "parsed_json": {
+                      "allowable_settlement_mm": 10.0,
+                      "estimated_settlement_mm": 4.5,
+                      "evidence": {
+                        "allowable": "10 mm",
+                        "estimated": "4.5 mm"
+                      }
+                    },
+                    "status": "pass"
+                  }
+                },
+                {
+                  "case_id": "0001c87a-e5da-44c5-938c-c9dfa4d16105",
+                  "execution_id": "af8392b4-bac8-46b8-b2ad-a07048f26697",
+                  "status": "pass",
+                  "test_id": "T07",
+                  "validation": {
+                    "discrepancies": [],
+                    "parsed_json": {
+                      "allowable_settlement_mm": 10.0,
+                      "estimated_settlement_mm": 0.0,
+                      "evidence": {
+                        "allowable": "10.00 mm",
+                        "estimated": "0.00 mm"
+                      }
+                    },
+                    "status": "pass"
+                  }
+                },
+                {
+                  "case_id": "aa83292b-01d3-4436-a7d3-d1f61135517a",
+                  "execution_id": "b8adbe95-312b-4ee9-ab19-abb5d40f8e56",
+                  "status": "uncertain",
+                  "test_id": "T11",
+                  "validation": {
+                    "discrepancies": [
+                      {
+                        "code": "unsupported_unit",
+                        "field": null,
+                        "message": "Approved source metadata requires developer clarification."
+                      }
+                    ],
+                    "parsed_json": {
+                      "allowable_settlement_mm": 10.0,
+                      "estimated_settlement_mm": null,
+                      "evidence": {
+                        "allowable": "10 mm",
+                        "estimated": null
+                      }
+                    },
+                    "status": "uncertain"
+                  }
+                }
+              ],
+              "source_refs": [
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+                "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+              ]
+            },
+            "event_type": "graph_recommendation",
+            "id": "d51e1617-c9c5-498a-8a5f-916684e12855",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          },
+          {
+            "created_at": "2026-10-25T15:18:40.911863+00:00",
+            "cycle_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0",
+            "details": {
+              "error": null,
+              "node": "prepare_recommendation",
+              "selected_test_ids": []
+            },
+            "event_type": "graph_node_prepare_recommendation",
+            "id": "53cb3056-b717-40a5-826e-d804f753ff38",
+            "project_id": "demo",
+            "ref_id": "34b486f9-71e1-40c4-95e8-ab832e778fb0"
+          }
+        ],
+        "project_id": "demo"
+      }
+    }
+  ],
+  "repeat_counts_unchanged": {
+    "review_cycles": 1,
+    "planner_decisions": 1,
+    "test_executions": 4,
+    "tool_operations": 5,
+    "audit_events": 98,
+    "operation_attempts": 5,
+    "human_decisions": 0
+  },
+  "model_call_starts": 5,
+  "human_release_approval": "pending",
+  "integrity_check": "ok",
+  "foreign_key_errors": 0
+}

@@ -1,0 +1,53 @@
+{
+  "fixture_id": "module07-handwritten-cli-v1",
+  "live_inference": false,
+  "provenance": "Handwritten with Codex assistance for deterministic CLI integration tests. Not captured Gemini responses. Git ref matches the fictional v3 fixture.",
+  "scenarios": {
+    "pass_v3": [
+      {
+        "raw_text": "{\"decision\": \"RUN_TESTS\", \"test_ids\": [\"T01\"], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline Module 07 CLI routing fixture; not live agency evidence.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt\"], \"needs_developer_approval\": false}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      }
+    ],
+    "fail_v3": [
+      {
+        "raw_text": "{\"decision\": \"RUN_TESTS\", \"test_ids\": [\"T01\", \"T02\"], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline Module 07 CLI routing fixture; not live agency evidence.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt\"], \"needs_developer_approval\": false}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 5.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4.5 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      }
+    ],
+    "decimal_pass_v3": [
+      {
+        "raw_text": "{\"decision\": \"RUN_TESTS\", \"test_ids\": [\"T01\", \"T02\"], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline Module 07 CLI routing fixture; not live agency evidence.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt\"], \"needs_developer_approval\": false}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.5, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4.5 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      }
+    ],
+    "hold_v3": [
+      {
+        "raw_text": "{\"decision\": \"HOLD_FOR_APPROVAL\", \"test_ids\": [], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline Module 07 CLI routing fixture; not live agency evidence.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt\"], \"needs_developer_approval\": true}"
+      }
+    ],
+    "retry_v3": [
+      {
+        "raw_text": "{\"decision\": \"RUN_TESTS\", \"test_ids\": [\"T01\"], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline Module 07 CLI routing fixture; not live agency evidence.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt\"], \"needs_developer_approval\": false}"
+      },
+      {
+        "error_code": "timeout"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      }
+    ]
+  }
+}

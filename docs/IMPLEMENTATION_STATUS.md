@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-25 (Asia/Karachi).
-Authorized scope: **Modules 00–06**. Modules 07–11 require separate explicit authorization.
+Authorized scope: **Modules 00–07**. Modules 08–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Module 06 is now verified; next approval required: `START MODULE 07`.
+- Stop after each module. Module 07 is verified; next approval required: `START MODULE 08`.
 
 ## Module checklist
 
@@ -24,8 +24,8 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 03 | Curated cases and versioned local Git fixture | DONE | 2026-10-25 | 62 passing tests; actual seed twice; three real Git SHAs; SQLite counts/integrity checked | Fictional baseline only; candidate v2 remains a file; no model results |
 | 04 | Read-only Git and memory tools | DONE | 2026-10-25 | 101 passing tests; actual v1/v2/v3 reads/diff, bounded memory and approved-policy lookup, audit read-back | No provider calls, evaluator, graph or workflow CLI implemented |
 | 05 | Provider adapter, executor, deterministic validator | DONE | 2026-10-25 | 158 tests passed; actual Gemini request and SQLite result verified; fresh-process reuse makes no additional call | Live `gemini-3.5-flash-lite` v3/T02 passed; see follow-up evidence below |
-| 06 | LLM planner and persistent LangGraph workflow | DONE | 2026-10-25 | 180 tests; real planner and selected executions; matched live memory diagnostic; strict SQLite checkpoints and fresh-process reuse | Approval pending; Module 07 not started; see evidence below |
-| 07 | Workflow CLI, approvals, corrections | PENDING | — | Not run | No approval functionality implemented |
+| 06 | LLM planner and persistent LangGraph workflow | DONE | 2026-10-25 | 180 tests; real planner and selected executions; matched live memory diagnostic; strict SQLite checkpoints and fresh-process reuse | Live planner verified; approval pending; see evidence below |
+| 07 | Workflow CLI, approvals, corrections | DONE | 2026-10-25 | 200 tests; real live CLI and fresh-process reuse; offline approval/correction and atomic-request tests | Live approval pending; full Module 08 demo not started |
 | 08 | Three cycles and full process restart | PENDING | — | Not run | Live/replay outputs and restart evidence absent |
 | 09 | Reliability, security, isolation, retries | PENDING | — | Not run | Negative cases and telemetry pending |
 | 10 | Ten scenarios, three memory comparisons, measurements | PENDING | — | Not run | No evaluation results claimed |
@@ -723,3 +723,116 @@ user deletion of `.env.example` remains untouched and excluded from the commit.
 No secrets or runtime databases are committed. Nothing pushed.
 
 MODULE 06 COMPLETE — STOPPED. Awaiting: START MODULE 07
+
+
+## Module 07 — Review CLI, developer approvals and corrections — 2026-10-25
+
+Status: **DONE**. User explicitly authorized
+`START MODULE 07` and previously authorized local commits, with pushes reserved
+for the user. Scope is limited to Module 07. The pre-existing `.env.example`
+deletion is preserved and excluded from this module's commit.
+
+### Implemented
+
+- Extended `src/promptpatch/cli.py` with `demo seed`, review start/status/resume,
+  memory show, policy propose/approve, version approve/reject, and logs show.
+  Formatted JSON displays version/cycle/policy, actual selected/executed IDs,
+  deterministic discrepancies, Git/case/history refs, recommendation, errors,
+  and the separate authoritative human approval record.
+- Added `reviews.py`: project-scoped lookups, preflight for source/policy/cases,
+  provider configuration and cycle key; atomic cycle/request creation; immutable
+  saved model/settings/history/base-version/fixture metadata; checkpoint resume.
+  Repeated identical starts return the same review. Changed requests are blocked.
+- Added `approvals.py`: validated bounded policy documents, pending proposals,
+  separate explicit activation, version/cycle matching, actor attribution, and
+  duplicate decision rejection. Promotion approval requires a completed candidate
+  under the current policy with no open risks. Rejection appends a separate row;
+  the next graph retrieves it and respects it. Git is never changed by approvals.
+- Added `review_audit.py`: adapters link existing source/memory reads and tool
+  errors to a cycle. Original tool audits remain intact; this does not introduce
+  new tool capabilities or additional model calls.
+- Explicit replay requires a fixture/scenario and replay mode. Resume verifies
+  its content hash and restores its event cursor from persisted call starts.
+  Handwritten `samples/replay/module07_reviews.json` is clearly labeled as offline
+  fixture evidence, not real Gemini inference or model agency.
+- `tests/test_reviews_cli.py` exercises actual CLI subprocesses, SQLite and Git.
+  Existing graph/store/provider implementations were preserved; the controller
+  extends their interfaces rather than rewriting prior modules. No schema,
+  dependency, configuration-loader, or evaluated-source changes were needed.
+
+### Actual checks and evidence
+
+| Command / check actually executed | Result |
+|---|---|
+| `.venv/bin/python -m pytest tests/test_foundation.py -q` | PASS: 10 tests; existing CLI/configuration behavior preserved |
+| `.venv/bin/python -m pytest tests/test_reviews_cli.py -q` | PASS: 19 new tests before final atomic-request test, 85.27 seconds |
+| Initial `.venv/bin/python -m pytest -q` | PASS: 199 tests in 115.88 seconds; one existing Google SDK Python deprecation warning |
+| Final `.venv/bin/python -m pytest -q` after atomic cycle/request improvement | PASS: **200 tests in 104.84 seconds**, one existing SDK deprecation warning, zero failures |
+| `.venv/bin/promptpatch review start --help`, `version approve --help` | PASS: exact command flags inspected |
+| Temporary live wrapper invoking CLI subprocesses with safely parsed local credentials | PASS: one actual Gemini v3 review, status/resume, memory/log views; no release approval |
+| Temporary offline wrapper invoking 13 CLI commands | PASS: replay review, simulated owner approval, duplicate approval blocked, policy proposal/activation, later review under revision 2, resume/log/memory views |
+| SQLite integrity, foreign keys and duplicate completed-result queries in both isolated stores | PASS: `ok`, zero FK errors, zero duplicate results |
+| Compare fixture v1/v2/v3 SHAs with recorded Module 03 identities | PASS: all three unchanged |
+| Scan exports and isolated runtime databases for configured key | PASS: absent; key never printed |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `.venv/bin/python -m compileall -q src scripts tests` | PASS |
+| `git diff --check` | PASS |
+
+Live check: real `gemini-3.5-flash-lite`, `demo/v3`, cycle
+`module07-live-cli`. The planner selected **T01/T02/T07/T11**, exactly those four
+executed, and results were **pass/pass/pass/uncertain**. T11's unsupported-unit
+metadata requires clarification. Recommendation: **needs_review**, human
+approval **pending**. There were **5** model-call starts. Separate fresh Python
+processes ran status/resume and returned identical output with unchanged domain
+table counts: no repeated model calls, result writes, or approvals.
+
+Offline evidence: simulated owner decisions use explicitly synthetic actors.
+The proposal left revision 1 approved until a separate policy approval command;
+then revision 1 became superseded and revision 2 approved. A subsequent review
+used revision 2. A targeted test with the same replay output **4.005 mm** passes
+under the original 0.01 tolerance and fails under approved 0.001, while the earlier
+result remains unchanged. This is deterministic replay evidence, not live output.
+
+Tests also cover project/version-mismatched and incomplete/failed review approvals,
+blank actors, malformed policy JSON, stale proposals, old-policy candidate
+approval rejection, rejection retrieved next time, resolved risks reopening as
+regressed with original/latest cycle provenance, retry attempts with one completed
+result, changed replay and missing checkpoints, and fresh-process resume after
+planning or committed results. The final fault-injection check verifies that a
+request-write interruption cannot leave an orphaned cycle.
+
+Artifacts: `artifacts/module07/live_cli.json`, `replay_cli.json`,
+`verification.json`, and their README. Authoritative databases and checkpoints
+remain ignored under `data/module07/`. `.env` remains environment-only configuration;
+temporary verification runners parsed selected local values as data, never shell
+code, without exposing the key.
+
+### Decisions and limits
+
+- `version approve/reject` requires **--cycle** as well as version/project/actor;
+  the exact review must be identified when multiple cycles exist. Policy proposal
+  requires actor/reason and a file whose revision equals the next project revision.
+- `demo seed` delegates to the existing Module 03 script from the documented
+  editable checkout, preserving its destination verification and explicit
+  fictional-baseline approval. Standalone wheel fixture packaging is unverified.
+- A local actor string attributes an explicit command; this single-user CLI is
+  not an authentication system. Synthetic test approvals do not imply student
+  release approval or teacher approval. The live version remains unapproved.
+- Completed checkpoints return their original recommendation; status reads the
+  authoritative human decision separately. Unknown in-flight model attempts,
+  held/invalid terminal plans, and missing checkpoints require review/restoration
+  or a new cycle; resume does not blindly repeat external calls.
+- One worker per cycle; no concurrent-worker orchestration. A completed review
+  may still recommend needs_review or revise; CLI exit 0 does not mean release
+  approval. No model cost was guessed.
+
+**Implemented/tested:** CLI workflow and targeted Module 07 acceptance above;
+**20 new integration tests**, atomic-request rollback/retry check, and the full
+**200-test** regression suite passed.
+**Pending:** Module 08 three-version/restart/correction runner and later modules,
+formal evaluation/report, and actual teacher approval. No Module 08 implementation
+or full three-cycle demonstration is claimed.
+**Blocked:** None within Module 07. No secret or runtime database is committed;
+nothing pushed.
+
+MODULE 07 COMPLETE — STOPPED. Awaiting: START MODULE 08
