@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools==84.2.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "promptpatch"
+version = "0.1.0"
+description = "Persistent memory-driven prompt regression testing (in development)"
+readme = "README.md"
+requires-python = ">=3.14,<3.15"
+dependencies = ["pydantic==2.14.1"]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+
+[project.scripts]
+promptpatch = "promptpatch.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
