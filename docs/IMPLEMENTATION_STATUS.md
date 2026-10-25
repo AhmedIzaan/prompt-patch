@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-25 (Asia/Karachi).
-Authorized scope: **Modules 00–03**. Modules 04–11 require separate explicit authorization.
+Authorized scope: **Modules 00–04**. Modules 05–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Next approval required: `START MODULE 04`.
+- Stop after each module. Next approval required: `START MODULE 05`.
 
 ## Module checklist
 
@@ -22,7 +22,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 01 | Python foundation, config, CLI, test harness | DONE | 2026-10-25 | Editable install, 8 pytest tests, help/doctor, pip check; see Module 01 evidence below | No DB tables, provider adapter, or graph implemented |
 | 02 | SQLite domain memory, versioned corrections | DONE | 2026-10-25 | 32 passing tests; CLI init twice; SQLite integrity/FK checks; fresh-process retrieval | Domain persistence implemented; checkpoints and live integrations pending |
 | 03 | Curated cases and versioned local Git fixture | DONE | 2026-10-25 | 62 passing tests; actual seed twice; three real Git SHAs; SQLite counts/integrity checked | Fictional baseline only; candidate v2 remains a file; no model results |
-| 04 | Read-only Git and memory tools | PENDING | — | Not run | Real evidence retrieval not implemented |
+| 04 | Read-only Git and memory tools | DONE | 2026-10-25 | 101 passing tests; actual v1/v2/v3 reads/diff, bounded memory and approved-policy lookup, audit read-back | No provider calls, evaluator, graph or workflow CLI implemented |
 | 05 | Provider adapter, executor, deterministic validator | PENDING | — | Not run | Provider not connected; key required locally |
 | 06 | LLM planner and persistent LangGraph workflow | PENDING | — | Not run | No agent decisions or checkpoints verified |
 | 07 | Workflow CLI, approvals, corrections | PENDING | — | Not run | No approval functionality implemented |
@@ -328,3 +328,98 @@ not connected. Prompt failure/recovery patterns are anticipated wording effects,
 not observed live outcomes. T09 contains an attack example, not proof of resistance.
 
 MODULE 03 COMPLETE — STOPPED. Awaiting: START MODULE 04
+
+## Module 04 — Read-only Git evidence and scoped memory tools
+
+Status: **DONE**. The user's “do it” authorized Module 04 following the Module 03
+handoff. Initial tree was clean at `c96ec00` on `main`. Inspected the module plan,
+status, configuration, domain schema/store API, fixture seeder, and README.
+No additional workspace `AGENTS.md` found. No earlier module code/schema was changed.
+
+### Implemented / design decisions
+
+- `git_tool.py`: trusted per-project `RepositoryAccess` mapping, fixed read-only
+  Git commands, full commit SHA validation, lexical/canonical path restrictions,
+  project-owned snapshot registration checks, regular blob checks, UTF-8 decoding,
+  raw SHA-256 verification, and typed prompt/diff evidence with provenance.
+- Reads/compares never edit, stage, commit, checkout, or promote the evaluated repo.
+  Defaults are 64 KiB per prompt, 128 KiB per diff, and 5 seconds per subprocess.
+  Prompt size is checked before reading; stdout is streamed with a hard cap and
+  child processes are killed/waited on after timeout or output overflow.
+- Git environment routing/global config, optional locks, hooks/fsmonitor, lazy
+  fetching, and replacement objects are disabled; diff disables external diff and
+  text conversion. Full local non-bare repositories are supported. Linked worktrees,
+  external object stores, and metadata/path escapes are explicitly rejected.
+- Both diff snapshots must be registered to the requested project/path and match
+  immutable stored hashes. No invented interpretation is returned, just the real
+  bounded diff and source/version references. Embedded instructions remain data.
+- `memory_tool.py`: bounded project-scoped risk/current state, immutable failure
+  history, saved validation outcomes, developer decisions, approved policy
+  corrections, and reference revision metadata. Each collection has a 1–50 limit,
+  explicit truncation indicator, and combined 128 KiB result budget.
+- Tags filter risk categories and tagged outcomes/reference revisions. Human
+  decisions and policy corrections remain project-wide because they apply across
+  categories. `open_only` affects risk/history selection. Raw model responses and
+  full source bodies are excluded. History is bounded to the selected risk IDs.
+- Active-policy lookup selects only approved current policy, with revision/source
+  ID and parsed rules. Pending proposals never become active via retrieval.
+- `tool_support.py`: read-only SQLite snapshots plus invocation/completion/error
+  audit boundaries. Logs record call IDs, UTC timestamps, latency, safe error codes,
+  and source record IDs; no source/feedback bodies, invalid inputs, or Git stderr.
+  Memory retrieval/policy lookup additionally record `memory_read` events.
+  Failed audit writes fail closed rather than returning success.
+- Unknown projects cannot receive FK-scoped audit rows; archived projects forbid
+  writes. Both fail without cross-project audit writes. Direct read-only store
+  access to archived records remains available as documented in Module 02.
+
+### Files changed
+
+Added `src/promptpatch/git_tool.py`, `src/promptpatch/memory_tool.py`,
+`src/promptpatch/tool_support.py`, `tests/test_git_tool.py`, and
+`tests/test_memory_tool.py`. Updated README and this status document.
+No new dependencies, schema migrations, or CLI commands were introduced.
+Runtime SQLite audit rows are gitignored; evaluated Git metadata is unchanged.
+
+### Actual checks / evidence
+
+| Command / check | Result |
+|---|---|
+| `.venv/bin/python -m pytest -q` after initial tools | PASS: existing 62 tests in 4.98 seconds |
+| Final `.venv/bin/python -m pytest -q` | PASS: **101 tests in 11.43 seconds**, no failures |
+| Inline Python default-fixture tool exercise | PASS: actual v1/v2/v3 content/hash verification; real v1→v2 diff; traversal rejected; empty initial history correctly returned; approved v1 policy retrieved |
+| Evaluated Git metadata SHA-256 snapshots before/after real tool exercise | PASS: all `.git` file contents unchanged |
+| Audit read-back scoped to `demo` | 7 tool invocations, 6 successes, 1 deliberately rejected traversal, 2 memory-read events; 0 review cycles |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `git diff --check` | PASS: no whitespace errors |
+
+Real source verification from the seeded fixture:
+
+| Prompt | Bytes | Actual raw-content SHA-256 |
+|---|---|---|
+| v1 | 362 | `ce45d8d3eade5106baff29e06b8047b41821c0777cbdd541d6cceaec79521d8e` |
+| v2 | 358 | `4e0cc181cedb93a45d4d8482edadd59cb035518940b0f93c76dfb3ccbe5fc229` |
+| v3 | 762 | `a985dac72d9802f6d3da445330abf44789ea7cff9a2966002c40006df16f13ce` |
+
+Actual v1→v2 diff: 594 UTF-8 bytes. No earlier review risks/outcomes/decisions or
+corrections exist in the default fixture; all six returned historical collections
+were correctly empty. Saved-history retrieval tests use separate synthetic offline
+records, including regression/resolution, developer rejection, approved v2 with
+pending v3, revised references, and another project's private evidence.
+
+Tests also cover invalid refs/options, traversal/absolute/unsafe paths, missing
+files, unknown commits, project registration/allowlist failures, hash mismatch,
+UTF-8 errors, internal/external symlink rejection, output budgets, actual child
+timeout termination, unsupported Git commands, no external diff/textconv execution,
+embedded source instructions leaving policy/approval state unchanged, secret-safe
+error/audit output, parameterized filters, bounded history/truncation, no foreign
+memory, absent approved policy, unknown/archived projects, and audit-storage failure.
+
+**Implemented:** Module 04 evidence and memory retrieval tools.
+**Tested:** 101 offline tests and actual default-fixture Git/SQLite reads/audits.
+**Pending:** Module 05 provider/executor/deterministic evaluator and later modules.
+**Blocked:** None in Module 04. Provider is not connected; teacher approval remains
+pending/unverified. No model outputs, live security claims, or formal evaluation
+results are invented. Runtime tools need trusted local configuration and an
+available writable domain audit store; their evaluated Git repo remains read-only.
+
+MODULE 04 COMPLETE — STOPPED. Awaiting: START MODULE 05
