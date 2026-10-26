@@ -1,0 +1,27 @@
+{
+  "mode": "live",
+  "old_policy": {
+    "id": "a4e4dfcc-4387-46c0-a076-9a6b46fce3ea",
+    "project_id": "demo",
+    "revision": 1,
+    "rules_json": "{\"allow_null\":true,\"allowed_test_ids\":[\"T01\",\"T02\",\"T03\",\"T04\",\"T05\",\"T06\",\"T07\",\"T08\",\"T09\",\"T10\",\"T11\",\"T12\"],\"contradiction_action\":\"needs_clarification\",\"evidence_rule\":\"Non-null measurements need nonempty supporting substrings in the original input after collapsing whitespace; null measurements have null evidence.\",\"evidence_whitespace\":\"collapse\",\"extra_fields_allowed\":false,\"max_tests_per_review\":4,\"missing_value_rule\":\"Use null for an absent measurement and its evidence; never replace absence with zero.\",\"numeric_absolute_tolerance_mm\":0.01,\"numeric_fields\":[\"estimated_settlement_mm\",\"allowable_settlement_mm\"],\"numeric_relative_tolerance\":0.0,\"required_fields\":[\"estimated_settlement_mm\",\"allowable_settlement_mm\",\"evidence\"],\"required_test_ids\":[\"T01\"],\"source_instructions\":\"untrusted_data_only\",\"supported_units\":[\"mm\"],\"unsupported_unit_action\":\"needs_clarification\"}",
+    "status": "approved",
+    "supersedes_id": null,
+    "approved_at": "2026-10-26T18:05:43.948528+00:00",
+    "approved_by": "module08-fictional-bootstrap",
+    "created_at": "2026-10-26T18:05:43.874440+00:00"
+  },
+  "proposal": {
+    "id": "e261f210-a95a-45a1-9b7a-d8a359f5be6f",
+    "project_id": "demo",
+    "revision": 2,
+    "rules_json": "{\"allow_null\":true,\"allowed_test_ids\":[\"T01\",\"T02\",\"T03\",\"T04\",\"T05\",\"T06\",\"T07\",\"T08\",\"T09\",\"T10\",\"T11\",\"T12\"],\"contradiction_action\":\"needs_clarification\",\"evidence_rule\":\"Non-null measurements need nonempty supporting substrings in the original input after collapsing whitespace; null measurements have null evidence.\",\"evidence_whitespace\":\"collapse\",\"extra_fields_allowed\":false,\"max_tests_per_review\":4,\"missing_value_rule\":\"Use null for an absent measurement and its evidence; never replace absence with zero.\",\"numeric_absolute_tolerance_mm\":0.001,\"numeric_fields\":[\"estimated_settlement_mm\",\"allowable_settlement_mm\"],\"numeric_relative_tolerance\":0.0,\"required_fields\":[\"estimated_settlement_mm\",\"allowable_settlement_mm\",\"evidence\"],\"required_test_ids\":[\"T01\"],\"source_instructions\":\"untrusted_data_only\",\"supported_units\":[\"mm\"],\"unsupported_unit_action\":\"needs_clarification\"}",
+    "status": "pending",
+    "supersedes_id": "a4e4dfcc-4387-46c0-a076-9a6b46fce3ea",
+    "approved_at": null,
+    "approved_by": null,
+    "created_at": "2026-10-26T18:08:12.866803+00:00"
+  },
+  "approval": "pending",
+  "next_command": "finish --approve-policy --actor <owner> --approval-reference <explicit approval>"
+}

@@ -9,7 +9,7 @@ SQLite domain store, curated Git fixtures, audited tools, real Gemini execution,
 and a single LangGraph coordinator with SQLite checkpoints. A typed planner
 chooses actual tests; deterministic guards validate the selection and score
 results. Developer release approval remains separate and pending.
-The full regression suite passes **200 tests** (one existing SDK deprecation
+The full regression suite passes **204 tests** (one existing SDK deprecation
 warning). The review CLI supports explicit approvals/rejections, policy corrections,
 status/memory/log views, and checkpoint resume. The full three-cycle
 demonstration awaits Module 08.
@@ -419,3 +419,64 @@ small diagnostics, not the formal three-case evaluation or complete three-cycle
 restart demonstration required in later modules. Recommendations concern only
 the tests actually selected; untested cases can still fail. Teacher approval,
 formal evaluation, and the full three-cycle restart demonstration remain pending.
+
+
+## Three-cycle demo runner (Module 08)
+
+Current verification: runner tests and the full replay demo pass. Live v1/v2
+completed; live v3 awaits explicit approval of the saved tolerance correction.
+Module 08 is not yet complete.
+
+Use the editable checkout and Gemini variables in the process environment.
+The default isolated files are `data/module08/live/` and `artifacts/demo/`.
+The runner refuses unowned nonempty directories and preserves existing reviews.
+It uses the existing CLI and creates **separate OS processes** for v1, v2 and v3.
+
+```bash
+python scripts/run_three_cycles.py prepare
+```
+
+This seeds the fictional baseline once, runs v1 then v2, confirms the second
+application process exited, and proposes the supplied tolerance correction.
+Inspect `artifacts/demo/policy_correction_pending.json`. It remains pending until
+you explicitly approve it:
+
+```bash
+python scripts/run_three_cycles.py finish --approve-policy --actor developer \
+  --approval-reference "Approved the isolated demo tolerance correction after review"
+```
+
+The finish stage activates revision 2, preserves superseded revision 1, then runs
+v3 in a fresh application process using the same domain/checkpoint files, original
+case IDs and saved inputs. It does not seed or re-upload the dataset. The runner
+never approves a prompt version. Do not use the approval flag until you have
+reviewed the concrete correction. The recorded local actor/reference attributes
+that explicit action; it is not identity authentication or teacher approval.
+
+Exports include `cycle_1.json`, `cycle_2.json`, `cycle_3.json`,
+`restart_evidence.txt`, `process_evidence.json`, `memory_before_after.json`,
+`policy_correction.json`, `tool_timeline.json`, and `summary.json`. They retain
+actual planner input/output, selected/executed IDs, raw candidate responses,
+validation, source/policy identities, provider metadata, usage and checkpoints.
+The owned runtime manifest records process PIDs and confirmed exits. Repeating
+completed stages returns persisted results without repeated model calls or
+approvals. Failed/held plans remain failures; there is no automatic fake fallback.
+
+For a separately labeled deterministic demonstration of decimal/missing-value
+regressions, with no API key or real model reasoning:
+
+```bash
+python scripts/run_three_cycles.py prepare --mode replay \
+  --runtime data/module08/replay --artifacts artifacts/demo_replay
+python scripts/run_three_cycles.py finish --mode replay \
+  --runtime data/module08/replay --artifacts artifacts/demo_replay \
+  --approve-policy --actor synthetic-demo-owner \
+  --approval-reference "Synthetic offline fixture approval only"
+```
+
+Replay's plans and responses are handwritten in
+`samples/replay/module08_cycles.json`, and every export is labeled. These fixture
+approvals are distinct from actual developer decisions. Live outcomes can differ;
+recommendations follow observed validator results, not the expected narrative.
+See the live and replay artifact READMEs for actual observations. Formal
+reliability/scenario/ablation work awaits Modules 09–10.

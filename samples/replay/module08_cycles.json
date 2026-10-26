@@ -1,0 +1,55 @@
+{
+  "fixture_id": "module08-handwritten-three-cycle-v1",
+  "live_inference": false,
+  "provenance": "Handwritten with Codex assistance. Deterministic regression/missing-value edge cases; not captured Gemini outputs, real usage, or evidence of LLM reasoning.",
+  "scenarios": {
+    "cycle_1": [
+      {
+        "raw_text": "{\"decision\": \"RUN_TESTS\", \"test_ids\": [\"T01\", \"T02\", \"T03\"], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:514d7be901ecca503bd5832e83e7834537fe4eaa:settlement_prompt.txt\"], \"needs_developer_approval\": false}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 5.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4.5 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 0.0, \"allowable_settlement_mm\": 0.0, \"evidence\": {\"estimated\": null, \"allowable\": null}}"
+      }
+    ],
+    "cycle_2": [
+      {
+        "raw_text": "{\"decision\": \"RUN_TESTS\", \"test_ids\": [\"T01\", \"T02\", \"T03\", \"T04\"], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt\"], \"needs_developer_approval\": false}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.5, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4.5 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 0.0, \"allowable_settlement_mm\": 0.0, \"evidence\": {\"estimated\": null, \"allowable\": null}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 0.0, \"allowable_settlement_mm\": 12.0, \"evidence\": {\"estimated\": null, \"allowable\": \"The allowable settlement is 12 mm\"}}"
+      }
+    ],
+    "cycle_3": [
+      {
+        "raw_text": "{\"decision\": \"RUN_TESTS\", \"test_ids\": [\"T01\", \"T02\", \"T03\", \"T04\"], \"test_mode\": \"targeted_regression\", \"reason_summary\": \"Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.\", \"memory_evidence_ids\": [], \"source_evidence_refs\": [\"git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt\"], \"needs_developer_approval\": false}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.0, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": 4.5, \"allowable_settlement_mm\": 10.0, \"evidence\": {\"estimated\": \"The estimated settlement is 4.5 mm\", \"allowable\": \"the allowable settlement is 10 mm\"}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": null, \"allowable_settlement_mm\": null, \"evidence\": {\"estimated\": null, \"allowable\": null}}"
+      },
+      {
+        "raw_text": "{\"estimated_settlement_mm\": null, \"allowable_settlement_mm\": 12.0, \"evidence\": {\"estimated\": null, \"allowable\": \"The allowable settlement is 12 mm\"}}"
+      }
+    ]
+  }
+}

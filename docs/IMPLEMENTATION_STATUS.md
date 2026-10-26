@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
-Last updated: 2026-10-25 (Asia/Karachi).
-Authorized scope: **Modules 00–07**. Modules 08–11 require separate explicit authorization.
+Last updated: 2026-10-26 (Asia/Karachi).
+Authorized scope: **Modules 00–08**. Modules 09–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Module 07 is verified; next approval required: `START MODULE 08`.
+- Stop after each module. Module 08 is in progress; Module 09 requires `START MODULE 09`.
 
 ## Module checklist
 
@@ -26,7 +26,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 05 | Provider adapter, executor, deterministic validator | DONE | 2026-10-25 | 158 tests passed; actual Gemini request and SQLite result verified; fresh-process reuse makes no additional call | Live `gemini-3.5-flash-lite` v3/T02 passed; see follow-up evidence below |
 | 06 | LLM planner and persistent LangGraph workflow | DONE | 2026-10-25 | 180 tests; real planner and selected executions; matched live memory diagnostic; strict SQLite checkpoints and fresh-process reuse | Live planner verified; approval pending; see evidence below |
 | 07 | Workflow CLI, approvals, corrections | DONE | 2026-10-25 | 200 tests; real live CLI and fresh-process reuse; offline approval/correction and atomic-request tests | Live approval pending; full Module 08 demo not started |
-| 08 | Three cycles and full process restart | PENDING | — | Not run | Live/replay outputs and restart evidence absent |
+| 08 | Three cycles and full process restart | BLOCKED | 2026-10-26 | 204 tests passed; complete replay demo; actual live cycles 1–2 completed | Awaiting explicit developer approval of proposed tolerance correction before live cycle 3 |
 | 09 | Reliability, security, isolation, retries | PENDING | — | Not run | Negative cases and telemetry pending |
 | 10 | Ten scenarios, three memory comparisons, measurements | PENDING | — | Not run | No evaluation results claimed |
 | 11 | Reproducibility, report, submission and demo docs | PENDING | — | Not run | Report/demo/package pending; no publishing authorized |
@@ -836,3 +836,118 @@ or full three-cycle demonstration is claimed.
 nothing pushed.
 
 MODULE 07 COMPLETE — STOPPED. Awaiting: START MODULE 08
+
+
+## Module 08 — Three-cycle runner and process restart — 2026-10-26
+
+Status: **BLOCKED — awaiting explicit developer correction approval**. The user
+authorized Module 08 and local commits; no Module 09 work was started. Code and
+checks below are implemented/tested, but live acceptance is not yet complete.
+
+### Implemented
+
+- `scripts/run_three_cycles.py`: isolated owned runtime/export directories;
+  existing CLI commands run as separate OS application processes with recorded
+  PID, start/exit times, exit code and confirmed reaping. Stable cycle keys reuse
+  completed calls. No model-response-dependent Git/source edits or auto approvals.
+- `prepare` seeds once, runs real v1/v2 reviews, and leaves the concrete policy
+  correction pending. `finish` requires explicit `--approve-policy`, `--actor`,
+  and `--approval-reference`; it activates revision 2, then runs v3 in a new
+  process without reseeding/reuploading. The runner verifies original case IDs,
+  source hashes and import-event counts, plus policy/checkpoint/provider evidence.
+- Exports actual planner input/output, candidate responses, deterministic scores,
+  source/policy identities and memory. Full completion exports the requested
+  cycle files, restart text, process evidence, memory snapshots, policy history,
+  tool timeline and concise summary. No replay is an automatic live fallback.
+- `samples/replay/module08_cycles.json`: explicitly handwritten offline fixture
+  showing decimal and missing-value regressions, continued/new risks, and later
+  resolution. Its scripted choices are never claimed as live LLM agency.
+- `tests/test_three_cycles.py`: real subprocess end-to-end replay, explicit
+  approval boundary, source identity and process restart, revision 2 use, replay
+  provenance, risk resolution, stage idempotency, interrupted-export recovery,
+  ownership/configuration guards. Prior modules and dependency pins unchanged.
+
+### Actual commands and results
+
+| Command/check | Actual result |
+|---|---|
+| Initial `.venv/bin/python -m pytest tests/test_three_cycles.py -q` | FAILED: one SQLite-row conversion error in the new exporter, three tests passed |
+| Fix row conversion and cached export recovery; rerun same tests | PASS: 4 tests in 14.81 seconds |
+| `.venv/bin/python -m pytest -q` after final code/test changes | PASS: **204 tests in 120.98 seconds**, one existing Google SDK Python deprecation warning, zero failures |
+| `.venv/bin/python /tmp/promptpatch_module08_live.py prepare` | Initial live v1 completed and persisted; old exporter failed afterward. Corrected rerun reused v1 without another call, then completed v2 and saved pending proposal |
+| Replay runner `prepare --mode replay --runtime data/module08/replay --artifacts artifacts/demo_replay`, then `finish` with synthetic owner/approval reference | PASS: three completed CLI reviews, distinct process PIDs and confirmed exit before cycle 3; revision 2 active for cycle 3; all required replay artifacts saved |
+| `.venv/bin/python scripts/run_three_cycles.py --help` | PASS: staged commands/options inspected |
+| `.venv/bin/python -m compileall -q src scripts tests` | PASS |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `git diff --check` | PASS |
+| Read-only SQLite checks for live and replay stores | PASS: integrity `ok`, zero FK errors, zero duplicate results |
+| Scan runtime/export files for configured key without printing it | PASS: key absent |
+
+The temporary live wrapper read only allowlisted `.env` values as data with
+`shlex`, never executing shell content or printing credentials. The application
+still reads process environment variables, and no credential/configuration file
+was changed. Neither runtime databases nor temporary wrappers are committed.
+
+### Live observations (actual Gemini, not replay)
+
+| Cycle | Actual selection / results | Memory and outcome |
+|---|---|---|
+| v1 | T01 pass, T02 fail, T06 fail, T07 pass | No earlier risks; numeric/quote failures persisted as two risks; `revise`, approval pending |
+| v2 | T01 pass, T02 pass, T06 pass, T05 fail | Planner explicitly cited both v1 risks and retested T02/T06; added T05 in place of T07; missing-value regression persisted; `revise`, approval pending |
+| v3 | **NOT RUN** | Awaiting the concrete policy correction decision; no success/restart/model output invented |
+
+The v2 reason explicitly references the earlier failures and its supplied risk
+IDs. Its added T05 choice is observable sequential evidence; this is not a
+controlled memory ablation or a statistical causality claim. Full controlled
+comparisons remain Module 10 work. Live storage currently has 2 cycles,
+2 planner decisions, 8 test executions and **0** human release decisions.
+
+`artifacts/demo/policy_correction_pending.json` holds revision 2, proposed to
+change absolute tolerance **0.01 → 0.001 mm**, retaining revision 1. It remains
+pending and revision 1 remains the active approved policy. An asynchronous
+approval request asked the developer to approve this specific isolated change
+with actor `developer`. **No approval response has been received at this stop.**
+
+The permission requirement comes from master plan Module 08 step 5, “Demonstrate
+a developer-approved policy correction”, and the invariant that proposals stay
+inactive until a separate explicit approval. Approval of a prompt release is a
+different action; no prompt version is automatically approved by this runner.
+
+### Replay observations (separate fixture evidence)
+
+`artifacts/demo_replay/summary.json` records v1/v2/v3 recommendations
+`revise/revise/promote_candidate`. Three stored risks resolve in cycle 3, all
+selected v3 outputs pass, revision 1 remains queryable as superseded, and
+revision 2 is active. `process_evidence.json` / `restart_evidence.txt` confirm a
+fresh worker after the v2 process exited, identical saved source/case identities,
+and no seed after v2. Prompt approval remains pending. Policy actor/reference
+explicitly identify a synthetic offline test action; it is not student release
+or teacher approval. Replay storage has 3 cycles, 3 planner decisions,
+11 executions and **0** human release decisions.
+
+### Remaining work and resume
+
+**Implemented/tested:** runner, four tests, full regression suite, completed
+replay restart/correction workflow, live v1/v2 memory-driven execution, and owned
+exports. The exporter bug was fixed within Module 08 and the initial real result
+reused; no failure history was erased.
+
+**Pending/blocked:** explicit owner decision on the saved isolated policy
+correction, then the live v3 process and final live restart/policy/evidence
+verification. Do not mark Module 08 complete or start Module 09 yet. Existing
+`.env.example` deletion remains preserved and excluded from the local commit.
+No secrets or runtime databases are staged; nothing pushed. Teacher approval is
+still unverified. Approximate cost remains unknown rather than fabricated.
+
+After explicit approval, use the existing safe local environment wrapper:
+
+```bash
+.venv/bin/python /tmp/promptpatch_module08_live.py finish --approve-policy \
+  --actor developer --approval-reference "Actual developer approval from this conversation"
+```
+
+The reference must describe an actual received approval, not be copied as a
+claim before consent. Then verify outputs/checks, update this status, commit the
+completion, and stop at the Module 09 gate.
+
+MODULE 08 BLOCKED — STOPPED
