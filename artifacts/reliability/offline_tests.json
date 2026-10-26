@@ -1,0 +1,13 @@
+{
+  "mode": "offline-replay-and-mocked-sdk",
+  "live_inference": false,
+  "exit_code": 0,
+  "tests": 26,
+  "failed": 0,
+  "skipped": 0,
+  "elapsed_ms": 9447.045939989039,
+  "local_cpu_seconds": 9.191903,
+  "child_peak_rss_kib": 124172,
+  "stdout": "..........................                                               [100%]\n=============================== warnings summary ===============================\n.venv/lib/python3.14/site-packages/google/genai/types.py:42\n  /mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/.venv/lib/python3.14/site-packages/google/genai/types.py:42: DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17\n    VersionedUnionType = Union[builtin_types.UnionType, _UnionGenericAlias]\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n26 passed, 1 warning in 7.25s\n",
+  "stderr": ""
+}

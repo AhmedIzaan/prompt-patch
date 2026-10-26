@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from promptpatch.errors import RecordNotFound, StoreError
 from promptpatch.repository import Repository
+from promptpatch.security import contains_credentials
 
 
 class ToolError(RuntimeError):
@@ -50,6 +51,8 @@ class AuditedTools:
                 store.append_audit_event(project_id, "tool_invoked", call_id, {"tool": tool})
                 try:
                     result, evidence_refs = action()
+                    if contains_credentials(result.model_dump() if hasattr(result, "model_dump") else result):
+                        raise ToolError("sensitive_evidence", "Source evidence contains credential material; an owner correction is required.")
                 except ToolError as error:
                     store.append_audit_event(project_id, "tool_failed", call_id, {
                         "tool": tool, "error_code": error.code,

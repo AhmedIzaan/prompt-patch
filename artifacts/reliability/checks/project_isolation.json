@@ -1,0 +1,6 @@
+{
+  "mode": "offline-replay-or-mock",
+  "foreign_ids_rejected": true,
+  "foreign_history_supplied": false,
+  "local_result": "promote_candidate"
+}

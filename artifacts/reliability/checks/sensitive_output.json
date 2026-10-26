@@ -1,0 +1,6 @@
+{
+  "mode": "offline-replay-or-mock",
+  "blocked": true,
+  "no_result": true,
+  "database_and_checkpoint_clean": true
+}

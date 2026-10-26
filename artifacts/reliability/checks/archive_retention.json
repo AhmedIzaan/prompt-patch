@@ -1,0 +1,6 @@
+{
+  "mode": "offline-replay-or-mock",
+  "owner_actor_required": true,
+  "history_retained": true,
+  "new_writes_and_model_work_blocked": true
+}

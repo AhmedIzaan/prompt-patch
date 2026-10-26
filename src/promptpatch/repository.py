@@ -13,6 +13,7 @@ import sqlite3
 from uuid import uuid4
 
 from promptpatch.db import SCHEMA_VERSION, connect
+from promptpatch.security import contains_credentials, redact
 from promptpatch.errors import (
     DuplicateOperation, InvalidStateTransition, RecordNotFound, StoreError, SupersededPolicy,
 )
@@ -61,9 +62,15 @@ class Repository:
             self._db.rollback()
             raise
 
+    @staticmethod
+    def _safe(value):
+        if contains_credentials(value):
+            raise StoreError("Credential material cannot be persisted; use an explicit owner correction.")
+
     def _insert(self, table: str, **values) -> str:
         # Table/column identifiers come exclusively from internal constant callers.
         values = {"id": str(uuid4()), **values}
+        self._safe(values)
         columns = ",".join(values)
         placeholders = ",".join("?" for _ in values)
         self._db.execute(f"INSERT INTO {table} ({columns}) VALUES ({placeholders})", tuple(values.values()))
@@ -88,13 +95,14 @@ class Repository:
     def _audit(self, project_id, event_type, ref_id, details, cycle_id=None):
         return self._insert(
             "audit_events", project_id=project_id, cycle_id=cycle_id, event_type=event_type,
-            ref_id=ref_id, details_json=encode(details), created_at=utc_now(),
+            ref_id=ref_id, details_json=encode(redact(details)), created_at=utc_now(),
         )
 
     @staticmethod
     def _actor(actor):
         if not isinstance(actor, str) or not actor.strip():
             raise InvalidStateTransition("Explicit nonempty actor required.")
+        Repository._safe(actor)
 
     def create_project(self, project_id: str, name: str) -> dict:
         if not project_id.strip() or not name.strip():
@@ -267,6 +275,7 @@ class Repository:
         return self._get("planner_decisions", project_id, decision_id)
 
     def record_failure(self, project_id, cycle_id, fingerprint, category, evidence):
+        self._safe({"fingerprint": fingerprint, "category": category, "evidence": evidence})
         with self._transaction():
             self._project(project_id, writable=True)
             self.get_review_cycle(project_id, cycle_id)
@@ -295,6 +304,7 @@ class Repository:
         return self._get("failure_memories", project_id, failure_id)
 
     def resolve_failure(self, project_id, failure_id, cycle_id, evidence):
+        self._safe(evidence)
         with self._transaction():
             self._project(project_id, writable=True)
             old = self.get_failure(project_id, failure_id)
@@ -359,6 +369,7 @@ class Repository:
         return dict(row)
 
     def _finish_operation(self, project_id, operation, status, details, result_ref=None):
+        self._safe(result_ref)
         if operation["status"] == "completed":
             raise DuplicateOperation("Operation is already completed.")
         self._db.execute(
@@ -366,7 +377,7 @@ class Repository:
             (status, result_ref, utc_now(), project_id, operation["id"]),
         )
         self._insert("operation_attempts", project_id=project_id, operation_id=operation["id"],
-                     status=status, details_json=encode(details), created_at=utc_now())
+                     status=status, details_json=encode(redact(details)), created_at=utc_now())
         self._audit(project_id, "tool_operation_" + status, operation["id"], details, operation["cycle_id"])
 
     def finish_tool_operation(self, project_id, operation_key, *, success, details, result_ref=None):

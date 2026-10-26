@@ -4,12 +4,12 @@ PromptPatch is a persistent memory-driven agent for testing settlement
 measurement extraction prompts across versions. This fictional domain example
 is for regression testing, not engineering judgment.
 
-**Current status: Modules 00–08 complete.** The package includes the persistent
+**Current status: Modules 00–09 complete.** The package includes the persistent
 SQLite domain store, curated Git fixtures, audited tools, real Gemini execution,
 and a single LangGraph coordinator with SQLite checkpoints. A typed planner
 chooses actual tests; deterministic guards validate the selection and score
 results. Developer release approval remains separate and pending.
-The full regression suite passes **206 tests** (one existing SDK deprecation
+The full regression suite passes **232 tests** (one existing SDK deprecation
 warning). The review CLI supports explicit approvals/rejections, policy corrections,
 status/memory/log views, and checkpoint resume. The full three-cycle
 live demonstration, explicit restart and approved policy correction are verified.
@@ -370,11 +370,11 @@ concurrent initialization, and CLI behavior. All stored test outputs are explici
 synthetic offline fixtures; separate Module 05/06 live checks supply the actual
 model integration evidence.
 
-Codex assisted with inspection, documentation, and the Modules 01–08 implementation.
+Codex assisted with inspection, documentation, and the Modules 01–09 implementation.
 The student must review, understand, and be able to modify submitted code.
 No external datasets have been imported. Third-party dependencies are listed
 above. Development proceeds one explicitly authorized module at a time; next is
-Module 09, after explicit approval.
+Module 10, after explicit approval.
 
 
 ## Planner and persisted graph (Module 06)
@@ -492,3 +492,32 @@ approvals are distinct from actual developer decisions. Live outcomes can differ
 recommendations follow observed validator results, not the expected narrative.
 See the live and replay artifact READMEs for actual observations. Formal
 reliability/scenario/ablation work awaits Modules 09–10.
+
+
+## Reliability/security checks and telemetry (Module 09)
+
+```bash
+python scripts/check_reliability.py
+python scripts/check_reliability.py --live-injection  # explicit real Gemini check
+promptpatch telemetry show --project demo --cycle my-review
+```
+
+Telemetry is read-only and project-scoped: actual started calls by purpose/mode,
+received responses, retries/failures/in-flight state, observed latencies, tokens
+with missing values retained, duplicate logical actions and local storage sizes.
+No token price or replay cost is guessed. Use the database environment variables
+for the cycle you want to inspect. The control runner uses separate owned
+`data/module09/` and `artifacts/reliability/` directories.
+
+The credential guard rejects recognized sensitive source/result material before
+model or persistence boundaries, including update and restored-checkpoint paths.
+Audit/CLI/export values are redacted without silently altering source hashes or
+acceptance references. Errors expose safe codes and HTTP status; 504 is recorded
+as a timeout. Retries remain bounded and completed operation keys are reused.
+
+Read the [control and retention semantics](docs/RELIABILITY_CONTROLS.md) and
+[actual evidence](artifacts/reliability/README.md). Offline mocks/replay are clearly
+separate from the one real adversarial extraction check. Local actor strings are
+not authentication, old data is not automatically erased, and this is not a
+claim of universal injection/secret protection. Formal Module 10 evaluation is
+still pending.

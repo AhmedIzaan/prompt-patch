@@ -9,6 +9,7 @@ from promptpatch.git_tool import GitEvidenceTool, RepositoryAccess
 from promptpatch.graph import ReviewGraph
 from promptpatch.model_provider import GeminiProvider, ModelSettings, ReplayProvider
 from promptpatch.repository import Repository, digest, utc_now
+from promptpatch.security import reject_credentials
 from promptpatch.review_audit import CycleGitTools, CycleMemoryTools
 from promptpatch.tool_support import read_snapshot
 
@@ -161,6 +162,7 @@ class Reviews:
                 raise ReviewError("Replay fixture exceeds 256 KiB.")
             request["replay_hash"] = digest(path.read_text())
         # Configuration/fixture preflight makes no external request.
+        reject_credentials(request)
         self._provider(request)
         try:
             existing = cycle_by_key(self.db_path, project_id, key)

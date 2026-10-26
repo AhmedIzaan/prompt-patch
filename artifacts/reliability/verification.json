@@ -1,0 +1,25 @@
+{
+  "module": "09",
+  "sqlite_integrity": "ok",
+  "foreign_key_errors": 0,
+  "actual_live_model_calls": 1,
+  "duplicate_completed_results": 0,
+  "human_release_decisions": 0,
+  "policy_unchanged": true,
+  "configured_credential_absent_from_exports_and_runtime": true,
+  "telemetry_cli_read_only": true,
+  "project_scoped_tool_invocations": [
+    [
+      "read_git_prompt",
+      4
+    ]
+  ],
+  "notes": "Repeated read-tool audits are genuine reads, not duplicate external/model/result actions. This is one fixed live control, not a planner review.",
+  "formal_module10_scenarios_or_ablation": "not implemented",
+  "tests": {
+    "full_regression_passed": 232,
+    "module09_controls_passed": 26,
+    "warnings": 1,
+    "elapsed_seconds": 156.68
+  }
+}

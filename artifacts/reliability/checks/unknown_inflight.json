@@ -1,0 +1,47 @@
+{
+  "mode": "offline-replay-or-mock",
+  "telemetry": {
+    "project_id": "demo",
+    "cycle_id": "3fc32706-eef8-40f8-b78b-1aa98b89207b",
+    "cycle_status": "pending",
+    "MODEL_CALLS": 2,
+    "LIVE_MODEL_CALLS": 0,
+    "MODEL_CALLS_BY_PURPOSE": {
+      "planner": 0,
+      "candidate_execution": 2
+    },
+    "RECEIVED_PROVIDER_RESPONSES": 0,
+    "FAILED_MODEL_CALLS": 0,
+    "UNKNOWN_INFLIGHT_OPERATIONS": 1,
+    "LOGICAL_LATENCY_MS": 0,
+    "MISSING_PLANNER_LATENCY_RECORDS": 0,
+    "PROVIDER_RESPONSE_LATENCY_MS": 0,
+    "ATTEMPT_LATENCY_MS": 2,
+    "MISSING_ATTEMPT_LATENCY_RECORDS": 0,
+    "latency_note": "Observed sums, not end-to-end wall time; old missing failure timings remain unknown.",
+    "TOKEN_USAGE": {
+      "prompt_token_count": null,
+      "candidates_token_count": null,
+      "thoughts_token_count": null,
+      "total_token_count": null
+    },
+    "TOKEN_USAGE_UNKNOWN_RESPONSES": {
+      "prompt_token_count": 0,
+      "candidates_token_count": 0,
+      "thoughts_token_count": 0,
+      "total_token_count": 0
+    },
+    "provider_modes": [],
+    "failure_details": [],
+    "COMPLETED_TESTS": 0,
+    "DUPLICATE_ACTIONS": 0,
+    "call_status_note": "Received responses can contain invalid plans. Failed-call audit events include output-validation failures; neither proves successful agency.",
+    "duplicate_definition": "Extra completed results per operation key plus extra human decisions per cycle; not HTTP exactly-once billing.",
+    "APPROXIMATE_COST": null,
+    "cost_note": "No verified price configured; replay has no measured provider tokens/cost.",
+    "LOCAL_STORAGE_BYTES": {
+      "domain": 245760,
+      "checkpoint": null
+    }
+  }
+}

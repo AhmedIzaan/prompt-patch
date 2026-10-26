@@ -1,0 +1,9 @@
+{
+  "mode": "offline-replay-or-mock",
+  "statuses": [
+    "pass",
+    "uncertain",
+    "uncertain"
+  ],
+  "recommendation": "needs_review"
+}

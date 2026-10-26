@@ -22,6 +22,7 @@ from promptpatch.memory_tool import MemoryTools
 from promptpatch.model_provider import ProviderError
 from promptpatch.planner import Planner, validate_decision
 from promptpatch.repository import Repository, digest, encode
+from promptpatch.security import reject_credentials
 from promptpatch.tool_support import ToolError, read_snapshot
 
 
@@ -117,10 +118,12 @@ class ReviewGraph:
                    "base_version_id": base_version_id, "memory_enabled": memory_enabled, "settings_hash": settings_hash,
                    "selected_test_ids": [], "execution_results": [], "risk_changes": [], "error": None,
                    "pending_approval": True, "next_action": "load_context"}
+        reject_credentials(initial)
         # Do not export source text or model responses to optional hosted tracing.
         with tracing_context(enabled=False), self.compiled() as graph:
             snapshot = graph.get_state(config)
             if snapshot.values:
+                reject_credentials(snapshot.values)
                 if any(snapshot.values.get(key) != initial[key] for key in
                        ("project_id", "cycle_id", "version_id", "base_version_id", "memory_enabled", "settings_hash")):
                     raise ValueError("checkpoint_request_changed")
@@ -141,6 +144,7 @@ class ReviewGraph:
             catalog = [{"id": row["id"], "test_id": row["case_key"], "tags": json.loads(row["tags_json"]),
                         "input_text": row["input_text"], "source_ref": f"case:{row['id']}"}
                        for row in store.get_active_test_cases(p) if row["case_key"] in policy["rules"]["allowed_test_ids"]]
+            reject_credentials({"catalog": catalog, "policy": policy})
             if len(catalog) > 50 or len(encode(catalog).encode()) > 65536:
                 raise ValueError("catalog_budget_exceeded")
             if cycle["status"] == "pending":

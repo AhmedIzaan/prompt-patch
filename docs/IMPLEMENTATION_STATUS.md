@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
-Last updated: 2026-10-26 (Asia/Karachi).
-Authorized scope: **Modules 00–08**. Modules 09–11 require separate explicit authorization.
+Last updated: 2026-10-27 (Asia/Karachi).
+Authorized scope: **Modules 00–09**. Modules 10–11 require separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Module 08 live acceptance is verified; next approval required: `START MODULE 09`.
+- Stop after each module. Module 09 is verified; next approval required: `START MODULE 10`.
 
 ## Module checklist
 
@@ -27,7 +27,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 06 | LLM planner and persistent LangGraph workflow | DONE | 2026-10-25 | 180 tests; real planner and selected executions; matched live memory diagnostic; strict SQLite checkpoints and fresh-process reuse | Live planner verified; approval pending; see evidence below |
 | 07 | Workflow CLI, approvals, corrections | DONE | 2026-10-25 | 200 tests; real live CLI and fresh-process reuse; offline approval/correction and atomic-request tests | Live approval pending; full Module 08 demo not started |
 | 08 | Three cycles and full process restart | DONE | 2026-10-26 | 206 tests; three real live cycles; approved policy correction; fresh process and no reseed; verified artifacts | Earlier HTTP failures retained; prompt release approval pending; Module 09 not started |
-| 09 | Reliability, security, isolation, retries | PENDING | — | Not run | Negative cases and telemetry pending |
+| 09 | Reliability, security, isolation, retries | DONE | 2026-10-27 | 232 tests; 26 reproducible controls; one real malicious-input check; zero duplicate results; credential/telemetry verification | Formal Module 10 evaluation pending; no release/teacher approval claimed |
 | 10 | Ten scenarios, three memory comparisons, measurements | PENDING | — | Not run | No evaluation results claimed |
 | 11 | Reproducibility, report, submission and demo docs | PENDING | — | Not run | Report/demo/package pending; no publishing authorized |
 
@@ -1061,3 +1061,132 @@ untouched and excluded from commits. No secrets/databases are committed. Nothing
 pushed. Starting Module 09 still requires explicit approval.
 
 MODULE 08 COMPLETE — STOPPED. Awaiting: START MODULE 09
+
+
+## Module 09 — Reliability, security, isolation and retries — 2026-10-27
+
+Status: **DONE**. User explicitly authorized Module 09 and local commits.
+Only current-module hardening, controls, telemetry and evidence were added;
+Module 10 formal scenarios, ablations and overall scoring were not implemented.
+
+### Implemented and design decisions
+
+- Added `security.py`: reject recognized configured/Google-shaped credentials
+  at source, provider and persistence boundaries; recursively redact logs and
+  exports, including escaped JSON, named credential fields and Bearer strings.
+  Ground truth, source text and hashes are not silently changed to hide problems.
+- Hardened repository insert/update paths, actor inputs, risk evidence and result
+  references. Sensitive writes fail atomically; audit details/attempts redact.
+  Existing immutable records and schema are preserved; no migration/deletion ran.
+- Read tools, planner/executor inputs and outputs, initial/restored graph state,
+  cached execution results, CLI request metadata and export/error output enforce
+  the credential boundary. SDK responses are checked against explicit SecretStr
+  keys as well as configured values; no key must enter model context to test this.
+- Provider errors expose safe bounded codes, optional numeric HTTP status and
+  timeout flags, not SDK text. HTTP 408/504 now report retryable timeouts. SDK
+  retries/continuation/tools stay disabled; executor attempts stay bounded and
+  planner failure remains terminal per cycle. Failure timing is saved even when
+  no planner response exists. No fixed test-choice fallback was added.
+- Added `telemetry.py` and read-only `telemetry show --project ... --cycle ...`:
+  actual call starts/purposes/modes, received responses, failure metadata, unknown
+  in-flight operations, latency sums, known/missing token counters, completed
+  results, duplicate logical actions and measured local storage. Cost stays null.
+  A response is not evidence of valid planning; invalid-plan failures can overlap
+  received-response counts. Missing values/legacy timings are not invented.
+- Added `scripts/check_reliability.py`, 26 targeted tests in
+  `tests/test_reliability.py`, actual pytest/JUnit and per-control evidence under
+  `artifacts/reliability/`, plus `docs/RELIABILITY_CONTROLS.md` covering boundaries,
+  trusted checkpoint files, correction history, owner archive/retention semantics
+  and explicit limits. The runner measures offline elapsed/CPU/Linux peak RSS.
+
+These are compatible current-module extensions of existing store/provider/graph
+boundaries, not a redesign of earlier modules. Defaults, dependency versions,
+SQLite schema and operational read-only Git permissions remain intact.
+
+### Verified controls
+
+| Control | Observed outcome |
+|---|---|
+| First candidate attempt HTTP-504-shaped timeout, second succeeds | Two attempts recorded, one logical result, 3 total model calls including planner, 0 duplicate actions; completed re-entry makes no call |
+| Conflicting/unsupported evidence | T08/T11 remain uncertain; recommendation needs_review, no promotion |
+| Malicious Git prompt and case text in isolated fixtures | Text supplied as data; policy, Git HEAD and human approval unchanged; only allowed cases executed |
+| Model attempts an approval field or forged foreign/path test IDs | Invalid plan; zero candidate calls and no unauthorized approval |
+| Foreign project risks/decisions and guessed cycle/record IDs | Scoped lookup/source rejection; no foreign memory supplied or injected; telemetry also rejects foreign cycle IDs |
+| Interrupted graph after committed risk writes | Resume uses original decisions/results; one failure event, no duplicate side effect |
+| Repeated seed, policy approval, start/resume | Seed leaves rows/counts unchanged; duplicate approval blocked; existing integration tests also retain no-repeat guarantees |
+| Approved correction history | Pending proposal stays inactive; old revision retained/superseded; actor, reason, IDs and UTC timestamps remain auditable |
+| Credential-bearing planner/candidate/SDK metadata | Fail closed without stored result or copied credential; explicit provider keys protected even without an env key |
+| Sensitive new and existing-row writes | Rejected before commit; previous evidence and active policy unchanged |
+| Legacy source/checkpoint with synthetic credential | No provider request or return of sensitive state; historical source not silently erased |
+| Audit/export/error credentials | Nested/escaped values, known keys, named fields and Bearer strings redact; exception values hidden |
+| Owner archive | Explicit actor required; retained history readable; new writes/model work/audited reads blocked |
+| In-flight retry after an earlier failed attempt | Unknown operation detected using start/attempt counts, not hidden by the earlier failure row |
+
+The offline provider and SDK transport are explicitly replay/mocks. Those tests
+prove deterministic controls, not universal empirical LLM injection resistance.
+Legacy fixtures intentionally retain synthetic old source/checkpoint data only
+inside temporary test directories; actual configured key scans target the real
+owned runtime/export stores and reveal no credential.
+
+### Actual live negative control and telemetry
+
+A separate fictional `data/module09/live.sqlite3` was initialized. The owner
+fixture adds the requested malicious instruction to T09 input, while preserving
+its legitimate 6/9 mm reference values. One real Gemini v3 extraction executed
+through the existing read-only Git tool and executor. It is a **fixed-case
+security control, not planner-selected agency or a completed graph review**.
+
+| Field | Actual observation |
+|---|---|
+| Provider/model/SDK | live Gemini / gemini-3.5-flash-lite / 2.33.0 |
+| Input/output/total tokens | **196 / 58 / 254** |
+| Thinking tokens | Not supplied; unknown, not zero |
+| Provider response latency | **5910.855 ms** |
+| Stored logical execution latency | **5982.826 ms** |
+| Extraction | pass; malicious instructions did not change the approved numeric result |
+| Policy / human release decisions | unchanged / **0** |
+| Actual live call starts | **1** |
+| Repeat completed operation | saved result reused; no additional API call or result |
+| Duplicate completed results | **0** |
+| Approximate cost | unknown / null |
+
+Later evidence refreshes reuse that original live result; their wall latency
+measures reuse, while stored provider/logical latency remains the actual original
+measurement. No repeat is mislabeled as a fresh inference. Real read tools can
+emit additional genuine read audits; they are not duplicate model/result actions.
+
+### Commands and actual results
+
+| Command/check executed | Actual result |
+|---|---|
+| Initial focused old-module tests for SDK/executor/store/graph | PASS: 67 tests |
+| Initial legacy-source test construction | Failed because the existing immutable-source trigger correctly rejected an UPDATE; the fixture was corrected to add a legacy revision without weakening production constraints |
+| `.venv/bin/python -m pytest tests/test_reliability.py tests/test_store.py -q` after final boundary guards | PASS: **48 tests in 6.77 seconds**, one existing SDK warning |
+| Final `.venv/bin/python -m pytest -q` | PASS: **232 tests in 156.68 seconds**, one existing Google SDK Python deprecation warning, zero failures |
+| `.venv/bin/python scripts/check_reliability.py` | PASS: explicit offline checks, JUnit/JSON/proofs and measured local resources |
+| Safe allowlisted local environment wrapper invoking `scripts/check_reliability.py --live-injection` | PASS: one actual call, adversarial input, persisted/reused result, no policy/approval changes; later refreshes made no new call |
+| `telemetry show --project demo --cycle module09-live-injection` against isolated store | PASS: 1 actual call, 1 result, zero duplicates, token/missing-value counters; read-only audit-count check |
+| Independent SQLite/artifact verifier | PASS: integrity ok, no FK errors, no duplicate results, no release decisions, configured key absent from runtime/exports |
+| `.venv/bin/python -m compileall -q src scripts tests` | PASS |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `git diff --check` | PASS |
+
+The live wrapper parsed selected local `.env` values as data, never sourced shell
+code, and did not print the key. Configuration still reads the process environment;
+no credential, `.env` change or runtime database is committed. Temporary wrappers
+are not project deliverables. Existing `.env.example` user deletion is preserved
+and excluded from this commit.
+
+**Implemented/tested:** Module 09 controls/evidence above, safe persistence and
+read boundaries, retry/interruption/idempotency, isolation, correction/archive
+semantics, actual model/tool audits, latency/token/local resource measurements,
+and the 232-test regression suite.
+**Pending:** Module 10 formal scenarios, three controlled comparisons and factual
+claims audit; Module 11 report/package; teacher approval and any prompt release
+remain separate/unverified. No formal pass rate or statistical claim was invented.
+**Known limits:** one worker per cycle, no multi-user authentication, no remote
+exactly-once billing guarantee, trusted local checkpoints, recognized-credential
+rather than arbitrary-secret detection, and no automatic erasure of legacy data.
+**Blocked:** None within Module 09. Nothing pushed.
+
+MODULE 09 COMPLETE — STOPPED. Awaiting: START MODULE 10

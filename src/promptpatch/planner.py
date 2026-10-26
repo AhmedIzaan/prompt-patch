@@ -1,6 +1,7 @@
 """Evidence-based model planning; Python validates permissions, never chooses tests."""
 
 import json
+from time import perf_counter
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -9,6 +10,7 @@ from promptpatch.evaluator import parse_json
 from promptpatch.errors import RecordNotFound
 from promptpatch.model_provider import ProviderError
 from promptpatch.repository import Repository, digest, encode
+from promptpatch.security import contains_credentials
 from promptpatch.tool_support import read_snapshot
 
 PLANNER_INSTRUCTION = """You select regression tests for structured settlement extraction.
@@ -116,29 +118,38 @@ class Planner:
                                      {"purpose": "planner", "mode": self.provider.mode,
                                       "model_id": self.settings.model_id, "attempt": 1}, cycle_id)
             response, parsed, error = None, None, None
+            failure = {}
+            attempt_started = perf_counter()
             try:
                 response = self.provider.generate_once(PLANNER_INSTRUCTION, encode(context), self.settings,
                                                        purpose="planner", response_schema=planner_schema(context))
                 if (response.purpose != "planner" or response.provider != self.provider.name
                         or response.mode != self.provider.mode or response.model_id != self.settings.model_id):
                     raise ProviderError("provider_identity_mismatch")
+                if contains_credentials(response.model_dump()):
+                    raise ProviderError("sensitive_output")
                 if len(response.raw_text.encode()) > 65536:
                     raise ProviderError("response_limit")
                 parsed = parse_json(response.raw_text)
                 validate_decision(parsed, context)
             except ProviderError as exc:
                 error = exc.code
+                failure = {"http_status": exc.http_status, "timeout": exc.timed_out, "retryable": exc.retryable}
+                if error == "sensitive_output":
+                    response, parsed = None, None
             except (ValueError, ValidationError):
                 error = "invalid_planner_output"
-            saved = {"request_hash": request_hash, "input": context, "system_instruction": PLANNER_INSTRUCTION,
+            attempt_elapsed_ms = (perf_counter() - attempt_started) * 1000
+            saved = {"elapsed_ms": attempt_elapsed_ms, "request_hash": request_hash, "input": context, "system_instruction": PLANNER_INSTRUCTION,
                      "response_schema": planner_schema(context),
                      "settings": self.settings.model_dump(), "supplied_memory_refs":
                      (context["long_term_memory"] or {}).get("source_refs", []),
                      "response": response.model_dump() if response else None, "plan": parsed, "error": error}
             row = store.record_planner_decision(project_id, cycle_id, memory_enabled, saved, self.settings.model_id)
             store.finish_tool_operation(project_id, key, success=True,
-                                        details={"purpose": "planner", "error_code": error}, result_ref=row["id"])
+                                        details={"purpose": "planner", "error_code": error, "elapsed_ms": attempt_elapsed_ms, **failure}, result_ref=row["id"])
             store.append_audit_event(project_id, "model_call_failed" if error else "model_call_completed", operation["id"],
-                                     {"purpose": "planner", "error_code": error,
-                                      "elapsed_ms": response.elapsed_ms if response else None}, cycle_id)
+                                     {"purpose": "planner", "provider": self.provider.name, "mode": self.provider.mode,
+                                      "model_id": self.settings.model_id, "error_code": error,
+                                      "elapsed_ms": attempt_elapsed_ms, "usage": response.usage if response else {}, **failure}, cycle_id)
             return {"id": row["id"], **saved}

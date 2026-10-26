@@ -1,0 +1,34 @@
+{
+  "mode": "offline-replay-or-mock",
+  "repeated_seed_no_changes": true,
+  "duplicate_approval_blocked": true,
+  "old_revision": 1,
+  "new_revision": 2,
+  "actor": "offline-owner",
+  "approved_at": "2026-10-26T19:00:51.620510+00:00",
+  "history": [
+    {
+      "id": "c59a3811-38c9-4ee1-8c82-8c13aeb915e5",
+      "project_id": "demo",
+      "cycle_id": null,
+      "event_type": "policy_proposed",
+      "ref_id": "bd8f7256-8cd3-4f2b-8549-53ac54ca06d7",
+      "details_json": {
+        "actor": "offline-owner",
+        "reason": "Synthetic approved correction provenance check."
+      },
+      "created_at": "2026-10-26T19:00:51.613431+00:00"
+    },
+    {
+      "id": "78a8ba2b-1242-4b09-bcf3-f15cf1ab2cb5",
+      "project_id": "demo",
+      "cycle_id": null,
+      "event_type": "policy_approved",
+      "ref_id": "bd8f7256-8cd3-4f2b-8549-53ac54ca06d7",
+      "details_json": {
+        "actor": "offline-owner"
+      },
+      "created_at": "2026-10-26T19:00:51.620692+00:00"
+    }
+  ]
+}

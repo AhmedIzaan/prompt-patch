@@ -14,6 +14,7 @@ from promptpatch.errors import RecordNotFound
 from promptpatch.evaluator import EvaluationConfigError, SettlementEvaluator
 from promptpatch.model_provider import ModelSettings, ProviderError
 from promptpatch.models import SettlementExtraction
+from promptpatch.security import contains_credentials
 from promptpatch.repository import Repository, digest
 from promptpatch.tool_support import read_snapshot
 
@@ -33,6 +34,8 @@ class TestExecutor:
     @staticmethod
     def _result(row, *, reused):
         response = json.loads(row["response_json"])
+        if contains_credentials(response):
+            raise ExecutionError("sensitive_stored_result")
         return {"execution_id": row["id"], "project_id": row["project_id"], "status": row["status"],
                 "validation": json.loads(row["validation_json"]), "response": response,
                 "elapsed_ms": row["elapsed_ms"], "reused": reused}
@@ -53,6 +56,8 @@ class TestExecutor:
             rules, expected, tags = json.loads(policy["rules_json"]), json.loads(case["expected_json"]), json.loads(case["tags_json"])
             if digest({"input": case["input_text"], "expected": expected, "tags": tags}) != case["content_hash"]:
                 raise ExecutionError("reference_identity_mismatch")
+            if contains_credentials({"prompt": prompt_snapshot.model_dump(), "case": case, "policy": policy}):
+                raise ExecutionError("sensitive_evidence")
             if policy["status"] not in {"approved", "superseded"}:
                 raise ExecutionError("policy_not_approved")
             request_hash = digest({"cycle_id": cycle_id, "prompt_version_id": prompt["id"],
@@ -123,12 +128,14 @@ class TestExecutor:
                     if (response.purpose != "candidate_execution" or response.provider != self.provider.name
                             or response.mode != self.provider.mode or response.model_id != model_settings.model_id):
                         raise ProviderError("provider_identity_mismatch")
+                    if contains_credentials(response.model_dump()):
+                        raise ProviderError("sensitive_output")
                     if len(response.raw_text.encode()) > 65536:
                         raise ProviderError("response_limit")
                 except ProviderError as error:
                     elapsed = (perf_counter() - attempt_started) * 1000
                     details = {**metadata, "error_code": error.code, "timeout": error.timed_out,
-                               "elapsed_ms": elapsed, "retryable": error.retryable}
+                               "elapsed_ms": elapsed, "retryable": error.retryable, "http_status": error.http_status}
                     store.finish_tool_operation(project_id, operation_key, success=False, details=details)
                     store.append_audit_event(project_id, "model_call_failed", operation["id"], details, cycle_id)
                     if not error.retryable or attempt == model_settings.max_attempts:

@@ -1,0 +1,6 @@
+{
+  "mode": "offline-replay-or-mock",
+  "candidate_calls": 0,
+  "error": "invalid_planner_output",
+  "unauthorized_action_completed": false
+}

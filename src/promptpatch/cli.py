@@ -10,6 +10,7 @@ from promptpatch import __version__
 from promptpatch.config import ConfigurationError, load_settings
 from promptpatch.db import initialize_database
 from promptpatch.errors import StoreError
+from promptpatch.security import redact, redact_text
 from promptpatch.repository import Repository
 from promptpatch.model_provider import ProviderError
 from promptpatch.tool_support import ToolError
@@ -37,6 +38,10 @@ def _parser():
             item.add_argument("--memory-off", action="store_true")
             item.add_argument("--replay-file", type=Path)
             item.add_argument("--replay-scenario")
+    telemetry = commands.add_parser("telemetry").add_subparsers(dest="action", required=True)
+    measurement = telemetry.add_parser("show", help="Read actual calls, attempts, latency, usage and duplicate counts.")
+    measurement.add_argument("--project", required=True)
+    measurement.add_argument("--cycle", required=True)
     memory = commands.add_parser("memory").add_subparsers(dest="action", required=True)
     memory.add_parser("show").add_argument("--project", required=True)
     policy = commands.add_parser("policy").add_subparsers(dest="action", required=True)
@@ -85,6 +90,10 @@ def _dispatch(args, settings):
             return controller.start(args.project, args.version, args.cycle, base_label=args.base_version,
                                     memory_enabled=not args.memory_off, replay_file=args.replay_file, replay_scenario=args.replay_scenario, timeout_ms=args.timeout_ms)
         return getattr(controller, args.action)(args.project, args.cycle)
+    if args.command == "telemetry":
+        from promptpatch.telemetry import review_telemetry
+        cycle = cycle_by_key(settings.db_path, args.project, args.cycle)
+        return review_telemetry(settings.db_path, args.project, cycle["id"], checkpoint_path=settings.checkpoint_db_path)
     if args.command == "memory":
         return {"active_policy": MemoryTools(settings.db_path).read_active_policy(args.project),
                 "history": MemoryTools(settings.db_path).retrieve_memory(args.project)}
@@ -131,7 +140,7 @@ def main(argv: list[str] | None = None) -> int:
             print("Domain database initialized (schema 1); existing records preserved.")
             return 0
         result = _dispatch(args, settings)
-        rendered = json.dumps(result, indent=2, allow_nan=False)
+        rendered = json.dumps(redact(result), indent=2, allow_nan=False)
         if settings.gemini_api_key:
             rendered = rendered.replace(settings.gemini_api_key.get_secret_value(), "[redacted]")
         print(rendered)
@@ -152,7 +161,7 @@ def main(argv: list[str] | None = None) -> int:
                                              "action": args.action, "error_code": type(exc).__name__})
             except (StoreError, OSError, sqlite3.Error):
                 pass
-        print(message, file=sys.stderr)
+        print(redact_text(message), file=sys.stderr)
         return 1
 
 

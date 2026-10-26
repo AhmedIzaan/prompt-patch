@@ -1,0 +1,11 @@
+{
+  "mode": "offline-replay-or-mock",
+  "malicious_text_was_data": true,
+  "policy_unchanged": true,
+  "human_decisions": 0,
+  "git_head_unchanged": true,
+  "selected": [
+    "T01",
+    "T09"
+  ]
+}

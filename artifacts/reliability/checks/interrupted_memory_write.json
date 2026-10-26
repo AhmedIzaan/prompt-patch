@@ -1,0 +1,7 @@
+{
+  "mode": "offline-replay-or-mock",
+  "failure_recorded_events": 1,
+  "model_calls": 2,
+  "resumed": true,
+  "duplicate_writes": 0
+}

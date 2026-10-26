@@ -1,0 +1,6 @@
+{
+  "mode": "offline-replay-or-mock",
+  "provider_calls": 0,
+  "credential_not_copied_to_checkpoint": true,
+  "historical_source_not_erased": true
+}

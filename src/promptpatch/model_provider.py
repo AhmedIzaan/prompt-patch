@@ -12,6 +12,9 @@ from typing import Literal, Protocol
 from google import genai
 from google.genai import errors, types
 import httpx
+import re
+
+from promptpatch.security import contains_credentials
 from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 
@@ -19,13 +22,16 @@ CallPurpose = Literal["candidate_execution", "planner"]
 
 
 class ProviderError(RuntimeError):
-    def __init__(self, code, *, retryable=False, timed_out=False):
+    def __init__(self, code, *, retryable=False, timed_out=False, http_status=None):
+        if not isinstance(code, str) or not re.fullmatch(r"[a-z][a-z0-9_]{0,63}", code) or contains_credentials(code):
+            code = "provider_error"
         super().__init__("Model provider operation failed: " + code)
         self.code, self.retryable, self.timed_out = code, retryable, timed_out
+        self.http_status = http_status if type(http_status) is int and 400 <= http_status <= 599 else None
 
 
 class ModelSettings(BaseModel):
-    model_config = ConfigDict(frozen=True, strict=True, extra="forbid", allow_inf_nan=False)
+    model_config = ConfigDict(frozen=True, strict=True, extra="forbid", allow_inf_nan=False, hide_input_in_errors=True)
     model_id: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._/-]+$")
     temperature: float = Field(default=0.0, ge=0, le=1)
     seed: int | None = None
@@ -98,7 +104,7 @@ class GeminiProvider:
             if len(raw_text.encode("utf-8")) > 65536:
                 raise ProviderError("response_limit")
             usage = response.usage_metadata
-            return ProviderResponse(
+            result = ProviderResponse(
                 provider="gemini", mode="live", purpose=purpose, model_id=settings.model_id,
                 model_version=response.model_version, sdk_version=version("google-genai"),
                 response_id=response.response_id, raw_text=raw_text,
@@ -106,14 +112,18 @@ class GeminiProvider:
                 usage={name: getattr(usage, name, None) for name in
                        ("prompt_token_count", "candidates_token_count", "thoughts_token_count", "total_token_count")},
             )
+            if contains_credentials(result.model_dump(), extra=(self._key.get_secret_value(),)):
+                raise ProviderError("sensitive_output")
+            return result
         except (httpx.TimeoutException, TimeoutError):
             raise ProviderError("timeout", retryable=True, timed_out=True) from None
         except httpx.RequestError:
             raise ProviderError("transport_error", retryable=True) from None
         except errors.APIError as error:
             code = error.code
-            raise ProviderError("quota" if code == 429 else "api_error",
-                                retryable=code in {408, 429, 500, 502, 503, 504}, timed_out=code == 408) from None
+            raise ProviderError("timeout" if code in {408, 504} else "quota" if code == 429 else "api_error",
+                                retryable=code in {408, 429, 500, 502, 503, 504},
+                                timed_out=code in {408, 504}, http_status=code) from None
         except ProviderError:
             raise
         except Exception:

@@ -1,0 +1,7 @@
+{
+  "mode": "offline-replay-or-mock",
+  "http_status": 504,
+  "timeout": true,
+  "retryable": true,
+  "server_message_exposed": false
+}

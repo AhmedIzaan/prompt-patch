@@ -17,6 +17,7 @@ from uuid import uuid4
 from promptpatch.config import load_settings
 from promptpatch.errors import StoreError
 from promptpatch.repository import Repository, digest, utc_now
+from promptpatch.security import redact
 from promptpatch.tool_support import read_snapshot
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,7 +69,7 @@ class DemoRun:
             self.env.pop("GEMINI_MODEL", None)
 
     def _text(self, value):
-        text = json.dumps(value, indent=2, allow_nan=False) + "\n"
+        text = json.dumps(redact(value), indent=2, allow_nan=False) + "\n"
         if self.settings.gemini_api_key:
             text = text.replace(self.settings.gemini_api_key.get_secret_value(), "[redacted]")
         return text
