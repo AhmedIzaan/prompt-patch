@@ -1,0 +1,588 @@
+{
+  "mode": "live",
+  "cycle2_process": {
+    "args": [
+      "review",
+      "start",
+      "--project",
+      "demo",
+      "--version",
+      "v2",
+      "--cycle",
+      "module08-c2",
+      "--base-version",
+      "v1"
+    ],
+    "pid": 161506,
+    "parent_pid": 161505,
+    "started_at": "2026-10-26T18:07:20.984860+00:00",
+    "exited_at": "2026-10-26T18:08:11.483393+00:00",
+    "exit_code": 0,
+    "confirmed_exit": true,
+    "elapsed_ms": 50498.522480003885,
+    "timed_out": false,
+    "output": {
+      "project_id": "demo",
+      "version": "v2",
+      "version_id": "44904afb-ae2a-4320-b34a-099f29d6516e",
+      "cycle": "module08-c2",
+      "cycle_id": "8c2f150d-a5d6-4c81-9e57-1c238153d41e",
+      "status": "completed",
+      "policy_id": "a4e4dfcc-4387-46c0-a076-9a6b46fce3ea",
+      "policy_revision": 1,
+      "policy_status": "approved",
+      "mode": "live",
+      "planner": {
+        "decision": "RUN_TESTS",
+        "memory_evidence_ids": [
+          "risk:fb0107c0-da70-47b8-9463-12c7968f7f00",
+          "risk:dbdca637-beb7-4e7e-a61c-cf46feff4365"
+        ],
+        "needs_developer_approval": false,
+        "reason_summary": "Run required test T01 alongside previously regressed tests T02 and T06 that target decimal handling and wording variations, plus T05 for risk coverage.",
+        "source_evidence_refs": [
+          "case:c96a9e75-a73e-4064-9579-ea0c4b14defc",
+          "case:978cc598-b5b8-4f96-88a5-de0ce132ad4f",
+          "case:2ff72e41-7a41-482b-aa5d-748dc1b24c2c",
+          "case:984b65cb-00d5-4783-be62-2cfe7ee600a2"
+        ],
+        "test_ids": [
+          "T01",
+          "T02",
+          "T06",
+          "T05"
+        ],
+        "test_mode": "targeted_regression"
+      },
+      "planner_error": null,
+      "selected_test_ids": [
+        "T01",
+        "T02",
+        "T06",
+        "T05"
+      ],
+      "supplied_memory_refs": [
+        "risk:fb0107c0-da70-47b8-9463-12c7968f7f00",
+        "risk:dbdca637-beb7-4e7e-a61c-cf46feff4365",
+        "audit:cd87cdcb-7147-4b2a-80f4-f9f6ccdf24e7",
+        "audit:f4bd35a3-cf13-42c3-ab3e-ff4fd0e909e5",
+        "execution:929f7242-ac29-4533-91c4-73a703f25dc5",
+        "execution:0c056d98-d3a6-4576-a6b9-bddfcc25831f",
+        "execution:2d297d16-0428-4bfc-b071-352372ebdb13",
+        "execution:4c896169-a818-4193-bcab-17b8ee4186c6"
+      ],
+      "source_refs": [
+        "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+        "git:514d7be901ecca503bd5832e83e7834537fe4eaa:settlement_prompt.txt",
+        "policy:a4e4dfcc-4387-46c0-a076-9a6b46fce3ea",
+        "case:c96a9e75-a73e-4064-9579-ea0c4b14defc",
+        "case:978cc598-b5b8-4f96-88a5-de0ce132ad4f",
+        "case:b0b04a68-a26d-4d23-848a-42890f621bba",
+        "case:d023678b-01d8-4f8b-ad2e-bee1508e429d",
+        "case:984b65cb-00d5-4783-be62-2cfe7ee600a2",
+        "case:2ff72e41-7a41-482b-aa5d-748dc1b24c2c",
+        "case:3a481e4c-2365-42a5-80ad-30788994ec26",
+        "case:649de313-de30-41e4-a32b-3e23b1c87409",
+        "case:4167f34d-4ada-44c7-82ab-67f3d6a0906f",
+        "case:8bcb2471-a6cf-46e3-a482-65f741816f72",
+        "case:3d987f40-469c-4716-b4bf-7ca69cb9552f",
+        "case:00a08951-32fa-4770-8fbc-f40e91c9077a"
+      ],
+      "results": [
+        {
+          "execution_id": "bd4d06a7-6924-4a43-a34d-4db9cae7a498",
+          "test_id": "T01",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10,
+              "estimated_settlement_mm": 4,
+              "evidence": {
+                "allowable": "the allowable settlement is 10 mm",
+                "estimated": "The estimated settlement is 4 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 5613.757901999634
+        },
+        {
+          "execution_id": "d08d623b-cb58-4cc7-8e11-9a404bdf8d6a",
+          "test_id": "T02",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10.0,
+              "estimated_settlement_mm": 4.5,
+              "evidence": {
+                "allowable": "the allowable settlement is 10 mm",
+                "estimated": "The estimated settlement is 4.5 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 8284.241839006427
+        },
+        {
+          "execution_id": "479d6a0e-fa7a-482d-8914-7d2ca52b24f9",
+          "test_id": "T06",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 8.0,
+              "estimated_settlement_mm": 3.2,
+              "evidence": {
+                "allowable": "Permitted settlement limit: 8 mm.",
+                "estimated": "Predicted vertical movement (settlement): 3.2 mm."
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 8928.634393989341
+        },
+        {
+          "execution_id": "241f1ce0-5166-488c-9aa3-335b54b7bb1b",
+          "test_id": "T05",
+          "status": "fail",
+          "validation": {
+            "discrepancies": [
+              {
+                "code": "absent_supporting_quote",
+                "field": "allowable_settlement_mm",
+                "message": "The source quote does not support the reported measurement."
+              },
+              {
+                "code": "unjustified_non_null",
+                "field": "allowable_settlement_mm",
+                "message": "Reference evidence does not justify a numeric value."
+              }
+            ],
+            "parsed_json": {
+              "allowable_settlement_mm": 0,
+              "estimated_settlement_mm": 2.75,
+              "evidence": {
+                "allowable": "No allowable settlement limit is specified.",
+                "estimated": "Estimated settlement: 2.75 mm."
+              }
+            },
+            "status": "fail"
+          },
+          "elapsed_ms": 8455.63045500603
+        }
+      ],
+      "recommendation": {
+        "action": "revise",
+        "approval": "pending",
+        "error": null,
+        "open_risk_ids": [
+          "e93a4d7c-61c0-47cf-b3da-61aa6466516b"
+        ],
+        "planner_action": "run_tests",
+        "planner_decision_id": "ef35322f-a72e-41a2-aa51-4e2fd956bd0f",
+        "prior_rejection": false,
+        "results": [
+          {
+            "case_id": "c96a9e75-a73e-4064-9579-ea0c4b14defc",
+            "execution_id": "bd4d06a7-6924-4a43-a34d-4db9cae7a498",
+            "status": "pass",
+            "test_id": "T01",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10,
+                "estimated_settlement_mm": 4,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "978cc598-b5b8-4f96-88a5-de0ce132ad4f",
+            "execution_id": "d08d623b-cb58-4cc7-8e11-9a404bdf8d6a",
+            "status": "pass",
+            "test_id": "T02",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.5,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4.5 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "2ff72e41-7a41-482b-aa5d-748dc1b24c2c",
+            "execution_id": "479d6a0e-fa7a-482d-8914-7d2ca52b24f9",
+            "status": "pass",
+            "test_id": "T06",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 8.0,
+                "estimated_settlement_mm": 3.2,
+                "evidence": {
+                  "allowable": "Permitted settlement limit: 8 mm.",
+                  "estimated": "Predicted vertical movement (settlement): 3.2 mm."
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "984b65cb-00d5-4783-be62-2cfe7ee600a2",
+            "execution_id": "241f1ce0-5166-488c-9aa3-335b54b7bb1b",
+            "status": "fail",
+            "test_id": "T05",
+            "validation": {
+              "discrepancies": [
+                {
+                  "code": "absent_supporting_quote",
+                  "field": "allowable_settlement_mm",
+                  "message": "The source quote does not support the reported measurement."
+                },
+                {
+                  "code": "unjustified_non_null",
+                  "field": "allowable_settlement_mm",
+                  "message": "Reference evidence does not justify a numeric value."
+                }
+              ],
+              "parsed_json": {
+                "allowable_settlement_mm": 0,
+                "estimated_settlement_mm": 2.75,
+                "evidence": {
+                  "allowable": "No allowable settlement limit is specified.",
+                  "estimated": "Estimated settlement: 2.75 mm."
+                }
+              },
+              "status": "fail"
+            }
+          }
+        ],
+        "source_refs": [
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+          "git:514d7be901ecca503bd5832e83e7834537fe4eaa:settlement_prompt.txt",
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt"
+        ]
+      },
+      "next_action": "revise",
+      "approval": "pending",
+      "human_decision": null,
+      "errors": []
+    },
+    "stderr": ""
+  },
+  "cycle3_process": {
+    "args": [
+      "review",
+      "start",
+      "--project",
+      "demo",
+      "--version",
+      "v3",
+      "--cycle",
+      "module08-c3-timeout-30000",
+      "--base-version",
+      "v2",
+      "--timeout-ms",
+      "30000"
+    ],
+    "pid": 180540,
+    "parent_pid": 180538,
+    "started_at": "2026-10-26T18:27:10.517663+00:00",
+    "exited_at": "2026-10-26T18:27:38.265869+00:00",
+    "exit_code": 0,
+    "confirmed_exit": true,
+    "elapsed_ms": 27748.18782399234,
+    "timed_out": false,
+    "output": {
+      "project_id": "demo",
+      "version": "v3",
+      "version_id": "3824fc91-3ea7-4feb-80a1-023616c5e5bc",
+      "cycle": "module08-c3-timeout-30000",
+      "cycle_id": "c85283fa-25bf-402e-aade-57fb802e5fde",
+      "status": "completed",
+      "policy_id": "e261f210-a95a-45a1-9b7a-d8a359f5be6f",
+      "policy_revision": 2,
+      "policy_status": "approved",
+      "mode": "live",
+      "planner": {
+        "decision": "RUN_TESTS",
+        "memory_evidence_ids": [
+          "risk:e93a4d7c-61c0-47cf-b3da-61aa6466516b",
+          "audit:2e04d57d-a090-49f9-9294-76e62f73d27d",
+          "execution:241f1ce0-5166-488c-9aa3-335b54b7bb1b"
+        ],
+        "needs_developer_approval": false,
+        "reason_summary": "Select required tests and prioritize unresolved failure T05 from long-term memory, along with discretionary tests T07 and T12 to cover missing values and zero decimals under the max limit of 4.",
+        "source_evidence_refs": [
+          "case:c96a9e75-a73e-4064-9579-ea0c4b14defc",
+          "case:984b65cb-00d5-4783-be62-2cfe7ee600a2",
+          "case:3a481e4c-2365-42a5-80ad-30788994ec26",
+          "case:00a08951-32fa-4770-8fbc-f40e91c9077a",
+          "policy:e261f210-a95a-45a1-9b7a-d8a359f5be6f"
+        ],
+        "test_ids": [
+          "T01",
+          "T05",
+          "T07",
+          "T12"
+        ],
+        "test_mode": "targeted_regression"
+      },
+      "planner_error": null,
+      "selected_test_ids": [
+        "T01",
+        "T05",
+        "T07",
+        "T12"
+      ],
+      "supplied_memory_refs": [
+        "risk:e93a4d7c-61c0-47cf-b3da-61aa6466516b",
+        "audit:2e04d57d-a090-49f9-9294-76e62f73d27d",
+        "execution:241f1ce0-5166-488c-9aa3-335b54b7bb1b",
+        "execution:479d6a0e-fa7a-482d-8914-7d2ca52b24f9",
+        "execution:d08d623b-cb58-4cc7-8e11-9a404bdf8d6a",
+        "execution:bd4d06a7-6924-4a43-a34d-4db9cae7a498",
+        "execution:929f7242-ac29-4533-91c4-73a703f25dc5",
+        "execution:0c056d98-d3a6-4576-a6b9-bddfcc25831f",
+        "execution:2d297d16-0428-4bfc-b071-352372ebdb13",
+        "execution:4c896169-a818-4193-bcab-17b8ee4186c6",
+        "policy:e261f210-a95a-45a1-9b7a-d8a359f5be6f"
+      ],
+      "source_refs": [
+        "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+        "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+        "policy:e261f210-a95a-45a1-9b7a-d8a359f5be6f",
+        "case:c96a9e75-a73e-4064-9579-ea0c4b14defc",
+        "case:978cc598-b5b8-4f96-88a5-de0ce132ad4f",
+        "case:b0b04a68-a26d-4d23-848a-42890f621bba",
+        "case:d023678b-01d8-4f8b-ad2e-bee1508e429d",
+        "case:984b65cb-00d5-4783-be62-2cfe7ee600a2",
+        "case:2ff72e41-7a41-482b-aa5d-748dc1b24c2c",
+        "case:3a481e4c-2365-42a5-80ad-30788994ec26",
+        "case:649de313-de30-41e4-a32b-3e23b1c87409",
+        "case:4167f34d-4ada-44c7-82ab-67f3d6a0906f",
+        "case:8bcb2471-a6cf-46e3-a482-65f741816f72",
+        "case:3d987f40-469c-4716-b4bf-7ca69cb9552f",
+        "case:00a08951-32fa-4770-8fbc-f40e91c9077a"
+      ],
+      "results": [
+        {
+          "execution_id": "c24790ee-c6b2-4e28-9d0c-41d1826ca500",
+          "test_id": "T01",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10.0,
+              "estimated_settlement_mm": 4.0,
+              "evidence": {
+                "allowable": "10 mm",
+                "estimated": "4 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 4622.906923003029
+        },
+        {
+          "execution_id": "14585773-0a39-4fda-beba-f650e310f525",
+          "test_id": "T05",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": null,
+              "estimated_settlement_mm": 2.75,
+              "evidence": {
+                "allowable": null,
+                "estimated": "2.75 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 3172.901122001349
+        },
+        {
+          "execution_id": "4d33b638-1d19-47c1-86eb-e1b59de590c1",
+          "test_id": "T07",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10.0,
+              "estimated_settlement_mm": 0.0,
+              "evidence": {
+                "allowable": "10.00 mm",
+                "estimated": "0.00 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 6363.0648469988955
+        },
+        {
+          "execution_id": "655e0652-2e94-438f-af8b-634feaaf0902",
+          "test_id": "T12",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 15,
+              "estimated_settlement_mm": null,
+              "evidence": {
+                "allowable": "15 mm",
+                "estimated": null
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 2241.116219011019
+        }
+      ],
+      "recommendation": {
+        "action": "promote_candidate",
+        "approval": "pending",
+        "error": null,
+        "open_risk_ids": [],
+        "planner_action": "run_tests",
+        "planner_decision_id": "3a4fea07-85ef-450b-b46d-e0c01e4296c9",
+        "prior_rejection": false,
+        "results": [
+          {
+            "case_id": "c96a9e75-a73e-4064-9579-ea0c4b14defc",
+            "execution_id": "c24790ee-c6b2-4e28-9d0c-41d1826ca500",
+            "status": "pass",
+            "test_id": "T01",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "10 mm",
+                  "estimated": "4 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "984b65cb-00d5-4783-be62-2cfe7ee600a2",
+            "execution_id": "14585773-0a39-4fda-beba-f650e310f525",
+            "status": "pass",
+            "test_id": "T05",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": null,
+                "estimated_settlement_mm": 2.75,
+                "evidence": {
+                  "allowable": null,
+                  "estimated": "2.75 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "3a481e4c-2365-42a5-80ad-30788994ec26",
+            "execution_id": "4d33b638-1d19-47c1-86eb-e1b59de590c1",
+            "status": "pass",
+            "test_id": "T07",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 0.0,
+                "evidence": {
+                  "allowable": "10.00 mm",
+                  "estimated": "0.00 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "00a08951-32fa-4770-8fbc-f40e91c9077a",
+            "execution_id": "655e0652-2e94-438f-af8b-634feaaf0902",
+            "status": "pass",
+            "test_id": "T12",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 15,
+                "estimated_settlement_mm": null,
+                "evidence": {
+                  "allowable": "15 mm",
+                  "estimated": null
+                }
+              },
+              "status": "pass"
+            }
+          }
+        ],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+        ]
+      },
+      "next_action": "promote_candidate",
+      "approval": "pending",
+      "human_decision": null,
+      "errors": []
+    },
+    "stderr": ""
+  },
+  "source_identity_before": {
+    "case_ids": [
+      "c96a9e75-a73e-4064-9579-ea0c4b14defc",
+      "978cc598-b5b8-4f96-88a5-de0ce132ad4f",
+      "b0b04a68-a26d-4d23-848a-42890f621bba",
+      "d023678b-01d8-4f8b-ad2e-bee1508e429d",
+      "984b65cb-00d5-4783-be62-2cfe7ee600a2",
+      "2ff72e41-7a41-482b-aa5d-748dc1b24c2c",
+      "3a481e4c-2365-42a5-80ad-30788994ec26",
+      "649de313-de30-41e4-a32b-3e23b1c87409",
+      "4167f34d-4ada-44c7-82ab-67f3d6a0906f",
+      "8bcb2471-a6cf-46e3-a482-65f741816f72",
+      "3d987f40-469c-4716-b4bf-7ca69cb9552f",
+      "00a08951-32fa-4770-8fbc-f40e91c9077a"
+    ],
+    "case_snapshot_hash": "1ebb9433639a8d096bbfc67b450e9180b6a4021fcaf14a4276f1c9a48d909350",
+    "prompt_snapshot_hash": "dfcc797ddadac6a280d0a6f3dd2dcef2e767d504412962d8e4b12a786ee3e9e2",
+    "import_events": 12
+  },
+  "source_identity_after": {
+    "case_ids": [
+      "c96a9e75-a73e-4064-9579-ea0c4b14defc",
+      "978cc598-b5b8-4f96-88a5-de0ce132ad4f",
+      "b0b04a68-a26d-4d23-848a-42890f621bba",
+      "d023678b-01d8-4f8b-ad2e-bee1508e429d",
+      "984b65cb-00d5-4783-be62-2cfe7ee600a2",
+      "2ff72e41-7a41-482b-aa5d-748dc1b24c2c",
+      "3a481e4c-2365-42a5-80ad-30788994ec26",
+      "649de313-de30-41e4-a32b-3e23b1c87409",
+      "4167f34d-4ada-44c7-82ab-67f3d6a0906f",
+      "8bcb2471-a6cf-46e3-a482-65f741816f72",
+      "3d987f40-469c-4716-b4bf-7ca69cb9552f",
+      "00a08951-32fa-4770-8fbc-f40e91c9077a"
+    ],
+    "case_snapshot_hash": "1ebb9433639a8d096bbfc67b450e9180b6a4021fcaf14a4276f1c9a48d909350",
+    "prompt_snapshot_hash": "dfcc797ddadac6a280d0a6f3dd2dcef2e767d504412962d8e4b12a786ee3e9e2",
+    "import_events": 12
+  },
+  "seed_commands": 1,
+  "seed_after_cycle2": false
+}

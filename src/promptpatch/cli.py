@@ -33,6 +33,7 @@ def _parser():
         if action == "start":
             item.add_argument("--version", required=True)
             item.add_argument("--base-version")
+            item.add_argument("--timeout-ms", type=int, default=20000, help="Bounded model request timeout: 1000–30000 ms; saved for resume.")
             item.add_argument("--memory-off", action="store_true")
             item.add_argument("--replay-file", type=Path)
             item.add_argument("--replay-scenario")
@@ -82,7 +83,7 @@ def _dispatch(args, settings):
         controller = Reviews(settings)
         if args.action == "start":
             return controller.start(args.project, args.version, args.cycle, base_label=args.base_version,
-                                    memory_enabled=not args.memory_off, replay_file=args.replay_file, replay_scenario=args.replay_scenario)
+                                    memory_enabled=not args.memory_off, replay_file=args.replay_file, replay_scenario=args.replay_scenario, timeout_ms=args.timeout_ms)
         return getattr(controller, args.action)(args.project, args.cycle)
     if args.command == "memory":
         return {"active_policy": MemoryTools(settings.db_path).read_active_policy(args.project),

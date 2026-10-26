@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Module 08 is in progress; Module 09 requires `START MODULE 09`.
+- Stop after each module. Module 08 live acceptance is verified; next approval required: `START MODULE 09`.
 
 ## Module checklist
 
@@ -26,7 +26,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 05 | Provider adapter, executor, deterministic validator | DONE | 2026-10-25 | 158 tests passed; actual Gemini request and SQLite result verified; fresh-process reuse makes no additional call | Live `gemini-3.5-flash-lite` v3/T02 passed; see follow-up evidence below |
 | 06 | LLM planner and persistent LangGraph workflow | DONE | 2026-10-25 | 180 tests; real planner and selected executions; matched live memory diagnostic; strict SQLite checkpoints and fresh-process reuse | Live planner verified; approval pending; see evidence below |
 | 07 | Workflow CLI, approvals, corrections | DONE | 2026-10-25 | 200 tests; real live CLI and fresh-process reuse; offline approval/correction and atomic-request tests | Live approval pending; full Module 08 demo not started |
-| 08 | Three cycles and full process restart | BLOCKED | 2026-10-26 | 204 tests passed; complete replay demo; actual live cycles 1–2 completed | Awaiting explicit developer approval of proposed tolerance correction before live cycle 3 |
+| 08 | Three cycles and full process restart | DONE | 2026-10-26 | 206 tests; three real live cycles; approved policy correction; fresh process and no reseed; verified artifacts | Earlier HTTP failures retained; prompt release approval pending; Module 09 not started |
 | 09 | Reliability, security, isolation, retries | PENDING | — | Not run | Negative cases and telemetry pending |
 | 10 | Ten scenarios, three memory comparisons, measurements | PENDING | — | Not run | No evaluation results claimed |
 | 11 | Reproducibility, report, submission and demo docs | PENDING | — | Not run | Report/demo/package pending; no publishing authorized |
@@ -838,7 +838,7 @@ nothing pushed.
 MODULE 07 COMPLETE — STOPPED. Awaiting: START MODULE 08
 
 
-## Module 08 — Three-cycle runner and process restart — 2026-10-26
+## Module 08 initial handoff — before correction approval — 2026-10-26
 
 Status: **BLOCKED — awaiting explicit developer correction approval**. The user
 authorized Module 08 and local commits; no Module 09 work was started. Code and
@@ -951,3 +951,113 @@ claim before consent. Then verify outputs/checks, update this status, commit the
 completion, and stop at the Module 09 gate.
 
 MODULE 08 BLOCKED — STOPPED
+
+
+## Module 08 completion follow-up — 2026-10-26
+
+Status: **DONE**. The user explicitly approved the saved correction with “you
+have my approval”. That authorization was applied to the isolated demo only,
+with actor `developer` and a reference to the actual conversation. It does not
+approve release of a prompt version. No Module 09 work was implemented.
+
+### Completed live workflow
+
+| Version | Actual selected/executed cases | Observed result / recommendation |
+|---|---|---|
+| v1 | T01, T02, T06, T07 | pass/fail/fail/pass; numeric and quote failures saved; `revise` |
+| v2 | T01, T02, T06, T05 | pass/pass/pass/fail; original risks cited/retested; T05 missing-value regression saved; `revise` |
+| v3 | T01, T05, T07, T12 | four passes; saved T05 risk cited/retested/resolved; `promote_candidate`, release approval pending |
+
+Every selected case was actually executed through Gemini, and deterministic
+validation determined the outcomes. The three original risks are now resolved.
+No human release approval/rejection row was created. The live planner reasons
+and actual history refs are retained; the separate replay fixture remains
+explicitly labeled and is not used as live inference evidence.
+
+The separate policy approval activated revision **2**, tightening absolute
+numeric tolerance **0.01 → 0.001 mm**. Revision 1 remains queryable with its old
+rules as superseded. The v3 planner input, pinned cycle policy and every v3
+execution response reference revision 2. The pending-proposal artifact remains
+an immutable historical snapshot; current approval evidence is in
+`artifacts/demo/policy_correction.json`.
+
+The v2 worker PID **161506** exited successfully at
+`2026-10-26T18:08:11.483393+00:00`. The successful v3 worker PID **180540** started
+at `2026-10-26T18:27:10.517663+00:00` and exited successfully. The runner confirmed
+process exit, not merely a recreated Python object. The original case IDs,
+source hashes and **12** case-import audit events match before/after. The same
+domain/checkpoint files were used without reseeding or reuploading the dataset.
+Each completed review has **12** persisted SQLite checkpoints.
+
+### Failure diagnosis and bounded timeout extension
+
+The first v3 planner request and one explicit fresh retry returned `api_error`
+without executing any test. Both immutable failed cycles/exports remain. Two
+standalone audited diagnostic requests using the saved context/schema succeeded;
+these are diagnostics, not substituted workflow decisions or completed cycles.
+An observation-only CLI diagnostic captured **HTTP 504 / DEADLINE_EXCEEDED**.
+It also failed before any test and is preserved separately.
+
+A small compatible interface extension for the current demo adds optional
+`review start --timeout-ms`: the existing **20000 ms default** and model-settings
+**30000 ms maximum** are preserved. The chosen timeout is persisted as part of
+the immutable request and restored on resume. Changed requests using the same
+cycle key remain blocked. No planner/provider decision logic, domain schema,
+source contents, or dependency versions were changed.
+
+The runner requires explicit `--retry-cycle3` to create a new review after a
+failed command and retains `cycle_3_attempt_1.json` / `cycle_3_attempt_2.json`.
+After the recorded deadline failure, one explicit changed-timeout attempt used
+`--cycle3-timeout-ms 30000` under a new cycle key. It completed all four real
+Gemini tests. Retries are bounded, never automatic, and do not resample completed
+extraction failures or overwrite their records. The recorded policy approval
+was reused, not applied a second time.
+
+The final isolated live store contains **6** review rows: **3 completed** and
+**3 failed planner reviews** (two managed by the runner plus the separately
+observed diagnostic CLI failure). It has **6** planner decisions, **12** test
+executions, **18** workflow call starts, **2** standalone diagnostic calls, and
+**0** human release decisions. The summary's two failed attempts count runner
+attempts only; all three failed reviews are disclosed in `verification.json`.
+No cost estimate was invented (`null`).
+
+### Commands/checks actually executed
+
+| Command/check | Actual result |
+|---|---|
+| Existing safe local wrapper: `finish --approve-policy --actor developer --approval-reference <actual user consent>` | Approval applied once; initial v3 planner failed closed; failure retained |
+| Exact saved-context/schema diagnostic requests | Two real planner responses; saved separately, not counted as successful graph cycles |
+| Observation-only CLI SDK-error capture | HTTP **504**, deadline expired; source/request evidence retained |
+| `finish ... --retry-cycle3 --cycle3-timeout-ms 30000` | PASS: real fresh-process v3 completed; four passes and evidence-grounded promotion recommendation |
+| `.venv/bin/python -m pytest tests/test_three_cycles.py tests/test_reviews_cli.py::test_timeout_setting_is_bounded_persisted_and_part_of_request -q` | PASS: **6 tests in 42.75 seconds**, one existing SDK warning |
+| Final `.venv/bin/python -m pytest -q` | PASS: **206 tests in 139.03 seconds**, one existing SDK Python deprecation warning, zero failures |
+| Dedicated read-only live DB/artifact verifier | PASS: correct provider modes, selected=executed IDs, revision 2 settings/provenance, checkpoints, process exit order, unchanged source identity |
+| SQLite integrity/FKs/duplicate queries | PASS: `ok`, **0** FK errors, **0** duplicate completed results |
+| Fresh-process repeat of completed `finish` | PASS: identical summary; all domain table counts unchanged; no extra API calls, approvals or writes |
+| Configured-key absence scan over live/replay exports and runtime files | PASS: key absent; not printed |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `.venv/bin/python -m compileall -q src scripts tests` | PASS |
+| `git diff --check` | PASS |
+
+The final suite includes a real subprocess retry/correction test that preserves
+failed review IDs and creates a separate successful review without duplicating
+approval. The timeout test checks persistence, bounds and changed-request
+rejection. Prior modules' defaults and existing regression tests still pass.
+
+All requested live artifacts now exist: `cycle_1.json`, `cycle_2.json`,
+`cycle_3.json`, `restart_evidence.txt`, `memory_before_after.json`,
+`tool_timeline.json`; plus `process_evidence.json`, `policy_correction.json`,
+`summary.json`, `verification.json`, earlier failed attempts and diagnostic
+records. The live artifact README documents actual outcomes and all failures.
+Authoritative runtime databases and temporary diagnostic wrappers remain ignored.
+
+**Implemented/tested:** Module 08 three-cycle live/replay runners, real restart,
+source continuity, memory-informed selection, explicitly approved correction,
+bounded recovery, evidence exports, idempotency and the 206-test regression suite.
+**Pending:** Module 09 onward, formal controlled ablations/scenarios/report,
+actual teacher approval and the developer's separate prompt release decision.
+**Blocked:** None within Module 08. The existing `.env.example` deletion remains
+untouched and excluded from commits. No secrets/databases are committed. Nothing
+pushed. Starting Module 09 still requires explicit approval.
+
+MODULE 08 COMPLETE — STOPPED. Awaiting: START MODULE 09

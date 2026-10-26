@@ -158,9 +158,11 @@ class DemoRun:
                      "checkpoint_thread_id": f"demo:{status['cycle_id']}", "checkpoint_count": checkpoint_count})
 
     def cycle(self, number):
-        args = ["review", "start", "--project", "demo", "--version", f"v{number}", "--cycle", f"module08-c{number}"]
+        args = ["review", "start", "--project", "demo", "--version", f"v{number}", "--cycle", self.manifest.get("cycle3_retry_key", "module08-c3") if number == 3 else f"module08-c{number}"]
         if number > 1:
             args += ["--base-version", f"v{number - 1}"]
+        if number == 3 and self.manifest.get("cycle3_timeout_ms"):
+            args += ["--timeout-ms", str(self.manifest["cycle3_timeout_ms"])]
         if self.mode == "replay":
             args += ["--replay-file", str(self.replay), "--replay-scenario", f"cycle_{number}"]
         return self.cli(f"cycle_{number}", args, review=True)
@@ -193,7 +195,7 @@ class DemoRun:
                     ("memory_before", "memory_after_cycle1", "memory_before_restart")}})
         return {"phase": "prepared", "approval": "pending", "artifacts": str(self.artifacts)}
 
-    def finish(self, *, approve_policy=False, actor=None, approval_reference=None):
+    def finish(self, *, approve_policy=False, actor=None, approval_reference=None, retry_cycle3=False, cycle3_timeout_ms=20000):
         if self.manifest["phase"] == "complete":
             return json.loads((self.artifacts / "summary.json").read_text())
         if self.manifest["phase"] != "prepared":
@@ -206,6 +208,25 @@ class DemoRun:
         self.manifest["approval_actor"] = actor
         self._save()
         self.cli("approve_policy", ["policy", "approve", "--project", "demo", "--revision", "2", "--actor", actor])
+        if retry_cycle3:
+            previous = self.manifest["commands"].get("cycle_3")
+            if self.manifest.get("cycle3_retry_key"):
+                if previous and previous["exit_code"] != 0:
+                    if cycle3_timeout_ms != 30000 or self.manifest.get("cycle3_deadline_retry"):
+                        raise DemoError("The explicit retry failed; a single changed 30000-ms deadline retry is allowed, not repeated identical requests.")
+                    self._write("cycle_3_attempt_2.json", json.loads((self.artifacts / "cycle_3.json").read_text()))
+                    self.manifest["commands"]["cycle_3_failed_attempt_2"] = self.manifest["commands"].pop("cycle_3")
+                    self.manifest["cycle3_retry_key"] = "module08-c3-timeout-30000"
+                    self.manifest["cycle3_deadline_retry"] = True
+            else:
+                if not previous or previous["exit_code"] == 0:
+                    raise DemoError("Retry requires an actually failed cycle-3 command, not completed extraction failures.")
+                original_export = json.loads((self.artifacts / "cycle_3.json").read_text())
+                self._write("cycle_3_attempt_1.json", original_export)
+                self.manifest["commands"]["cycle_3_failed_attempt"] = self.manifest["commands"].pop("cycle_3")
+                self.manifest["cycle3_retry_key"] = "module08-c3-retry-1"
+            self.manifest["cycle3_timeout_ms"] = cycle3_timeout_ms
+            self._save()
         self.cycle(3)
         if self.source_identity() != self.manifest["source_identity"]:
             raise DemoError("Source/import identity changed during the restarted cycle.")
@@ -221,7 +242,8 @@ class DemoRun:
         if not second["confirmed_exit"] or second["exit_code"] != 0 or second["exited_at"] > third["started_at"] or second["pid"] == third["pid"]:
             raise DemoError("Process restart evidence is inconsistent.")
         summary = {"mode": self.mode, "live_inference": self.mode == "live", "cycles": [], "release_approval": "pending",
-                   "process_restart_verified": True, "sources_and_import_events_unchanged": True, "approximate_cost": None}
+                   "process_restart_verified": True, "sources_and_import_events_unchanged": True, "approximate_cost": None,
+                   "failed_cycle3_attempts": sum(k.startswith("cycle_3_failed_attempt") for k in commands)}
         for number in (1, 2, 3):
             export = json.loads((self.artifacts / f"cycle_{number}.json").read_text())
             status, plan = export["status"], export["planner"]
@@ -273,12 +295,14 @@ def main(argv=None):
     parser.add_argument("--repo", type=Path)
     parser.add_argument("--replay-file", type=Path)
     parser.add_argument("--approve-policy", action="store_true")
+    parser.add_argument("--retry-cycle3", action="store_true", help="One new cycle key after a failed cycle-3 command; preserve the original failure.")
+    parser.add_argument("--cycle3-timeout-ms", type=int, choices=[20000, 30000], default=20000)
     parser.add_argument("--actor")
     parser.add_argument("--approval-reference")
     args = parser.parse_args(argv)
     try:
         demo = DemoRun(args.runtime, args.artifacts, args.mode, repo=args.repo, replay_file=args.replay_file)
-        result = demo.prepare() if args.stage == "prepare" else demo.finish(approve_policy=args.approve_policy, actor=args.actor, approval_reference=args.approval_reference)
+        result = demo.prepare() if args.stage == "prepare" else demo.finish(approve_policy=args.approve_policy, actor=args.actor, approval_reference=args.approval_reference, retry_cycle3=args.retry_cycle3, cycle3_timeout_ms=args.cycle3_timeout_ms)
         print(json.dumps(result, indent=2))
         return 0
     except (OSError, sqlite3.Error, ValueError, StoreError) as error:

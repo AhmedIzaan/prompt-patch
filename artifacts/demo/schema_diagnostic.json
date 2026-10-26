@@ -1,0 +1,21 @@
+{
+  "response": {
+    "provider": "gemini",
+    "mode": "live",
+    "purpose": "planner",
+    "model_id": "gemini-3.5-flash-lite",
+    "model_version": "gemini-3.5-flash-lite",
+    "sdk_version": "2.33.0",
+    "response_id": "Ypnfav-7B7iVxN8Pwabi2Q8",
+    "raw_text": "{\n  \"decision\": \"RUN_TESTS\",\n  \"memory_evidence_ids\": [\n    \"risk:e93a4d7c-61c0-47cf-b3da-61aa6466516b\",\n    \"audit:2e04d57d-a090-49f9-9294-76e62f73d27d\",\n    \"execution:241f1ce0-5166-488c-9aa3-335b54b7bb1b\"\n  ],\n  \"needs_developer_approval\": false,\n  \"reason_summary\": \"Run targeted regression tests prioritizing the unresolved missing-value risk (T05) alongside the required smoke test (T01) and additional representative test cases within max_tests_per_review limits.\",\n  \"source_evidence_refs\": [\n    \"case:c96a9e75-a73e-4064-9579-ea0c4b14defc\",\n    \"case:984b65cb-00d5-4783-be62-2cfe7ee600a2\",\n    \"case:978cc598-b5b8-4f96-88a5-de0ce132ad4f\",\n    \"case:2ff72e41-7a41-482b-aa5d-748dc1b24c2c\"\n  ],\n  \"test_ids\": [\n    \"T01\",\n    \"T05\",\n    \"T02\",\n    \"T06\"\n  ],\n  \"test_mode\": \"targeted_regression\"\n}",
+    "elapsed_ms": 8573.82980598777,
+    "usage": {
+      "prompt_token_count": 8069,
+      "candidates_token_count": 424,
+      "thoughts_token_count": null,
+      "total_token_count": 8493
+    },
+    "finish_reason": "STOP",
+    "fixture_id": null
+  }
+}

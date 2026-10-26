@@ -1,0 +1,95 @@
+{
+  "mode": "live",
+  "live_inference": true,
+  "cycles": [
+    {
+      "cycle": 1,
+      "version": "v1",
+      "selected": [
+        "T01",
+        "T02",
+        "T06",
+        "T07"
+      ],
+      "statuses": [
+        "pass",
+        "fail",
+        "fail",
+        "pass"
+      ],
+      "recommendation": "revise",
+      "policy_revision": 1,
+      "reason_summary": "Executing required test T01 and discretionary regression tests T02, T06, and T07 to validate decimal rounding and wording variants under the current policy.",
+      "supplied_risk_ids": [],
+      "cited_risk_ids": [],
+      "prior_failed_cases_retested": [],
+      "approval": "pending"
+    },
+    {
+      "cycle": 2,
+      "version": "v2",
+      "selected": [
+        "T01",
+        "T02",
+        "T06",
+        "T05"
+      ],
+      "statuses": [
+        "pass",
+        "pass",
+        "pass",
+        "fail"
+      ],
+      "recommendation": "revise",
+      "policy_revision": 1,
+      "reason_summary": "Run required test T01 alongside previously regressed tests T02 and T06 that target decimal handling and wording variations, plus T05 for risk coverage.",
+      "supplied_risk_ids": [
+        "fb0107c0-da70-47b8-9463-12c7968f7f00",
+        "dbdca637-beb7-4e7e-a61c-cf46feff4365"
+      ],
+      "cited_risk_ids": [
+        "fb0107c0-da70-47b8-9463-12c7968f7f00",
+        "dbdca637-beb7-4e7e-a61c-cf46feff4365"
+      ],
+      "prior_failed_cases_retested": [
+        "T02",
+        "T06"
+      ],
+      "approval": "pending"
+    },
+    {
+      "cycle": 3,
+      "version": "v3",
+      "selected": [
+        "T01",
+        "T05",
+        "T07",
+        "T12"
+      ],
+      "statuses": [
+        "pass",
+        "pass",
+        "pass",
+        "pass"
+      ],
+      "recommendation": "promote_candidate",
+      "policy_revision": 2,
+      "reason_summary": "Select required tests and prioritize unresolved failure T05 from long-term memory, along with discretionary tests T07 and T12 to cover missing values and zero decimals under the max limit of 4.",
+      "supplied_risk_ids": [
+        "e93a4d7c-61c0-47cf-b3da-61aa6466516b"
+      ],
+      "cited_risk_ids": [
+        "e93a4d7c-61c0-47cf-b3da-61aa6466516b"
+      ],
+      "prior_failed_cases_retested": [
+        "T05"
+      ],
+      "approval": "pending"
+    }
+  ],
+  "release_approval": "pending",
+  "process_restart_verified": true,
+  "sources_and_import_events_unchanged": true,
+  "approximate_cost": null,
+  "failed_cycle3_attempts": 2
+}

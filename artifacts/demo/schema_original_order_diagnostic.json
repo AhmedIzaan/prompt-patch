@@ -1,0 +1,21 @@
+{
+  "response": {
+    "provider": "gemini",
+    "mode": "live",
+    "purpose": "planner",
+    "model_id": "gemini-3.5-flash-lite",
+    "model_version": "gemini-3.5-flash-lite",
+    "sdk_version": "2.33.0",
+    "response_id": "XJrfauXwCcu0nsEPy6q92As",
+    "raw_text": "{\n  \"decision\": \"RUN_TESTS\",\n  \"test_ids\": [\n    \"T01\",\n    \"T05\",\n    \"T03\",\n    \"T04\"\n  ],\n  \"test_mode\": \"targeted_regression\",\n  \"reason_summary\": \"Run required test T01 and prioritize regression failure T05 along with missing value test cases to validate null handling under the updated prompt rules.\",\n  \"memory_evidence_ids\": [\n    \"risk:e93a4d7c-61c0-47cf-b3da-61aa6466516b\",\n    \"audit:2e04d57d-a090-49f9-9294-76e62f73d27d\",\n    \"execution:241f1ce0-5166-488c-9aa3-335b54b7bb1b\"\n  ],\n  \"source_evidence_refs\": [\n    \"case:c96a9e75-a73e-4064-9579-ea0c4b14defc\",\n    \"case:984b65cb-00d5-4783-be62-2cfe7ee600a2\",\n    \"case:b0b04a68-a26d-4d23-848a-42890f621bba\",\n    \"case:d023678b-01d8-4f8b-ad2e-bee1508e429d\"\n  ],\n  \"needs_developer_approval\": false\n}",
+    "elapsed_ms": 3406.794822003576,
+    "usage": {
+      "prompt_token_count": 8069,
+      "candidates_token_count": 414,
+      "thoughts_token_count": null,
+      "total_token_count": 8483
+    },
+    "finish_reason": "STOP",
+    "fixture_id": null
+  }
+}

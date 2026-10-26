@@ -138,7 +138,7 @@ class Reviews:
         return git
 
     def start(self, project_id, label, key, *, base_label=None, memory_enabled=True,
-              replay_file=None, replay_scenario=None):
+              replay_file=None, replay_scenario=None, timeout_ms=20000):
         if not key.strip() or len(key) > 128:
             raise ReviewError("Cycle key must contain 1–128 characters.")
         version = version_by_label(self.db_path, project_id, label)
@@ -146,7 +146,7 @@ class Reviews:
         model_id = self.settings.gemini_model if self.settings.mode == "live" else "module07-replay"
         if not model_id:
             raise ReviewError("Set GEMINI_MODEL in the local process environment.")
-        model = ModelSettings(model_id=model_id)
+        model = ModelSettings(model_id=model_id, timeout_ms=timeout_ms)
         if self.settings.mode == "replay" and (not replay_file or not replay_scenario):
             raise ReviewError("Replay mode requires --replay-file and --replay-scenario; it is never a live fallback.")
         if self.settings.mode == "live" and (replay_file or replay_scenario):

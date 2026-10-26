@@ -1,0 +1,117 @@
+{
+  "mode": "live",
+  "approval_reference": "User explicitly approved the isolated demo tolerance correction in this conversation on 2026-10-26: you have my approval",
+  "checks": {
+    "sqlite_integrity": "ok",
+    "foreign_key_errors": 0,
+    "duplicate_results": 0,
+    "policy_history": [
+      [
+        1,
+        "superseded",
+        "module08-fictional-bootstrap"
+      ],
+      [
+        2,
+        "approved",
+        "developer"
+      ]
+    ],
+    "all_original_risks_resolved": true,
+    "human_release_decisions": 0,
+    "cycle_status_counts": [
+      [
+        "completed",
+        3
+      ],
+      [
+        "needs_review",
+        3
+      ]
+    ],
+    "domain_counts": {
+      "review_cycles": 6,
+      "test_executions": 12,
+      "planner_decisions": 6,
+      "human_decisions": 0,
+      "audit_events": 325,
+      "tool_operations": 18,
+      "operation_attempts": 18
+    },
+    "workflow_model_call_starts": 18,
+    "standalone_diagnostic_model_calls": 2,
+    "source_identity_unchanged": true,
+    "import_events": 12,
+    "restart_verified": true,
+    "cycle2_pid": 161506,
+    "cycle3_pid": 180540,
+    "fresh_process_finish_repeat_no_writes_or_calls": true,
+    "configured_key_absent_from_exports_and_runtime_files": true
+  },
+  "cycles": [
+    {
+      "cycle_id": "8a1f8981-37e5-42f9-81f0-307ebfe086de",
+      "selected": [
+        "T01",
+        "T02",
+        "T06",
+        "T07"
+      ],
+      "results": [
+        "pass",
+        "fail",
+        "fail",
+        "pass"
+      ],
+      "recommendation": "revise",
+      "policy_revision": 1,
+      "checkpoint_count": 12,
+      "timeout_ms": 20000
+    },
+    {
+      "cycle_id": "8c2f150d-a5d6-4c81-9e57-1c238153d41e",
+      "selected": [
+        "T01",
+        "T02",
+        "T06",
+        "T05"
+      ],
+      "results": [
+        "pass",
+        "pass",
+        "pass",
+        "fail"
+      ],
+      "recommendation": "revise",
+      "policy_revision": 1,
+      "checkpoint_count": 12,
+      "timeout_ms": 20000
+    },
+    {
+      "cycle_id": "c85283fa-25bf-402e-aade-57fb802e5fde",
+      "selected": [
+        "T01",
+        "T05",
+        "T07",
+        "T12"
+      ],
+      "results": [
+        "pass",
+        "pass",
+        "pass",
+        "pass"
+      ],
+      "recommendation": "promote_candidate",
+      "policy_revision": 2,
+      "checkpoint_count": 12,
+      "timeout_ms": 30000
+    }
+  ],
+  "approximate_cost": null,
+  "tests": {
+    "full_suite_passed": 206,
+    "elapsed_seconds": 139.03,
+    "warnings": 1,
+    "warning": "Existing Google SDK Python deprecation"
+  }
+}

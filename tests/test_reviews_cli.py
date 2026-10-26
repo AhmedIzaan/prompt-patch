@@ -284,3 +284,15 @@ def test_cycle_and_resume_request_commit_atomically(workspace, monkeypatch):
     monkeypatch.setattr(ReviewRepository, "_audit", original)
     result = cli(workspace, *start_args("atomic"))
     assert result["status"] == "completed" and counts(workspace[0])["review_cycles"] == 1
+
+
+def test_timeout_setting_is_bounded_persisted_and_part_of_request(workspace, capsys):
+    assert main(start_args("deadline") + ["--timeout-ms", "30000"]) == 0
+    result = json.loads(capsys.readouterr().out)
+    with read_snapshot(workspace[0]) as db:
+        row=db.execute("SELECT decision_json FROM planner_decisions WHERE project_id='demo' AND cycle_id=?",(result["cycle_id"],)).fetchone()
+    assert json.loads(row[0])["settings"]["timeout_ms"] == 30000
+    assert main(start_args("deadline")) == 1
+    assert "different inputs" in capsys.readouterr().err
+    assert main(start_args("too-long") + ["--timeout-ms", "30001"]) == 1
+    assert counts(workspace[0])["review_cycles"] == 1

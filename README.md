@@ -4,15 +4,15 @@ PromptPatch is a persistent memory-driven agent for testing settlement
 measurement extraction prompts across versions. This fictional domain example
 is for regression testing, not engineering judgment.
 
-**Current status: Modules 00–07 complete.** The package includes the persistent
+**Current status: Modules 00–08 complete.** The package includes the persistent
 SQLite domain store, curated Git fixtures, audited tools, real Gemini execution,
 and a single LangGraph coordinator with SQLite checkpoints. A typed planner
 chooses actual tests; deterministic guards validate the selection and score
 results. Developer release approval remains separate and pending.
-The full regression suite passes **204 tests** (one existing SDK deprecation
+The full regression suite passes **206 tests** (one existing SDK deprecation
 warning). The review CLI supports explicit approvals/rejections, policy corrections,
 status/memory/log views, and checkpoint resume. The full three-cycle
-demonstration awaits Module 08.
+live demonstration, explicit restart and approved policy correction are verified.
 See [implementation status](docs/IMPLEMENTATION_STATUS.md) and
 [requirement traceability](docs/REQUIREMENT_TRACEABILITY.md).
 
@@ -307,7 +307,9 @@ live reviews. Configure both `PROMPTPATCH_DB_PATH` and
 Exit 0 means a command/completed review succeeded, **not** that a candidate is
 approved or all tests passed. Review start/resume exit 1 when the graph terminates
 in `needs_review` without completing execution (for example, invalid plan or hold),
-or a local/provider/approval action fails. Read-only status exits 0 for a found
+or a local/provider/approval action fails. `review start --timeout-ms` optionally
+sets a 1000–30000 ms request timeout (default 20000), saved for resume. Read-only
+status exits 0 for a found
 cycle even if it needs attention. Invalid syntax/configuration exits 2.
 `doctor` remains local and makes no database/provider readiness claim.
 
@@ -368,11 +370,11 @@ concurrent initialization, and CLI behavior. All stored test outputs are explici
 synthetic offline fixtures; separate Module 05/06 live checks supply the actual
 model integration evidence.
 
-Codex assisted with inspection, documentation, and the Modules 01–07 implementation.
+Codex assisted with inspection, documentation, and the Modules 01–08 implementation.
 The student must review, understand, and be able to modify submitted code.
 No external datasets have been imported. Third-party dependencies are listed
 above. Development proceeds one explicitly authorized module at a time; next is
-Module 08, after explicit approval.
+Module 09, after explicit approval.
 
 
 ## Planner and persisted graph (Module 06)
@@ -418,14 +420,16 @@ rejected planner attempts and a comparison with identical selections. They are
 small diagnostics, not the formal three-case evaluation or complete three-cycle
 restart demonstration required in later modules. Recommendations concern only
 the tests actually selected; untested cases can still fail. Teacher approval,
-formal evaluation, and the full three-cycle restart demonstration remain pending.
+formal evaluation and report remain pending. The three-cycle demonstration is
+verified below.
 
 
 ## Three-cycle demo runner (Module 08)
 
-Current verification: runner tests and the full replay demo pass. Live v1/v2
-completed; live v3 awaits explicit approval of the saved tolerance correction.
-Module 08 is not yet complete.
+Current verification: the live v1/v2/v3 workflow completed with recommendations
+`revise`, `revise`, `promote_candidate`. The developer-approved tolerance revision
+was active for v3 after a genuine process restart without reseeding. Prompt release
+approval is still pending. Earlier API deadline failures remain documented.
 
 Use the editable checkout and Gemini variables in the process environment.
 The default isolated files are `data/module08/live/` and `artifacts/demo/`.
@@ -461,6 +465,14 @@ validation, source/policy identities, provider metadata, usage and checkpoints.
 The owned runtime manifest records process PIDs and confirmed exits. Repeating
 completed stages returns persisted results without repeated model calls or
 approvals. Failed/held plans remain failures; there is no automatic fake fallback.
+
+If a cycle-3 command fails before completing, an explicit `--retry-cycle3` creates
+one new review key and preserves the failed review/export. A diagnosed deadline
+failure can use one additional explicit `--cycle3-timeout-ms 30000` retry; the
+original 20000 ms setting and failed attempts remain recorded. Retries never
+resample completed extraction results or automatically activate themselves. The
+live run needed this bounded timeout change after HTTP 504 responses; see its
+artifact README for all failures and actual counts.
 
 For a separately labeled deterministic demonstration of decimal/missing-value
 regressions, with no API key or real model reasoning:

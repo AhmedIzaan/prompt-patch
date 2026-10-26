@@ -94,3 +94,35 @@ def test_configuration_cannot_change_on_an_existing_run(tmp_path):
     with pytest.raises(DemoError,match='configuration differs'):
         DemoRun(tmp_path/'runtime',tmp_path/'exports','replay',repo=tmp_path/'different-git')
     assert original.manifest['phase']=='new'
+
+
+def test_explicit_retry_preserves_failed_review_and_approval(tmp_path):
+    fixture = json.loads((ROOT / 'samples/replay/module08_cycles.json').read_text())
+    path = tmp_path / 'transient-fixture.json'
+    original = json.dumps(fixture)
+    fixture['scenarios']['cycle_3'][0] = {'error_code': 'invalid_request'}
+    path.write_text(json.dumps(fixture))
+    extra = ['--replay-file',str(path)]
+    approval = ['--approve-policy','--actor','synthetic-owner','--approval-reference','Offline fixture approval only']
+    invoke(tmp_path,'prepare',*extra)
+    invoke(tmp_path,'finish',*extra,*approval,expected=1)
+    failed = json.loads((tmp_path / 'exports/cycle_3.json').read_text())
+    assert failed['status']['planner_error']=='invalid_request' and not failed['executions']
+    # A new fixture response is used only by a new explicitly requested review.
+    path.write_text(original)
+    result=json.loads(invoke(tmp_path,'finish',*extra,*approval,'--retry-cycle3','--cycle3-timeout-ms','30000').stdout)
+    assert result['failed_cycle3_attempts']==1
+    archived=json.loads((tmp_path / 'exports/cycle_3_attempt_1.json').read_text())
+    assert archived==failed
+    final=json.loads((tmp_path / 'exports/cycle_3.json').read_text())
+    assert final['status']['cycle_id']!=failed['status']['cycle_id']
+    assert final['planner']['settings']['timeout_ms']==30000
+    assert failed['planner']['settings']['timeout_ms']==20000
+    with sqlite3.connect(tmp_path / 'runtime/memory.sqlite3') as db:
+        assert db.execute("SELECT COUNT(*) FROM review_cycles WHERE project_id='demo'").fetchone()[0]==4
+        assert db.execute("SELECT COUNT(*) FROM audit_events WHERE project_id='demo' AND event_type='policy_approved'").fetchone()[0]==2
+        assert db.execute("SELECT status FROM review_cycles WHERE id=?",(failed['status']['cycle_id'],)).fetchone()[0]=='needs_review'
+        assert db.execute("SELECT COUNT(*) FROM human_decisions").fetchone()[0]==0
+    after=count_results(tmp_path)
+    invoke(tmp_path,'finish',*extra,*approval,'--retry-cycle3')
+    assert count_results(tmp_path)==after

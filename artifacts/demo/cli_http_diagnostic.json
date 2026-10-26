@@ -1,0 +1,18 @@
+{
+  "exit_code": 1,
+  "http_errors": [
+    {
+      "http_code": 504,
+      "message": "Deadline expired before operation could complete.",
+      "details": {
+        "error": {
+          "code": 504,
+          "message": "Deadline expired before operation could complete.",
+          "status": "DEADLINE_EXCEEDED"
+        }
+      },
+      "response_json": null
+    }
+  ],
+  "instrumentation": "Observed SDK errors only; original generate_content method invoked unchanged"
+}

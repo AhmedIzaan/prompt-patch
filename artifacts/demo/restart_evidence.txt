@@ -1,0 +1,6 @@
+Mode: live
+Cycle 2 PID 161506 exited 0 at 2026-10-26T18:08:11.483393+00:00; parent reaped it.
+Cycle 3 PID 180540 started at 2026-10-26T18:27:10.517663+00:00 and exited 0.
+Same persistent domain/checkpoint files; same case IDs and source hashes; no seed/import after cycle 2.
+Policy revision 2 was explicitly approved before cycle 3; revision 1 remains queryable.
+Prompt release approval remains pending.
