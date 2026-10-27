@@ -1,0 +1,15 @@
+[browser]
+gatherUsageStats = false
+
+[server]
+address = "127.0.0.1"
+headless = true
+fileWatcherType = "none"
+
+[theme]
+base = "light"
+primaryColor = "#147D64"
+backgroundColor = "#F6F8FA"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#142D3A"
+font = "sans serif"

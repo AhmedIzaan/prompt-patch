@@ -1,0 +1,18 @@
+{
+  "bind": "127.0.0.1:8501",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "body_ok": true
+    },
+    {
+      "path": "/_stcore/health",
+      "status": 200,
+      "body_ok": true
+    }
+  ],
+  "scope": "Real local HTTP server and assets/health; interactive rendering verified separately with Streamlit AppTest.",
+  "screenshot": "not captured",
+  "new_live_model_requests": 0
+}

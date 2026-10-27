@@ -1,0 +1,138 @@
+{
+  "verified_at": "2026-10-27T11:33:36.353551+00:00",
+  "regression_tests": 259,
+  "failed": 0,
+  "skipped": 0,
+  "offline_scenarios_passed": 10,
+  "three_cycle_replay": "PASS, explicit subprocess restart and no reseed",
+  "clean_environment": "PASS, fresh virtual environment and 11 actual CLI commands from another cwd",
+  "ui_http": "PASS, loopback root and health",
+  "ui_recorded_live_store": "PASS, approved v3 shown without writes/model calls",
+  "credential_scan": "PASS; configured values absent, never printed",
+  "configured_secret_values_checked": 1,
+  "local_document_links_checked": 41,
+  "sqlite_checks": [
+    {
+      "path": "data/module11/replay/memory.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/replay/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S07/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S07/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S03/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S03/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S04/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S04/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S10/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S10/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S08/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S08/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S02/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S02/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S05/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S05/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S01/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S01/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S06/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S06/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S09/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    },
+    {
+      "path": "data/module11/scenarios/S09/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0
+    }
+  ],
+  "report_draft": {
+    "page_sections": 5,
+    "explicit_page_breaks": 4,
+    "word_count": 2289,
+    "pdf_pagination": "not exported/verified"
+  },
+  "model_evaluation_limit": "Original 1/3 vs 1/3; quota limited two arms. No extra live calls in final checks.",
+  "teacher_approval": "unverified",
+  "student_review_and_demo_rehearsal": "pending student verification",
+  "zip_created": false,
+  "pushed": false,
+  "master_plan_sha256": "ba9243312bc06b48c42888000e863c7acace520ffffa8e51f03947a7a214af63"
+}

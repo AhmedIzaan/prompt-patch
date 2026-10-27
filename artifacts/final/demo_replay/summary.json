@@ -1,0 +1,90 @@
+{
+  "mode": "replay",
+  "live_inference": false,
+  "cycles": [
+    {
+      "cycle": 1,
+      "version": "v1",
+      "selected": [
+        "T01",
+        "T02",
+        "T03"
+      ],
+      "statuses": [
+        "pass",
+        "fail",
+        "fail"
+      ],
+      "recommendation": "revise",
+      "policy_revision": 1,
+      "reason_summary": "Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.",
+      "supplied_risk_ids": [],
+      "cited_risk_ids": [],
+      "prior_failed_cases_retested": [],
+      "approval": "pending"
+    },
+    {
+      "cycle": 2,
+      "version": "v2",
+      "selected": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "statuses": [
+        "pass",
+        "pass",
+        "fail",
+        "fail"
+      ],
+      "recommendation": "revise",
+      "policy_revision": 1,
+      "reason_summary": "Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.",
+      "supplied_risk_ids": [
+        "2efb6eb6-a0d3-4fcf-8c6f-c4e3aeb4d393",
+        "2086fe13-9a4e-496c-87e5-59d6f75a01ad"
+      ],
+      "cited_risk_ids": [],
+      "prior_failed_cases_retested": [
+        "T02",
+        "T03"
+      ],
+      "approval": "pending"
+    },
+    {
+      "cycle": 3,
+      "version": "v3",
+      "selected": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "statuses": [
+        "pass",
+        "pass",
+        "pass",
+        "pass"
+      ],
+      "recommendation": "promote_candidate",
+      "policy_revision": 2,
+      "reason_summary": "Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.",
+      "supplied_risk_ids": [
+        "31e8e4d5-ef48-47cf-b848-09c36539b038",
+        "2efb6eb6-a0d3-4fcf-8c6f-c4e3aeb4d393"
+      ],
+      "cited_risk_ids": [],
+      "prior_failed_cases_retested": [
+        "T03",
+        "T04"
+      ],
+      "approval": "pending"
+    }
+  ],
+  "release_approval": "pending",
+  "process_restart_verified": true,
+  "sources_and_import_events_unchanged": true,
+  "approximate_cost": null,
+  "failed_cycle3_attempts": 0
+}

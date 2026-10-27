@@ -1,0 +1,624 @@
+{
+  "mode": "replay",
+  "cycle2_process": {
+    "args": [
+      "review",
+      "start",
+      "--project",
+      "demo",
+      "--version",
+      "v2",
+      "--cycle",
+      "module08-c2",
+      "--base-version",
+      "v1",
+      "--replay-file",
+      "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/samples/replay/module08_cycles.json",
+      "--replay-scenario",
+      "cycle_2"
+    ],
+    "pid": 47,
+    "parent_pid": 2,
+    "started_at": "2026-10-27T11:22:58.332156+00:00",
+    "exited_at": "2026-10-27T11:23:13.373235+00:00",
+    "exit_code": 0,
+    "confirmed_exit": true,
+    "elapsed_ms": 15041.080303009949,
+    "timed_out": false,
+    "output": {
+      "project_id": "demo",
+      "version": "v2",
+      "version_id": "be95e3d9-7885-45a5-ae5f-e8f1ba6751bb",
+      "cycle": "module08-c2",
+      "cycle_id": "e5a80fdf-6626-41a2-9c63-38d23c96a6c8",
+      "status": "completed",
+      "policy_id": "dd8ec70c-27f0-4722-99ba-0a3ad3b5220c",
+      "policy_revision": 1,
+      "policy_status": "approved",
+      "mode": "replay",
+      "planner": {
+        "decision": "RUN_TESTS",
+        "memory_evidence_ids": [],
+        "needs_developer_approval": false,
+        "reason_summary": "Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.",
+        "source_evidence_refs": [
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt"
+        ],
+        "test_ids": [
+          "T01",
+          "T02",
+          "T03",
+          "T04"
+        ],
+        "test_mode": "targeted_regression"
+      },
+      "planner_error": null,
+      "selected_test_ids": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "supplied_memory_refs": [
+        "risk:2efb6eb6-a0d3-4fcf-8c6f-c4e3aeb4d393",
+        "risk:2086fe13-9a4e-496c-87e5-59d6f75a01ad",
+        "audit:20c980cb-7646-4ca4-b2f8-7175e20d1789",
+        "audit:64541f26-b878-48db-baaf-38a55d6bae76",
+        "execution:42abc5c4-087c-4bd1-808e-7b748b184f47",
+        "execution:ea44fd06-ce88-4525-9ac7-25c8412230ef",
+        "execution:4038f08a-0140-4001-94f3-b87a47809de7"
+      ],
+      "source_refs": [
+        "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+        "git:514d7be901ecca503bd5832e83e7834537fe4eaa:settlement_prompt.txt",
+        "policy:dd8ec70c-27f0-4722-99ba-0a3ad3b5220c",
+        "case:f240859e-709b-46b6-a705-2d8b9f2eed75",
+        "case:8584ceaf-022c-4ccf-867e-794d9462ea4c",
+        "case:8d90ce9b-2c40-43d5-afbe-11a2a7d9cbde",
+        "case:e23f0057-b4d6-44d8-b92f-358a1a240f95",
+        "case:ee3a7e4a-f241-418e-9236-c53eff3230b1",
+        "case:8946dee8-b6a5-43ef-8fd1-de64a2fde375",
+        "case:cc8c85e2-a3bc-4f84-918d-e74759cb324b",
+        "case:02861bd7-b578-4c24-97eb-e5134810980c",
+        "case:66a6e743-540b-4f70-a831-7d093df7ae42",
+        "case:4d9bedff-1c37-4bef-b230-92cc933503b2",
+        "case:5d4b5d8a-104f-465b-bdf1-6eaa46e4e9bf",
+        "case:001a2c65-caeb-4c19-9ae0-e1c2dc616607"
+      ],
+      "results": [
+        {
+          "execution_id": "0d3650d5-7124-4609-bf4a-7fd4ca5ff24f",
+          "test_id": "T01",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10.0,
+              "estimated_settlement_mm": 4.0,
+              "evidence": {
+                "allowable": "the allowable settlement is 10 mm",
+                "estimated": "The estimated settlement is 4 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 174.17035199468955
+        },
+        {
+          "execution_id": "57c19946-e490-4a46-87aa-c59f1faf129c",
+          "test_id": "T02",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10.0,
+              "estimated_settlement_mm": 4.5,
+              "evidence": {
+                "allowable": "the allowable settlement is 10 mm",
+                "estimated": "The estimated settlement is 4.5 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 193.30783799523488
+        },
+        {
+          "execution_id": "7fd8c8fe-4270-4fdc-9ffa-5a7e049f23de",
+          "test_id": "T03",
+          "status": "fail",
+          "validation": {
+            "discrepancies": [
+              {
+                "code": "absent_supporting_quote",
+                "field": "estimated_settlement_mm",
+                "message": "A nonempty supporting substring in the source is required."
+              },
+              {
+                "code": "absent_supporting_quote",
+                "field": "allowable_settlement_mm",
+                "message": "A nonempty supporting substring in the source is required."
+              },
+              {
+                "code": "unjustified_non_null",
+                "field": "estimated_settlement_mm",
+                "message": "Reference evidence does not justify a numeric value."
+              },
+              {
+                "code": "unjustified_non_null",
+                "field": "allowable_settlement_mm",
+                "message": "Reference evidence does not justify a numeric value."
+              }
+            ],
+            "parsed_json": {
+              "allowable_settlement_mm": 0.0,
+              "estimated_settlement_mm": 0.0,
+              "evidence": {
+                "allowable": null,
+                "estimated": null
+              }
+            },
+            "status": "fail"
+          },
+          "elapsed_ms": 175.4343369975686
+        },
+        {
+          "execution_id": "3db51ee8-08ae-4d59-9298-855e85d318ee",
+          "test_id": "T04",
+          "status": "fail",
+          "validation": {
+            "discrepancies": [
+              {
+                "code": "absent_supporting_quote",
+                "field": "estimated_settlement_mm",
+                "message": "A nonempty supporting substring in the source is required."
+              },
+              {
+                "code": "unjustified_non_null",
+                "field": "estimated_settlement_mm",
+                "message": "Reference evidence does not justify a numeric value."
+              }
+            ],
+            "parsed_json": {
+              "allowable_settlement_mm": 12.0,
+              "estimated_settlement_mm": 0.0,
+              "evidence": {
+                "allowable": "The allowable settlement is 12 mm",
+                "estimated": null
+              }
+            },
+            "status": "fail"
+          },
+          "elapsed_ms": 192.20852099533658
+        }
+      ],
+      "recommendation": {
+        "action": "revise",
+        "approval": "pending",
+        "error": null,
+        "open_risk_ids": [
+          "2efb6eb6-a0d3-4fcf-8c6f-c4e3aeb4d393",
+          "31e8e4d5-ef48-47cf-b848-09c36539b038"
+        ],
+        "planner_action": "run_tests",
+        "planner_decision_id": "cacef5e9-4b9e-419f-95a9-0d882fc416aa",
+        "prior_rejection": false,
+        "results": [
+          {
+            "case_id": "f240859e-709b-46b6-a705-2d8b9f2eed75",
+            "execution_id": "0d3650d5-7124-4609-bf4a-7fd4ca5ff24f",
+            "status": "pass",
+            "test_id": "T01",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "8584ceaf-022c-4ccf-867e-794d9462ea4c",
+            "execution_id": "57c19946-e490-4a46-87aa-c59f1faf129c",
+            "status": "pass",
+            "test_id": "T02",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.5,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4.5 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "8d90ce9b-2c40-43d5-afbe-11a2a7d9cbde",
+            "execution_id": "7fd8c8fe-4270-4fdc-9ffa-5a7e049f23de",
+            "status": "fail",
+            "test_id": "T03",
+            "validation": {
+              "discrepancies": [
+                {
+                  "code": "absent_supporting_quote",
+                  "field": "estimated_settlement_mm",
+                  "message": "A nonempty supporting substring in the source is required."
+                },
+                {
+                  "code": "absent_supporting_quote",
+                  "field": "allowable_settlement_mm",
+                  "message": "A nonempty supporting substring in the source is required."
+                },
+                {
+                  "code": "unjustified_non_null",
+                  "field": "estimated_settlement_mm",
+                  "message": "Reference evidence does not justify a numeric value."
+                },
+                {
+                  "code": "unjustified_non_null",
+                  "field": "allowable_settlement_mm",
+                  "message": "Reference evidence does not justify a numeric value."
+                }
+              ],
+              "parsed_json": {
+                "allowable_settlement_mm": 0.0,
+                "estimated_settlement_mm": 0.0,
+                "evidence": {
+                  "allowable": null,
+                  "estimated": null
+                }
+              },
+              "status": "fail"
+            }
+          },
+          {
+            "case_id": "e23f0057-b4d6-44d8-b92f-358a1a240f95",
+            "execution_id": "3db51ee8-08ae-4d59-9298-855e85d318ee",
+            "status": "fail",
+            "test_id": "T04",
+            "validation": {
+              "discrepancies": [
+                {
+                  "code": "absent_supporting_quote",
+                  "field": "estimated_settlement_mm",
+                  "message": "A nonempty supporting substring in the source is required."
+                },
+                {
+                  "code": "unjustified_non_null",
+                  "field": "estimated_settlement_mm",
+                  "message": "Reference evidence does not justify a numeric value."
+                }
+              ],
+              "parsed_json": {
+                "allowable_settlement_mm": 12.0,
+                "estimated_settlement_mm": 0.0,
+                "evidence": {
+                  "allowable": "The allowable settlement is 12 mm",
+                  "estimated": null
+                }
+              },
+              "status": "fail"
+            }
+          }
+        ],
+        "source_refs": [
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+          "git:514d7be901ecca503bd5832e83e7834537fe4eaa:settlement_prompt.txt",
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt"
+        ]
+      },
+      "next_action": "revise",
+      "approval": "pending",
+      "human_decision": null,
+      "errors": []
+    },
+    "stderr": ""
+  },
+  "cycle3_process": {
+    "args": [
+      "review",
+      "start",
+      "--project",
+      "demo",
+      "--version",
+      "v3",
+      "--cycle",
+      "module08-c3",
+      "--base-version",
+      "v2",
+      "--replay-file",
+      "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/samples/replay/module08_cycles.json",
+      "--replay-scenario",
+      "cycle_3"
+    ],
+    "pid": 4,
+    "parent_pid": 2,
+    "started_at": "2026-10-27T11:24:12.601329+00:00",
+    "exited_at": "2026-10-27T11:24:26.724891+00:00",
+    "exit_code": 0,
+    "confirmed_exit": true,
+    "elapsed_ms": 14123.567428003298,
+    "timed_out": false,
+    "output": {
+      "project_id": "demo",
+      "version": "v3",
+      "version_id": "47b1f2f2-c526-48e6-b8f5-07f5ae219e2b",
+      "cycle": "module08-c3",
+      "cycle_id": "70a40248-c2f7-4af9-8b34-6dca321b5094",
+      "status": "completed",
+      "policy_id": "7f2ca568-ef1c-4757-ba3b-4477c064fcc9",
+      "policy_revision": 2,
+      "policy_status": "approved",
+      "mode": "replay",
+      "planner": {
+        "decision": "RUN_TESTS",
+        "memory_evidence_ids": [],
+        "needs_developer_approval": false,
+        "reason_summary": "Handwritten offline three-cycle fixture; selection is scripted replay, not evidence of live LLM agency.",
+        "source_evidence_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+        ],
+        "test_ids": [
+          "T01",
+          "T02",
+          "T03",
+          "T04"
+        ],
+        "test_mode": "targeted_regression"
+      },
+      "planner_error": null,
+      "selected_test_ids": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "supplied_memory_refs": [
+        "risk:31e8e4d5-ef48-47cf-b848-09c36539b038",
+        "risk:2efb6eb6-a0d3-4fcf-8c6f-c4e3aeb4d393",
+        "audit:387196a6-725a-439b-9245-9f82cffe7a0c",
+        "audit:529d987b-a3b3-47e0-8f7b-9d53627c154c",
+        "audit:20c980cb-7646-4ca4-b2f8-7175e20d1789",
+        "execution:3db51ee8-08ae-4d59-9298-855e85d318ee",
+        "execution:7fd8c8fe-4270-4fdc-9ffa-5a7e049f23de",
+        "execution:57c19946-e490-4a46-87aa-c59f1faf129c",
+        "execution:0d3650d5-7124-4609-bf4a-7fd4ca5ff24f",
+        "execution:42abc5c4-087c-4bd1-808e-7b748b184f47",
+        "execution:ea44fd06-ce88-4525-9ac7-25c8412230ef",
+        "execution:4038f08a-0140-4001-94f3-b87a47809de7",
+        "policy:7f2ca568-ef1c-4757-ba3b-4477c064fcc9"
+      ],
+      "source_refs": [
+        "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+        "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+        "policy:7f2ca568-ef1c-4757-ba3b-4477c064fcc9",
+        "case:f240859e-709b-46b6-a705-2d8b9f2eed75",
+        "case:8584ceaf-022c-4ccf-867e-794d9462ea4c",
+        "case:8d90ce9b-2c40-43d5-afbe-11a2a7d9cbde",
+        "case:e23f0057-b4d6-44d8-b92f-358a1a240f95",
+        "case:ee3a7e4a-f241-418e-9236-c53eff3230b1",
+        "case:8946dee8-b6a5-43ef-8fd1-de64a2fde375",
+        "case:cc8c85e2-a3bc-4f84-918d-e74759cb324b",
+        "case:02861bd7-b578-4c24-97eb-e5134810980c",
+        "case:66a6e743-540b-4f70-a831-7d093df7ae42",
+        "case:4d9bedff-1c37-4bef-b230-92cc933503b2",
+        "case:5d4b5d8a-104f-465b-bdf1-6eaa46e4e9bf",
+        "case:001a2c65-caeb-4c19-9ae0-e1c2dc616607"
+      ],
+      "results": [
+        {
+          "execution_id": "dd2fbcb4-3888-42ab-bff1-61f5a9562277",
+          "test_id": "T01",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10.0,
+              "estimated_settlement_mm": 4.0,
+              "evidence": {
+                "allowable": "the allowable settlement is 10 mm",
+                "estimated": "The estimated settlement is 4 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 163.8705280056456
+        },
+        {
+          "execution_id": "c49ddda2-9d2c-4dc1-ab53-412b6b490b18",
+          "test_id": "T02",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 10.0,
+              "estimated_settlement_mm": 4.5,
+              "evidence": {
+                "allowable": "the allowable settlement is 10 mm",
+                "estimated": "The estimated settlement is 4.5 mm"
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 194.1672910033958
+        },
+        {
+          "execution_id": "5e944984-d238-464f-ae62-d2322fd37118",
+          "test_id": "T03",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": null,
+              "estimated_settlement_mm": null,
+              "evidence": {
+                "allowable": null,
+                "estimated": null
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 161.34047300147358
+        },
+        {
+          "execution_id": "ecb7580a-0613-4442-9412-e53e351781b9",
+          "test_id": "T04",
+          "status": "pass",
+          "validation": {
+            "discrepancies": [],
+            "parsed_json": {
+              "allowable_settlement_mm": 12.0,
+              "estimated_settlement_mm": null,
+              "evidence": {
+                "allowable": "The allowable settlement is 12 mm",
+                "estimated": null
+              }
+            },
+            "status": "pass"
+          },
+          "elapsed_ms": 224.94766999443527
+        }
+      ],
+      "recommendation": {
+        "action": "promote_candidate",
+        "approval": "pending",
+        "error": null,
+        "open_risk_ids": [],
+        "planner_action": "run_tests",
+        "planner_decision_id": "01317096-1a5a-47e2-b692-ac8c9a30ba32",
+        "prior_rejection": false,
+        "results": [
+          {
+            "case_id": "f240859e-709b-46b6-a705-2d8b9f2eed75",
+            "execution_id": "dd2fbcb4-3888-42ab-bff1-61f5a9562277",
+            "status": "pass",
+            "test_id": "T01",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "8584ceaf-022c-4ccf-867e-794d9462ea4c",
+            "execution_id": "c49ddda2-9d2c-4dc1-ab53-412b6b490b18",
+            "status": "pass",
+            "test_id": "T02",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.5,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4.5 mm"
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "8d90ce9b-2c40-43d5-afbe-11a2a7d9cbde",
+            "execution_id": "5e944984-d238-464f-ae62-d2322fd37118",
+            "status": "pass",
+            "test_id": "T03",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": null,
+                "estimated_settlement_mm": null,
+                "evidence": {
+                  "allowable": null,
+                  "estimated": null
+                }
+              },
+              "status": "pass"
+            }
+          },
+          {
+            "case_id": "e23f0057-b4d6-44d8-b92f-358a1a240f95",
+            "execution_id": "ecb7580a-0613-4442-9412-e53e351781b9",
+            "status": "pass",
+            "test_id": "T04",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 12.0,
+                "estimated_settlement_mm": null,
+                "evidence": {
+                  "allowable": "The allowable settlement is 12 mm",
+                  "estimated": null
+                }
+              },
+              "status": "pass"
+            }
+          }
+        ],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+        ]
+      },
+      "next_action": "promote_candidate",
+      "approval": "pending",
+      "human_decision": null,
+      "errors": []
+    },
+    "stderr": ""
+  },
+  "source_identity_before": {
+    "case_ids": [
+      "f240859e-709b-46b6-a705-2d8b9f2eed75",
+      "8584ceaf-022c-4ccf-867e-794d9462ea4c",
+      "8d90ce9b-2c40-43d5-afbe-11a2a7d9cbde",
+      "e23f0057-b4d6-44d8-b92f-358a1a240f95",
+      "ee3a7e4a-f241-418e-9236-c53eff3230b1",
+      "8946dee8-b6a5-43ef-8fd1-de64a2fde375",
+      "cc8c85e2-a3bc-4f84-918d-e74759cb324b",
+      "02861bd7-b578-4c24-97eb-e5134810980c",
+      "66a6e743-540b-4f70-a831-7d093df7ae42",
+      "4d9bedff-1c37-4bef-b230-92cc933503b2",
+      "5d4b5d8a-104f-465b-bdf1-6eaa46e4e9bf",
+      "001a2c65-caeb-4c19-9ae0-e1c2dc616607"
+    ],
+    "case_snapshot_hash": "2f578ec9ced92f6ce79b326a74f89dc438c8982a153e8bdaa3d15c0eb2a532c5",
+    "prompt_snapshot_hash": "9bb036e542bc6d370fb669ccb6379de3822114552617b05ae38d0cd51021f47c",
+    "import_events": 12
+  },
+  "source_identity_after": {
+    "case_ids": [
+      "f240859e-709b-46b6-a705-2d8b9f2eed75",
+      "8584ceaf-022c-4ccf-867e-794d9462ea4c",
+      "8d90ce9b-2c40-43d5-afbe-11a2a7d9cbde",
+      "e23f0057-b4d6-44d8-b92f-358a1a240f95",
+      "ee3a7e4a-f241-418e-9236-c53eff3230b1",
+      "8946dee8-b6a5-43ef-8fd1-de64a2fde375",
+      "cc8c85e2-a3bc-4f84-918d-e74759cb324b",
+      "02861bd7-b578-4c24-97eb-e5134810980c",
+      "66a6e743-540b-4f70-a831-7d093df7ae42",
+      "4d9bedff-1c37-4bef-b230-92cc933503b2",
+      "5d4b5d8a-104f-465b-bdf1-6eaa46e4e9bf",
+      "001a2c65-caeb-4c19-9ae0-e1c2dc616607"
+    ],
+    "case_snapshot_hash": "2f578ec9ced92f6ce79b326a74f89dc438c8982a153e8bdaa3d15c0eb2a532c5",
+    "prompt_snapshot_hash": "9bb036e542bc6d370fb669ccb6379de3822114552617b05ae38d0cd51021f47c",
+    "import_events": 12
+  },
+  "seed_commands": 1,
+  "seed_after_cycle2": false
+}

@@ -1,546 +1,226 @@
-# Prompt Patch
+# PromptPatch
 
-PromptPatch is a persistent memory-driven agent for testing settlement
-measurement extraction prompts across versions. This fictional domain example
-is for regression testing, not engineering judgment.
+Persistent prompt regression reviews with evidence, memory and human release
+approval. The fictional task extracts estimated/allowable settlement measurements;
+it is a software test fixture, not engineering advice.
 
-**Current status: Modules 00–10 complete.** The package includes the persistent
-SQLite domain store, curated Git fixtures, audited tools, real Gemini execution,
-and a single LangGraph coordinator with SQLite checkpoints. A typed planner
-chooses actual tests; deterministic guards validate the selection and score
-results. The developer approved the successful demo v3 review; release decisions
-remain separate from agent recommendations.
-The full regression suite passes **249 tests** (one existing SDK deprecation
-warning). The review CLI supports explicit approvals/rejections, policy corrections,
-status/memory/log views, and checkpoint resume. The full three-cycle
-live demonstration, explicit restart and approved policy correction are verified.
-See [implementation status](docs/IMPLEMENTATION_STATUS.md) and
-[requirement traceability](docs/REQUIREMENT_TRACEABILITY.md).
+The CLI and local Streamlit dashboard use the same LangGraph, SQLite and approval
+services. **All Modules 00–11 are implemented; 259 tests pass**, including ten UI
+checks, verified in a clean environment. Current implementation and final checks are tracked in
+[IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md). Teacher approval remains
+unverified; student review and final submission are separate actions.
 
 ## Setup
 
-Verified on Python **3.14.4**, SQLite **3.46.1**, and pip **25.1.1** on Linux.
-The package currently declares Python 3.14 only; other versions are unverified.
-Use a virtual environment. Installation requires access to the package index.
+Supported/verified platform: Linux, **Python 3.14** (originally 3.14.4), SQLite
+3.46.1 and Git. Other Python versions are not verified. Start from a checkout:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements-dev.txt
-python -m pip install -e '.[dev]'
-python -m pytest -q
-promptpatch --help
-promptpatch doctor
+python3.14 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m pip install --no-build-isolation -e '.[dev,ui]'
+.venv/bin/python -m pytest -q
+.venv/bin/promptpatch --help
+.venv/bin/promptpatch doctor
 ```
 
-`requirements-dev.txt` records all installed development dependency versions.
-Direct dependencies are also pinned in `pyproject.toml`: Pydantic **2.14.1**,
-pytest **9.1.1**, and setuptools **84.2.1** (build backend). CLI parsing and SQLite
-use the Python standard library. Module 05 additionally pins Google GenAI SDK
-**2.33.0** and HTTPX **0.28.1** after installation and offline transport verification.
-Module 06 pins LangGraph **1.2.17** and SQLite checkpointer **3.1.2**.
-The full installed dependency snapshot is recorded;
-no model version is guessed or pinned before a real provider response is available.
+`requirements-dev.txt` is the complete installed development/UI lock; direct
+versions are in `pyproject.toml`. UI is an optional extra for CLI-only installs.
+Final [clean-environment and test evidence](artifacts/final/README.md) is in
+`artifacts/final/`. `doctor`
+checks local configuration only; it does not claim provider/database readiness.
 
-## Configuration
+## Start the UI
 
-The application reads the process environment. Variables and defaults are listed
-below; `.env` files are **not loaded automatically**. Supply an
-authorized key using your local environment or secret manager, never chat,
-source, or committed files. Modules 01–04 do not require a key or make API calls.
+```bash
+.venv/bin/python scripts/run_ui.py --env-file .env
+```
 
-| Variable | Default / meaning |
+Open **http://127.0.0.1:8501**. The launcher explicitly parses the named env file
+as configuration data, never shell code. Existing process variables take
+precedence. If you have no `.env`, copy `config/.env.example` first and keep its
+replay mode for offline testing. Preserve an existing `.env`; never commit a key.
+The pre-existing local deletion of the root template is preserved; the documented
+safe template is now under `config/`.
+
+- Initialize/load fictional demo data with the explicit setup form if needed.
+- Select a project, browse recent reviews and inspect selected tests, results,
+  evidence, errors, memory/feedback, policy history and audit timeline.
+- Create or resume a review explicitly. Replay uses handwritten fixtures and makes
+  no provider calls. Live mode requires the configured key/model and explicit
+  submission of the review data to Gemini; browsing never starts inference.
+- Record a release decision only after inspecting the exact completed review.
+  The existing backend guards apply. Policy correction approval remains a separate
+  CLI action; the UI shows pending/current/superseded rules.
+
+To view the original recorded live store, if its ignored runtime files are still
+available locally:
+
+```bash
+.venv/bin/python scripts/run_ui.py --env-file .env --recorded-demo
+```
+
+This selects `data/module08/live/memory.sqlite3` and its checkpoint file; it does
+not seed, import, create a release or make a provider call. Committed JSON artifacts
+remain inspectable when ignored runtime DBs are unavailable. For an isolated
+key-free workspace:
+
+```bash
+PROMPTPATCH_MODE=replay \
+PROMPTPATCH_DB_PATH=data/ui-demo/domain.sqlite3 \
+PROMPTPATCH_CHECKPOINT_DB_PATH=data/ui-demo/checkpoints.sqlite3 \
+PROMPTPATCH_DEMO_REPO=data/ui-demo/git \
+.venv/bin/python scripts/run_ui.py
+```
+
+The server binds loopback and disables usage statistics. It is a trusted local
+owner tool without multi-user authentication. One worker per review cycle is
+supported. Do not expose it publicly. Stop with Ctrl+C. A different local port can
+be selected with `--port 8502`.
+
+## Offline CLI walkthrough
+
+The CLI reads process environment only; it never automatically loads `.env`.
+Use these settings in the same terminal, with previously unused runtime paths:
+
+```bash
+export PROMPTPATCH_MODE=replay
+export PROMPTPATCH_DB_PATH=data/quickstart/domain.sqlite3
+export PROMPTPATCH_CHECKPOINT_DB_PATH=data/quickstart/checkpoints.sqlite3
+export PROMPTPATCH_DEMO_REPO=data/quickstart/git
+.venv/bin/promptpatch init
+.venv/bin/promptpatch demo seed --actor developer --approve-baseline
+.venv/bin/promptpatch review start --project demo --version v3 --cycle first-review \
+  --replay-file samples/replay/module07_reviews.json --replay-scenario pass_v3
+.venv/bin/promptpatch review list --project demo
+.venv/bin/promptpatch review status --project demo --cycle first-review
+.venv/bin/promptpatch review resume --project demo --cycle first-review
+.venv/bin/promptpatch memory show --project demo
+.venv/bin/promptpatch logs show --project demo --cycle first-review
+.venv/bin/promptpatch telemetry show --project demo --cycle first-review
+```
+
+Replay is a deterministic control, not fresh LLM agency. Seeding approves only
+fictional baseline references under the named actor and is idempotent. Status,
+review list and telemetry do not invoke the provider. Logs without `--cycle` also
+include project-wide policy and human events.
+
+A cycle key identifies one immutable request. Repeated identical start/resume
+reuses durable results and separate SQLite checkpoints. Keep both original DB
+files, mode, Git fixture and saved configuration. Unknown in-flight API requests
+fail closed; a terminal failed/held planner is not automatically resampled.
+Changed requests require a new cycle key. Review completion is different from
+release approval. Exit codes: 0 success/readable status, 1 execution/input failure
+or incomplete review needing attention, 2 argument/configuration error. A completed
+review may validly recommend revision or contain uncertain evidence.
+
+## Live execution and configuration
+
+Provide an authorized `GEMINI_API_KEY` privately and set `GEMINI_MODEL` to the
+verified alias **gemini-3.5-flash-lite**. Switch `PROMPTPATCH_MODE=live` deliberately.
+The selected prompt/diff, fictional cases, policy and relevant memory are sent to
+Google Gemini at `generativelanguage.googleapis.com` on an explicit review action.
+A key authenticates the request and is excluded from prompt context and exports.
+No provider call is necessary for setup, browsing, replay or tests.
+
+```bash
+.venv/bin/promptpatch review start --project demo --version v3 --base-version v2 \
+  --cycle live-review --timeout-ms 30000
+```
+
+The example assumes live variables in the invoking process, available quota and
+already seeded sources. Default timeout is 20000 ms; allowed range 1000–30000.
+Planner attempts are terminal per cycle. Extractions use bounded retries; no
+silent replay fallback or loop retries until a favorable answer. Quota and deadline
+failures are retained. One review selects at most four tests under fixture policy.
+
+| Environment variable | Default / purpose |
 |---|---|
-| `GEMINI_API_KEY` | Unset; secret, excluded from configuration repr/export |
-| `GEMINI_MODEL` | Unset by default; verified local selection: `gemini-3.5-flash-lite` |
-| `PROMPTPATCH_DB_PATH` | `data/promptpatch.sqlite3` |
-| `PROMPTPATCH_CHECKPOINT_DB_PATH` | `data/checkpoints.sqlite3` |
-| `PROMPTPATCH_DEMO_REPO` | `samples/demo_git_repo` |
-| `PROMPTPATCH_MODE` | `live`; allowed values: `live`, `replay` |
+| GEMINI_API_KEY | Unset; secret; needed only for live model actions |
+| GEMINI_MODEL | Unset; verified alias above, provider response metadata retained |
+| PROMPTPATCH_MODE | live; explicitly set replay for offline use |
+| PROMPTPATCH_DB_PATH | data/promptpatch.sqlite3; authoritative domain store |
+| PROMPTPATCH_CHECKPOINT_DB_PATH | data/checkpoints.sqlite3; separate working checkpoints |
+| PROMPTPATCH_DEMO_REPO | samples/demo_git_repo; registered read-only prompt source |
 
-Blank environment values use defaults. Relative paths use the current working
-directory. Reading settings creates no files. Live inference and explicitly
-labeled replay are implemented. The integration check below requires live mode.
+## Corrections and human release decisions
 
-## Demo data (Module 03)
+Inspect the concrete change and exact review before executing owner actions:
 
 ```bash
-python scripts/seed_demo.py --actor fixture-bootstrap --approve-baseline
+.venv/bin/promptpatch policy propose --project demo \
+  --file samples/evaluation_policy_v2.json --actor developer \
+  --reason "Tighten numerical tolerance after review"
+.venv/bin/promptpatch policy approve --project demo --revision 2 --actor developer
+.venv/bin/promptpatch version approve --project demo --version v3 \
+  --cycle first-review --actor developer
+# Or reject a completed review instead:
+.venv/bin/promptpatch version reject --project demo --version v3 \
+  --cycle first-review --actor developer --comments "Explain the issue"
 ```
 
-This creates two fictional projects, twelve main cases plus one isolation case,
-initial approved fixture policies, and an independent local Git repo with actual
-v1/v2/v3 prompt commits. Rerunning preserves existing records and later corrections.
-The actor/flag apply only to fictional baseline setup; teacher and release approval
-are separate. Policy v2 remains a candidate file, not an activated correction.
-See [fixture coverage and version intent](samples/README.md) for expected values,
-ambiguity handling, safe destinations, custom paths, and Git inspection commands.
-No model calls, agent decisions, review cycles, or results are generated by seeding.
-`promptpatch demo seed --actor fixture-bootstrap --approve-baseline` exposes the
-same fixture setup through the CLI.
+These are alternative examples, not a script to approve and reject the same cycle.
+A proposal requires its revision to be the next revision. It remains inactive until
+separately approved; old criteria remain queryable. Release approval requires a
+completed promotion candidate under the current policy with no open risks, and
+one immutable human decision is permitted per cycle. Actor text is attribution,
+not authentication. Neither action changes Git, deploys, pushes, or proves teacher
+approval. The actual successful live v3 approval is recorded in
+[release_approval.json](artifacts/evaluation/release_approval.json).
 
-## Evidence tools (Module 04)
+## Three cycles and explicit restart
 
-The Python API is available after seeding; the CLI workflow is documented below.
-Repository/path access is trusted caller configuration, never model/source content:
-
-```python
-from pathlib import Path
-from promptpatch.git_tool import GitEvidenceTool, RepositoryAccess
-from promptpatch.memory_tool import MemoryTools
-
-db = Path("data/promptpatch.sqlite3")
-access = {"demo": RepositoryAccess(
-    Path("samples/demo_git_repo"), frozenset({"settlement_prompt.txt"})
-)}
-git_tool = GitEvidenceTool(db, access)
-prompt = git_tool.read_git_prompt(
-    "demo", "1fed5a700edb94ddff2568531ee3f80f76f42ddc", "settlement_prompt.txt"
-)
-memory = MemoryTools(db).retrieve_memory("demo", tags=["decimal"], limit=10)
-policy = MemoryTools(db).read_active_policy("demo")
-```
-
-`read_git_prompt(project_id, commit_sha, prompt_relpath)` returns typed source
-evidence with content, SHA-256, registered version ID, and Git source reference.
-It requires a full lowercase commit SHA registered to the project/path, verifies
-the raw blob hash, and rejects unsafe paths, external symlinks, symlink blobs,
-missing files, or mismatched sources. Tags/branches/short refs are not accepted.
-Regular local repos with their own `.git` directory are supported; linked
-worktrees, bare repos, and shared external object stores are outside this MVP.
-
-`compare_prompt_versions(project_id, base_sha, target_sha, prompt_relpath)` verifies
-both snapshots and returns the actual textual diff with version/source references.
-Only fixed read commands exist. Git is never used to edit/commit/promote evaluated
-prompts. External diff/text conversion, hooks, inherited Git routing, optional
-locks, replacement objects, and lazy fetching are disabled. Defaults: 64 KiB per
-prompt, 128 KiB per diff, and 5 seconds per Git subprocess. Streaming output is
-capped, and timeout/oversized child processes are terminated. Source instructions
-are returned as data and cannot alter permissions, policy, or approvals.
-
-`retrieve_memory(project_id, tags=None, open_only=True, limit=10)` returns risks,
-bounded failure-history audit events, saved validation outcomes, human decisions,
-approved policy corrections, and reference revision metadata, with IDs/timestamps
-and evidence references. Tags match risk categories and case tags for outcomes/
-reference corrections; human decisions/policy corrections stay project-wide.
-`open_only` filters risks/history, not outcome history. Each collection has its own
-limit (1–50), explicit truncation flags, and a combined 128 KiB output cap; history
-is restricted to the selected risks. Oversized results fail rather than silently
-dropping evidence. Raw model responses and full source bodies are omitted.
-
-`read_active_policy(project_id)` returns only the approved current revision and
-its rules/source ID, excluding newer pending proposals. Historical corrections
-in memory do not replace this authoritative current policy.
-
-Retrieval uses read-only SQLite snapshots. Each valid active-project call appends
-invocation/success/error audit events; memory calls also append `memory_read`.
-Audits contain call IDs, UTC timestamps, elapsed time, fixed error codes, and
-evidence IDs, without copying source bodies, feedback text, invalid arguments,
-or Git stderr. Failed audit storage prevents successful results. Unknown/archived
-projects fail without writing another project's log; archived projects cannot
-accept the required audit writes, although direct store reads remain available.
-These are read-only evidence tools with deliberate SQLite audit writes.
-
-## Provider/executor/validator (Module 05 — live verified)
-
-Set `GEMINI_API_KEY` and a supported `GEMINI_MODEL` through your local environment
-or secret manager, then run this in that same terminal:
+The staged runner launches separate CLI processes and preserves original cases:
 
 ```bash
-python scripts/check_live_provider.py
-```
-
-The script performs one real v3/T02 smoke request (one attempt maximum), stores the
-response and deterministic score, and prints IDs/status/usage without raw source
-or credentials. It requires the seeded fixture. This is a fixed integration smoke
-check, not an LLM planner decision or full review workflow. No release approval
-is granted. With credentials/model absent it exits 2, records a safe preflight
-blocker when the demo store exists, and creates no cycle/test result. No `.env`
-file is auto-loaded, and keys must never be placed in chat or committed files.
-
-Repeated identical checks reuse the completed operation. A changed model/settings
-or an exhausted/failed attempt needs review; `--cycle-key` can explicitly identify
-a new smoke check after fixing prerequisites, preserving the earlier failure.
-Module 05's live acceptance is verified; Module 06 adds the planner below.
-
-The adapter uses `google.genai.Client.models.generate_content`, JSON Schema output,
-an explicit Google endpoint, and client cleanup. Official references consulted:
-[Google GenAI SDK](https://googleapis.github.io/python-genai/) and
-[Gemini structured output](https://ai.google.dev/gemini-api/docs/structured-output).
-Installed signatures and request serialization were first checked using a mocked
-HTTP transport. A separate actual API smoke check then verified the live integration;
-the synthetic transport tests remain labelled offline evidence.
-
-`ModelSettings` defaults: temperature 0, optional unset seed, 2048 output tokens,
-20-second SDK request timeout, 2 executor attempts (allowed maximum 3), and a
-0.2-second delay between retryable failures. The SDK's own retries and automatic
-continuation/function calling are disabled. The smoke script limits attempts to 1.
-Inputs/outputs are capped at 64 KiB each, and the policy limits logical tests per
-cycle. Model ID is explicit. Request timeouts are SDK HTTP timeouts, not an
-independent process-wide wall-clock deadline. Low temperature does not guarantee
-deterministic live responses.
-
-Provider responses keep purpose (`candidate_execution` versus `planner`), requested
-and returned model identity, SDK version, raw text/parsed JSON, response ID when
-available, actual supplied token counts, elapsed time, and finish reason. No
-planner logic is implemented here. Quota/network/timeouts have bounded retries;
-non-retryable failures stop. A provider failure produces error/attempt audit
-evidence without a fabricated extraction pass/fail. Incomplete/blocked model
-responses require review. Usage/cost remain unavailable when not supplied; no
-estimated price is invented.
-
-`SettlementEvaluator` enforces strict JSON and required shape/types (including
-rejection of duplicate keys, booleans-as-numbers, strings-as-numbers, and nonfinite
-values), compares values with Decimal arithmetic using
-`max(absolute_tolerance, relative_tolerance * abs(reference))`, and verifies
-normalized source substrings containing the reported measurement and supported
-unit. Missing values require null evidence. Fabricated quotes fail even if the
-number matches. Ambiguous/unsupported sources identified by approved reference
-metadata produce `uncertain` when the otherwise valid response matches the
-reference; malformed output or invented values still fail. Invalid reference or
-policy evidence blocks scoring before a model call. No LLM judge is used.
-
-`TestExecutor` validates project/cycle/prompt/case/policy provenance, enforces the
-allowed case catalog and test budget, and uses a request hash plus operation key.
-The cycle's approved policy is pinned for historical reproducibility. Completed
-operations return saved results without a new model request; failed attempt
-budgets persist across invocations. Unfinished external attempts fail closed
-instead of blindly repeating a potentially billed request. Persistence guarantees
-one completed logical result per key; provider-side exactly-once billing and
-concurrent-worker scheduling are not promised by this module.
-
-`samples/replay/module05_responses.json` is separately identified **handwritten
-replay**, not captured Gemini output. `ReplayProvider` always labels results
-`provider=replay`, `mode=replay`, with fixture ID, no fabricated tokens/cost, and
-zero live-model-call telemetry. It is never an automatic fallback from Gemini.
-The test databases are isolated and synthetic. Module 06 verification: **180 tests
-passed** in 24.63 seconds, one SDK Python deprecation warning. The separate live
-v3/T02 check returned estimated **4.5 mm**, allowable **10.0 mm**, and zero validator
-discrepancies. The provider returned model version `gemini-3.5-flash-lite`, SDK
-version `2.33.0`, **167 input + 66 output = 233 total tokens**, and approximately
-**1.56 seconds** provider time (**1.63 seconds** logical execution time).
-
-Live execution ID: `ca208013-6806-4c2b-bb70-e732fbbd124b`, persisted in the configured
-local SQLite domain database with raw/parsed response, policy/reference IDs,
-validation, usage, timing, and attempt/audit records. Fresh-process verification
-confirmed one model-call start, one completed attempt, one result, and zero duplicate
-results after repeat. No additional model call was made by the repeat. Cost remains
-unmeasured/null, and absent thinking-token usage is not reported as zero.
-
-For this verification, only known `.env` variables were parsed as data and loaded
-into the check process's environment; no shell code was sourced and no secret was
-displayed. The application's environment-only configuration contract is unchanged:
-plain `python scripts/check_live_provider.py` still requires those variables to be
-exported in the invoking terminal. This one fixed smoke case does not establish
-live performance on the entire catalog or a planner-driven review workflow.
-
-## Current CLI contract (Module 07)
-
-Run from the repository's editable installation. Set Gemini credentials in the
-invoking process environment; `.env` is still not loaded automatically. A cycle
-key identifies one immutable review request inside a project.
-
-```bash
-promptpatch init
-promptpatch demo seed --actor fixture-bootstrap --approve-baseline
-promptpatch review start --project demo --version v3 --base-version v2 --cycle my-review
-promptpatch review status --project demo --cycle my-review
-promptpatch review resume --project demo --cycle my-review
-promptpatch memory show --project demo
-promptpatch logs show --project demo --cycle my-review
-promptpatch logs show --project demo
-```
-
-Review output is formatted JSON showing project/version/cycle, pinned policy,
-planner reason and choices, supplied memory refs, Git/case evidence refs,
-pass/fail/uncertain results, recommendation, errors, and human approval state.
-`status` reads domain records without provider access or writes. `logs --cycle`
-includes cycle-linked source/memory reads; omit the cycle to include project-wide
-policy/approval events and original tool audit events too.
-
-Repeat an identical `review start` or use `review resume` to reuse its persisted
-request, graph checkpoint and completed calls. The saved model/settings, history
-mode and base version are restored; changed start arguments require a new key.
-Resume needs the original mode, configured Git repository, checkpoint database,
-and provider access. Unknown interrupted external attempts fail closed; a terminal
-invalid/held plan remains pending and requires a new cycle after clarification.
-One worker per cycle is supported.
-
-Policy corrections and release decisions require explicit owner commands:
-
-```bash
-promptpatch policy propose --project demo --file samples/evaluation_policy_v2.json \
-  --actor developer --reason "Tighten numeric tolerance"
-promptpatch policy approve --project demo --revision 2 --actor developer
-promptpatch version approve --project demo --version v3 --cycle my-review --actor developer
-# Or, for a completed review you reject:
-promptpatch version reject --project demo --version v3 --cycle my-review \
-  --actor developer --comments "Explain the issue"
-```
-
-The example proposal requires revision 2 to be the project's next revision.
-Proposals remain pending until separately approved; old rules/history remain
-queryable. Version decisions require the **exact cycle** to avoid approving an
-ambiguous version-level recommendation. Approval requires a completed
-`promote_candidate` under the current approved policy with no open risks.
-Duplicate decisions and mismatched projects/versions are rejected. After a policy
-change, run a new review before approval. Human decisions append records and do
-not edit Git, publish, or deploy anything. `--actor` attributes a local owner
-action; this single-user CLI does not authenticate identities or grant teacher
-approval. Recommendations and human decisions are displayed separately.
-
-For an explicit offline fixture check, with no API key required:
-
-```bash
-PROMPTPATCH_MODE=replay promptpatch review start --project demo --version v3 \
-  --cycle offline-check --replay-file samples/replay/module07_reviews.json \
-  --replay-scenario pass_v3
-PROMPTPATCH_MODE=replay promptpatch review resume --project demo --cycle offline-check
-```
-
-Replay is handwritten, labeled, and never a fallback from live Gemini. Resume
-restores the fixture cursor from persisted call starts and verifies the fixture
-hash; do not edit it during a review. The supplied scenarios target the fictional
-v3 Git snapshot. Keep diagnostic replay approvals in a separate database from
-live reviews. Configure both `PROMPTPATCH_DB_PATH` and
-`PROMPTPATCH_CHECKPOINT_DB_PATH` when isolating data.
-
-Exit 0 means a command/completed review succeeded, **not** that a candidate is
-approved or all tests passed. Review start/resume exit 1 when the graph terminates
-in `needs_review` without completing execution (for example, invalid plan or hold),
-or a local/provider/approval action fails. `review start --timeout-ms` optionally
-sets a 1000–30000 ms request timeout (default 20000), saved for resume. Read-only
-status exits 0 for a found
-cycle even if it needs attention. Invalid syntax/configuration exits 2.
-`doctor` remains local and makes no database/provider readiness claim.
-
-The [Module 07 evidence](artifacts/module07/README.md) records a real live CLI
-review, fresh-process reuse, and separately labeled offline approval/correction
-checks. Teacher approval remains **pending/unverified**.
-
-## Domain memory (Module 02)
-
-```bash
-promptpatch init
-```
-
-Only the domain database is initialized by this command. The graph creates its
-separate checkpoint database when run. Doctor performs no database reads or writes. Domain and
-checkpoint paths must differ. Schema migrations use SQLite `user_version`; schema
-1 creation is transactional and repeatable, including concurrent initialization.
-A newer schema is rejected without changing it.
-
-`promptpatch.repository.Repository(Path(...))` opens an already initialized store
-and supports project creation/archiving, immutable prompt versions, reference-case
-revisions, policy proposals/approvals, review cycles, risks, planner decisions,
-human decisions, tool operations/attempts, results, and audit events. This is a
-storage API used by the review/approval CLI above.
-
-All record lookups require a project ID. Scoped foreign keys also prevent records
-from mixing projects. UUIDs identify records; caller-supplied project IDs, cycle
-keys, and operation keys provide stable identities. Writes and their audit events
-commit together under `BEGIN IMMEDIATE`, with foreign keys enabled on every store
-connection. UTC timestamps and canonical JSON/hashes preserve provenance.
-
-Policy proposals stay pending. A separate `approve_policy_revision` call with an
-explicit actor activates a policy and supersedes the old one. Stale proposals
-must be reproposed against the current policy. Old rules remain queryable, and
-existing cycles retain their original policy. New cycles use the approved current
-policy. Test-case revisions require an explicit actor, deactivate the old revision,
-and retain its content and hash. Callers are trusted local developer code; an actor
-string records attribution, and is not an authentication mechanism.
-
-Prompt/source content, results, planner decisions, human decisions, attempts, and
-audit history have SQLite mutation guards. Risk rows are current-state summaries;
-their earlier evidence survives in append-only audit events. Resolved risks reopen
-as regressed when contrary evidence arrives. One human decision per completed
-cycle and one completed result per operation key prevent duplicate approvals and
-results. Failure attempts remain separate from the completed logical operation.
-Store code records outcomes supplied by callers; it does not validate model outputs
-or grant release approval automatically.
-
-The owner can archive a project with an explicit actor; reads remain available
-and further writes are blocked. No deletion API or automatic expiry is provided;
-source/evaluation/decision history is retained. Database files are local,
-gitignored, and authoritative for domain records. Full privacy/retention tooling,
-log redaction hardening, and safe exports await later authorized modules.
-
-Tests cover fresh connections and a fresh Python process, corrections, isolation,
-foreign keys, retries/deduplication, atomic writes/audits, immutable history,
-concurrent initialization, and CLI behavior. All stored test outputs are explicitly
-synthetic offline fixtures; separate Module 05/06 live checks supply the actual
-model integration evidence.
-
-Codex assisted with inspection, documentation, and the Modules 01–09 implementation.
-The student must review, understand, and be able to modify submitted code.
-No external datasets have been imported. Third-party dependencies are listed
-above. Development proceeds one explicitly authorized module at a time; next is
-Module 10, after explicit approval.
-
-
-## Planner and persisted graph (Module 06)
-
-With already seeded data and Gemini variables in the process environment:
-
-```bash
-python scripts/check_graph.py --version v2 --base-version v1 \
-  --cycle-key my-module06-check --output data/module06-check.json
-```
-
-This developer integration check runs one graph, displays the planner's selected
-and executed IDs, deterministic results, recommendation, evidence, and pending
-approval. `--memory-off` hides long-term planner history while keeping current
-sources, catalog, approved policy, model, and generation settings. It never
-approves a release. The review CLI below is the normal workflow entry point.
-Repeated identical checks reuse the checkpoint and completed operations.
-
-The Python entry point is `ReviewGraph.run(project_id, cycle_id,
-memory_enabled=True, base_version_id=None)` for an explicitly created cycle.
-The ten nodes follow the master plan. Domain records are authoritative;
-`PROMPTPATCH_CHECKPOINT_DB_PATH` must identify a separate trusted local SQLite
-file. Thread IDs are `project_id:cycle_id`; strict serializer allowlists are empty
-and pickle fallback is disabled. Hosted LangSmith tracing is disabled for runs.
-See the [official persistence distinction](https://docs.langchain.com/oss/python/langgraph/persistence).
-
-Current bounds: at most 50 catalog entries/64 KiB, 64 KiB current prompt,
-16 KiB diff, memory retrieval limit 10 per collection/128 KiB overall, and the
-approved policy's execution budget (fixture: four tests, one required and three
-discretionary). Planner calls have one terminal attempt per cycle; candidate
-calls use bounded `ModelSettings` retries. Unknown interrupted API calls require
-review rather than automatic reissue. One worker per cycle is supported.
-
-Planner raw responses, supplied evidence, schema, settings, selected IDs and
-errors are stored in the domain DB. Citation enums expose only actual evidence;
-they do not choose tests. Guard rejection never substitutes a fixed test list.
-Checkpoints retain bounded current evidence and result summaries rather than
-candidate-response transcripts. Graph re-entry reuses durable planner/results,
-and failure-memory updates skip identical cycle/evidence writes.
-
-[Module 06 artifacts](artifacts/module06/) retain actual live checks, including
-rejected planner attempts and a comparison with identical selections. They are
-small diagnostics, not the formal three-case evaluation or complete three-cycle
-restart demonstration required in later modules. Recommendations concern only
-the tests actually selected; untested cases can still fail. Teacher approval,
-formal evaluation and report remain pending. The three-cycle demonstration is
-verified below.
-
-
-## Three-cycle demo runner (Module 08)
-
-Current verification: the live v1/v2/v3 workflow completed with recommendations
-`revise`, `revise`, `promote_candidate`. The developer-approved tolerance revision
-was active for v3 after a genuine process restart without reseeding. Prompt release
-approval is still pending. Earlier API deadline failures remain documented.
-
-Use the editable checkout and Gemini variables in the process environment.
-The default isolated files are `data/module08/live/` and `artifacts/demo/`.
-The runner refuses unowned nonempty directories and preserves existing reviews.
-It uses the existing CLI and creates **separate OS processes** for v1, v2 and v3.
-
-```bash
-python scripts/run_three_cycles.py prepare
-```
-
-This seeds the fictional baseline once, runs v1 then v2, confirms the second
-application process exited, and proposes the supplied tolerance correction.
-Inspect `artifacts/demo/policy_correction_pending.json`. It remains pending until
-you explicitly approve it:
-
-```bash
-python scripts/run_three_cycles.py finish --approve-policy --actor developer \
-  --approval-reference "Approved the isolated demo tolerance correction after review"
-```
-
-The finish stage activates revision 2, preserves superseded revision 1, then runs
-v3 in a fresh application process using the same domain/checkpoint files, original
-case IDs and saved inputs. It does not seed or re-upload the dataset. The runner
-never approves a prompt version. Do not use the approval flag until you have
-reviewed the concrete correction. The recorded local actor/reference attributes
-that explicit action; it is not identity authentication or teacher approval.
-
-Exports include `cycle_1.json`, `cycle_2.json`, `cycle_3.json`,
-`restart_evidence.txt`, `process_evidence.json`, `memory_before_after.json`,
-`policy_correction.json`, `tool_timeline.json`, and `summary.json`. They retain
-actual planner input/output, selected/executed IDs, raw candidate responses,
-validation, source/policy identities, provider metadata, usage and checkpoints.
-The owned runtime manifest records process PIDs and confirmed exits. Repeating
-completed stages returns persisted results without repeated model calls or
-approvals. Failed/held plans remain failures; there is no automatic fake fallback.
-
-If a cycle-3 command fails before completing, an explicit `--retry-cycle3` creates
-one new review key and preserves the failed review/export. A diagnosed deadline
-failure can use one additional explicit `--cycle3-timeout-ms 30000` retry; the
-original 20000 ms setting and failed attempts remain recorded. Retries never
-resample completed extraction results or automatically activate themselves. The
-live run needed this bounded timeout change after HTTP 504 responses; see its
-artifact README for all failures and actual counts.
-
-For a separately labeled deterministic demonstration of decimal/missing-value
-regressions, with no API key or real model reasoning:
-
-```bash
-python scripts/run_three_cycles.py prepare --mode replay \
-  --runtime data/module08/replay --artifacts artifacts/demo_replay
-python scripts/run_three_cycles.py finish --mode replay \
-  --runtime data/module08/replay --artifacts artifacts/demo_replay \
+.venv/bin/python scripts/run_three_cycles.py prepare --mode replay \
+  --runtime data/three-cycles-replay --artifacts artifacts/three-cycles-replay
+.venv/bin/python scripts/run_three_cycles.py finish --mode replay \
+  --runtime data/three-cycles-replay --artifacts artifacts/three-cycles-replay \
   --approve-policy --actor synthetic-demo-owner \
-  --approval-reference "Synthetic offline fixture approval only"
+  --approval-reference "Synthetic offline demonstration only"
 ```
 
-Replay's plans and responses are handwritten in
-`samples/replay/module08_cycles.json`, and every export is labeled. These fixture
-approvals are distinct from actual developer decisions. Live outcomes can differ;
-recommendations follow observed validator results, not the expected narrative.
-See the live and replay artifact READMEs for actual observations. Formal
-reliability/scenario/ablation evidence is recorded in Modules 09–10.
+Use unused output/runtime directories. These approvals are synthetic replay
+fixture actions. The same staged live runner is documented in
+[artifacts/demo/README.md](artifacts/demo/README.md); use it only with authorized
+payloads/provider access and an actual separately reviewed policy correction.
+Original live evidence shows v1/v2/v3 revise/revise/promotion candidate, real
+restart, unchanged sources and approved tolerance 0.01→0.001 mm. Failed planner
+attempts remain recorded. The later actual v3 human approval is a separate receipt.
 
-
-## Reliability/security checks and telemetry (Module 09)
+## Evaluation, final checks and submission
 
 ```bash
-python scripts/check_reliability.py
-python scripts/check_reliability.py --live-injection  # explicit real Gemini check
-promptpatch telemetry show --project demo --cycle my-review
+.venv/bin/python -m scripts.run_scenarios \
+  --runtime data/scenarios-rerun --artifacts artifacts/scenarios-rerun
+.venv/bin/python -m pytest -q
+.venv/bin/python -m pip check
 ```
 
-Telemetry is read-only and project-scoped: actual started calls by purpose/mode,
-received responses, retries/failures/in-flight state, observed latencies, tokens
-with missing values retained, duplicate logical actions and local storage sizes.
-No token price or replay cost is guessed. Use the database environment variables
-for the cycle you want to inspect. The control runner uses separate owned
-`data/module09/` and `artifacts/reliability/` directories.
+All **10/10 offline control scenarios** passed in Module 10; **5/5 factual claims**
+were checked and retry duplicates were **0**. Six live reviews attempted three
+memory pairs: **1/3 with history and 1/3 without**. Quota limited A02/A03 memory-on;
+only one pair completed without provider errors. Histories were scripted
+conditioning, current comparison calls live. No aggregate/statistical advantage
+is claimed. Current source alone can suggest regressions. Monetary cost and absent
+thinking-token counts remain unknown. See the exact protocol and actual outputs:
 
-The credential guard rejects recognized sensitive source/result material before
-model or persistence boundaries, including update and restored-checkpoint paths.
-Audit/CLI/export values are redacted without silently altering source hashes or
-acceptance references. Errors expose safe codes and HTTP status; 504 is recorded
-as a timeout. Retries remain bounded and completed operation keys are reused.
+- [Architecture](docs/ARCHITECTURE.md), [memory schema/lifecycle](docs/MEMORY_SCHEMA.md)
+- [Scenarios and ablation commands](docs/TEST_SCENARIOS.md), [results](docs/EVALUATION_RESULTS.md)
+- [Five-page-section technical report draft](docs/TECHNICAL_REPORT.md)
+- [Nine-minute demo script](docs/DEMO_SCRIPT.md), [submission checklist](docs/SUBMISSION_CHECKLIST.md)
+- [Control/security limits](docs/RELIABILITY_CONTROLS.md), [requirement mapping](docs/REQUIREMENT_TRACEABILITY.md)
 
-Read the [control and retention semantics](docs/RELIABILITY_CONTROLS.md) and
-[actual evidence](artifacts/reliability/README.md). Offline mocks/replay are clearly
-separate from the one real adversarial extraction check. Local actor strings are
-not authentication, old data is not automatically erased, and this is not a
-claim of universal injection/secret protection. Module 10 evaluation follows below.
+Keep source snapshots, long-term history and working checkpoints distinct. Tools
+cannot write the evaluated Git repository. Local archive retains history and
+blocks new work; no automatic deletion or arbitrary-secret protection is promised.
+Runtime DBs, keys, caches and raw logs stay ignored. No ZIP, push or submission is
+performed automatically.
 
-
-## Formal evaluation (Module 10)
-
-The [scenario protocol](docs/TEST_SCENARIOS.md) documents reproducible commands
-and the [measured results](artifacts/evaluation/RESULTS.md) link machine-readable
-evidence. All **10/10 offline control scenarios** passed; **5/5 factual claims**
-were checked against sources and **0 duplicate logical actions** occurred under
-the replay retry injection. These are not live accuracy claims.
-
-Six live Gemini reviews attempted three memory-on/off pairs from identical
-paired snapshots with scripted conditioning histories. The predeclared combined
-selection/execution criterion scored **1/3 with memory and 1/3 without memory**.
-Quota errors limited A02/A03 memory-on; only one pair completed without provider
-errors. A02 memory-on selected historical T05 while memory-off did not, but the
-quota prevented its execution. No statistical advantage is claimed and errors
-remain in the reports. Completed/failed arms are reused without resampling.
-
-Actual v3 release approval is recorded separately in
-[the approval receipt](artifacts/evaluation/release_approval.json); the earlier
-Module 08 exports retain their historically pending state. Teacher approval
-remains unverified. Module 11's report, packaging and viva script require
-separate authorization; nothing has been pushed.
+Codex assisted with planning, implementation, debugging, tests, documentation and
+evaluation tooling. The student must review, understand and explain every submitted
+component. Fixtures are fictional project data; no external dataset was imported.
+Pinned upstream dependencies provide SDK/graph/UI functionality and retain their
+licenses. Teacher approval, author identifiers, report pagination if exported and
+measured demo rehearsal remain student verification tasks.

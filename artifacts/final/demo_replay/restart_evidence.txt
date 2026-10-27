@@ -1,0 +1,6 @@
+Mode: replay
+Cycle 2 PID 47 exited 0 at 2026-10-27T11:23:13.373235+00:00; parent reaped it.
+Cycle 3 PID 4 started at 2026-10-27T11:24:12.601329+00:00 and exited 0.
+Same persistent domain/checkpoint files; same case IDs and source hashes; no seed/import after cycle 2.
+Policy revision 2 was explicitly approved before cycle 3; revision 1 remains queryable.
+Prompt release approval remains pending.

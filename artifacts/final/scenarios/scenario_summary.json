@@ -1,0 +1,8 @@
+{
+  "mode": "offline-replay",
+  "passed_scenarios": 10,
+  "total_scenarios": 10,
+  "failed_scenarios": [],
+  "not_run_scenarios": [],
+  "scope": "10 isolated behavior/control scenarios; live effectiveness measured separately in ablation."
+}

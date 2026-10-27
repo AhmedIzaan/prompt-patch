@@ -27,6 +27,9 @@ def _parser():
     seed.add_argument("--actor", required=True)
     seed.add_argument("--approve-baseline", action="store_true", required=True)
     review = commands.add_parser("review").add_subparsers(dest="action", required=True)
+    listing = review.add_parser("list", help="Find recent reviews, next actions and human approval states; read-only.")
+    listing.add_argument("--project", required=True)
+    listing.add_argument("--limit", type=int, default=50)
     for action in ("start", "status", "resume"):
         item = review.add_parser(action)
         item.add_argument("--project", required=True)
@@ -85,6 +88,9 @@ def _dispatch(args, settings):
             raise ReviewError("Demo setup failed; check destination ownership and existing baseline consistency.")
         return json.loads(result.stdout)
     if args.command == "review":
+        if args.action == "list":
+            from promptpatch.views import list_reviews
+            return list_reviews(settings.db_path, args.project, args.limit)
         controller = Reviews(settings)
         if args.action == "start":
             return controller.start(args.project, args.version, args.cycle, base_label=args.base_version,
@@ -144,7 +150,7 @@ def main(argv: list[str] | None = None) -> int:
         if settings.gemini_api_key:
             rendered = rendered.replace(settings.gemini_api_key.get_secret_value(), "[redacted]")
         print(rendered)
-        if args.command == "review" and args.action != "status" and result["status"] == "needs_review":
+        if args.command == "review" and args.action in {"start", "resume"} and result["status"] == "needs_review":
             return 1
         return 0
     except (StoreError, ToolError, ProviderError, ValueError, OSError, sqlite3.Error, subprocess.SubprocessError) as exc:

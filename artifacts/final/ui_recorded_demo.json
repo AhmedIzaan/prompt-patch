@@ -1,0 +1,26 @@
+{
+  "mode": "read-only recorded live store",
+  "project": "demo",
+  "selected_cycle": "module08-c3-timeout-30000",
+  "metrics": {
+    "Version": "V3",
+    "Workflow state": "Completed",
+    "Next action": "Promote Candidate",
+    "Human decision": "Approved"
+  },
+  "db_counts_before": {
+    "audit_events": 340,
+    "human_decisions": 1,
+    "test_executions": 12,
+    "review_cycles": 6
+  },
+  "db_counts_after": {
+    "audit_events": 340,
+    "human_decisions": 1,
+    "test_executions": 12,
+    "review_cycles": 6
+  },
+  "new_model_calls": 0,
+  "new_human_decisions": 0,
+  "scope": "Actual Streamlit rendering of the recorded successful v3 review; no fresh provider requests."
+}

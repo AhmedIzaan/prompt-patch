@@ -1,0 +1,7 @@
+{
+  "passed": 6,
+  "failed": 4,
+  "cause": "Default project name sorting selected isolation, while review/approval tests and intended first-use flow expected the main demo.",
+  "repair": "Prefer demo when present; retain explicit project selector and scoped keys. Tests rerun without weakening approval or isolation assertions.",
+  "live_requests": 0
+}

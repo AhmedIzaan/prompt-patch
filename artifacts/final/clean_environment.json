@@ -1,0 +1,1133 @@
+{
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "executable": "/tmp/promptpatch-module11-clean/bin/python",
+  "cwd": "/tmp/promptpatch-module11-quickstart-verified",
+  "installation": "Fresh isolated virtual environment; full requirements-dev.txt installed, then editable .[dev,ui] with no build isolation; pip check passed.",
+  "commands": [
+    {
+      "args": [
+        "--help"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1306.622674994287,
+      "output": "usage: promptpatch [-h] [--version]\n                   {doctor,init,demo,review,telemetry,memory,policy,version,logs} ...\n\nPersistent prompt regression reviews and explicit developer approvals.\n\npositional arguments:\n  {doctor,init,demo,review,telemetry,memory,policy,version,logs}\n    doctor              Inspect local configuration; no network or writes.\n    init                Initialize the domain database (idempotent).\n\noptions:\n  -h, --help            show this help message and exit\n  --version             show program's version number and exit\n"
+    },
+    {
+      "args": [
+        "doctor"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1292.8769749996718,
+      "output": "PromptPatch 0.1.0 \u2014 local configuration\nPython: 3.14.4\nSQLite: 3.46.1\nMode: replay\nGEMINI_API_KEY: not set\nGEMINI_MODEL: not set\nProvider: not connected by doctor; live integration is available through review start.\nDoctor completed local inspection only; database and provider access are not verified.\n"
+    },
+    {
+      "args": [
+        "init"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1349.07301000203,
+      "output": "Domain database initialized (schema 1); existing records preserved.\n"
+    },
+    {
+      "args": [
+        "demo",
+        "seed",
+        "--actor",
+        "clean-environment-fictional-owner",
+        "--approve-baseline"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 3064.883731000009,
+      "output": {
+        "candidate_policy_v2": "file only; not imported or approved",
+        "fixture_only": true,
+        "isolation_cases": 1,
+        "main_cases": 12,
+        "model_calls": 0,
+        "project_ids": [
+          "demo",
+          "isolation"
+        ],
+        "prompt_shas": {
+          "v1": "514d7be901ecca503bd5832e83e7834537fe4eaa",
+          "v2": "e1e119c53028325d0dbd63deb4cf353b918ba644",
+          "v3": "1fed5a700edb94ddff2568531ee3f80f76f42ddc"
+        }
+      }
+    },
+    {
+      "args": [
+        "review",
+        "start",
+        "--project",
+        "demo",
+        "--version",
+        "v3",
+        "--cycle",
+        "first-review",
+        "--replay-file",
+        "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/samples/replay/module07_reviews.json",
+        "--replay-scenario",
+        "pass_v3"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 2917.4273340031505,
+      "output": {
+        "project_id": "demo",
+        "version": "v3",
+        "version_id": "266a80b5-0d64-4921-b57f-0902ba099fa1",
+        "cycle": "first-review",
+        "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+        "status": "completed",
+        "policy_id": "f7c1c8ea-162b-4754-8e65-5e296c89f3f3",
+        "policy_revision": 1,
+        "policy_status": "approved",
+        "mode": "replay",
+        "planner": {
+          "decision": "RUN_TESTS",
+          "memory_evidence_ids": [],
+          "needs_developer_approval": false,
+          "reason_summary": "Handwritten offline Module 07 CLI routing fixture; not live agency evidence.",
+          "source_evidence_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ],
+          "test_ids": [
+            "T01"
+          ],
+          "test_mode": "targeted_regression"
+        },
+        "planner_error": null,
+        "selected_test_ids": [
+          "T01"
+        ],
+        "supplied_memory_refs": [],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "policy:f7c1c8ea-162b-4754-8e65-5e296c89f3f3",
+          "case:7494f055-076a-4420-9a3d-5d06732128f3",
+          "case:34f0b7f1-fe95-4210-85df-ef54e51079a9",
+          "case:f43816d5-9faa-417e-b317-b6d705de95c4",
+          "case:c9b1fb41-eff6-4258-ab59-c9768578ac87",
+          "case:fa5af2b1-ef30-4f64-9695-2a71f54049c4",
+          "case:e5aaf30b-2ab1-45d5-b5b5-3df7118f3d4a",
+          "case:d2ea5806-7a83-47e4-9e03-edeaa2ff322b",
+          "case:6c71e3e7-1a15-4edc-9540-5c923d9bfdba",
+          "case:582fedb6-8842-44c4-82d7-b2f8a85847f0",
+          "case:ae855e85-2720-4e0c-af4d-4e37aae78bd9",
+          "case:b7696618-549b-4390-a2e8-351918ae91a5",
+          "case:e107a3e1-2ce6-4483-b815-c37cae0ac1e5"
+        ],
+        "results": [
+          {
+            "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+            "test_id": "T01",
+            "status": "pass",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4 mm"
+                }
+              },
+              "status": "pass"
+            },
+            "elapsed_ms": 2.209136000601575
+          }
+        ],
+        "recommendation": {
+          "action": "promote_candidate",
+          "approval": "pending",
+          "error": null,
+          "open_risk_ids": [],
+          "planner_action": "run_tests",
+          "planner_decision_id": "c6959774-af61-4dfc-b8f2-fa31ebb3eb2d",
+          "prior_rejection": false,
+          "results": [
+            {
+              "case_id": "7494f055-076a-4420-9a3d-5d06732128f3",
+              "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+              "status": "pass",
+              "test_id": "T01",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "the allowable settlement is 10 mm",
+                    "estimated": "The estimated settlement is 4 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            }
+          ],
+          "source_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ]
+        },
+        "next_action": "promote_candidate",
+        "approval": "pending",
+        "human_decision": null,
+        "errors": []
+      }
+    },
+    {
+      "args": [
+        "review",
+        "list",
+        "--project",
+        "demo"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1960.285802008002,
+      "output": {
+        "project_id": "demo",
+        "limit": 50,
+        "reviews": [
+          {
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "cycle": "first-review",
+            "version": "v3",
+            "status": "completed",
+            "next_action": "promote_candidate",
+            "approval": "pending",
+            "created_at": "2026-10-27T11:29:05.510582+00:00",
+            "mode": "replay",
+            "planner_error": null
+          }
+        ]
+      }
+    },
+    {
+      "args": [
+        "review",
+        "status",
+        "--project",
+        "demo",
+        "--cycle",
+        "first-review"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1911.796438987949,
+      "output": {
+        "project_id": "demo",
+        "version": "v3",
+        "version_id": "266a80b5-0d64-4921-b57f-0902ba099fa1",
+        "cycle": "first-review",
+        "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+        "status": "completed",
+        "policy_id": "f7c1c8ea-162b-4754-8e65-5e296c89f3f3",
+        "policy_revision": 1,
+        "policy_status": "approved",
+        "mode": "replay",
+        "planner": {
+          "decision": "RUN_TESTS",
+          "memory_evidence_ids": [],
+          "needs_developer_approval": false,
+          "reason_summary": "Handwritten offline Module 07 CLI routing fixture; not live agency evidence.",
+          "source_evidence_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ],
+          "test_ids": [
+            "T01"
+          ],
+          "test_mode": "targeted_regression"
+        },
+        "planner_error": null,
+        "selected_test_ids": [
+          "T01"
+        ],
+        "supplied_memory_refs": [],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "policy:f7c1c8ea-162b-4754-8e65-5e296c89f3f3",
+          "case:7494f055-076a-4420-9a3d-5d06732128f3",
+          "case:34f0b7f1-fe95-4210-85df-ef54e51079a9",
+          "case:f43816d5-9faa-417e-b317-b6d705de95c4",
+          "case:c9b1fb41-eff6-4258-ab59-c9768578ac87",
+          "case:fa5af2b1-ef30-4f64-9695-2a71f54049c4",
+          "case:e5aaf30b-2ab1-45d5-b5b5-3df7118f3d4a",
+          "case:d2ea5806-7a83-47e4-9e03-edeaa2ff322b",
+          "case:6c71e3e7-1a15-4edc-9540-5c923d9bfdba",
+          "case:582fedb6-8842-44c4-82d7-b2f8a85847f0",
+          "case:ae855e85-2720-4e0c-af4d-4e37aae78bd9",
+          "case:b7696618-549b-4390-a2e8-351918ae91a5",
+          "case:e107a3e1-2ce6-4483-b815-c37cae0ac1e5"
+        ],
+        "results": [
+          {
+            "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+            "test_id": "T01",
+            "status": "pass",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4 mm"
+                }
+              },
+              "status": "pass"
+            },
+            "elapsed_ms": 2.209136000601575
+          }
+        ],
+        "recommendation": {
+          "action": "promote_candidate",
+          "approval": "pending",
+          "error": null,
+          "open_risk_ids": [],
+          "planner_action": "run_tests",
+          "planner_decision_id": "c6959774-af61-4dfc-b8f2-fa31ebb3eb2d",
+          "prior_rejection": false,
+          "results": [
+            {
+              "case_id": "7494f055-076a-4420-9a3d-5d06732128f3",
+              "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+              "status": "pass",
+              "test_id": "T01",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "the allowable settlement is 10 mm",
+                    "estimated": "The estimated settlement is 4 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            }
+          ],
+          "source_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ]
+        },
+        "next_action": "promote_candidate",
+        "approval": "pending",
+        "human_decision": null,
+        "errors": []
+      }
+    },
+    {
+      "args": [
+        "review",
+        "resume",
+        "--project",
+        "demo",
+        "--cycle",
+        "first-review"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1861.4274230058072,
+      "output": {
+        "project_id": "demo",
+        "version": "v3",
+        "version_id": "266a80b5-0d64-4921-b57f-0902ba099fa1",
+        "cycle": "first-review",
+        "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+        "status": "completed",
+        "policy_id": "f7c1c8ea-162b-4754-8e65-5e296c89f3f3",
+        "policy_revision": 1,
+        "policy_status": "approved",
+        "mode": "replay",
+        "planner": {
+          "decision": "RUN_TESTS",
+          "memory_evidence_ids": [],
+          "needs_developer_approval": false,
+          "reason_summary": "Handwritten offline Module 07 CLI routing fixture; not live agency evidence.",
+          "source_evidence_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ],
+          "test_ids": [
+            "T01"
+          ],
+          "test_mode": "targeted_regression"
+        },
+        "planner_error": null,
+        "selected_test_ids": [
+          "T01"
+        ],
+        "supplied_memory_refs": [],
+        "source_refs": [
+          "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+          "policy:f7c1c8ea-162b-4754-8e65-5e296c89f3f3",
+          "case:7494f055-076a-4420-9a3d-5d06732128f3",
+          "case:34f0b7f1-fe95-4210-85df-ef54e51079a9",
+          "case:f43816d5-9faa-417e-b317-b6d705de95c4",
+          "case:c9b1fb41-eff6-4258-ab59-c9768578ac87",
+          "case:fa5af2b1-ef30-4f64-9695-2a71f54049c4",
+          "case:e5aaf30b-2ab1-45d5-b5b5-3df7118f3d4a",
+          "case:d2ea5806-7a83-47e4-9e03-edeaa2ff322b",
+          "case:6c71e3e7-1a15-4edc-9540-5c923d9bfdba",
+          "case:582fedb6-8842-44c4-82d7-b2f8a85847f0",
+          "case:ae855e85-2720-4e0c-af4d-4e37aae78bd9",
+          "case:b7696618-549b-4390-a2e8-351918ae91a5",
+          "case:e107a3e1-2ce6-4483-b815-c37cae0ac1e5"
+        ],
+        "results": [
+          {
+            "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+            "test_id": "T01",
+            "status": "pass",
+            "validation": {
+              "discrepancies": [],
+              "parsed_json": {
+                "allowable_settlement_mm": 10.0,
+                "estimated_settlement_mm": 4.0,
+                "evidence": {
+                  "allowable": "the allowable settlement is 10 mm",
+                  "estimated": "The estimated settlement is 4 mm"
+                }
+              },
+              "status": "pass"
+            },
+            "elapsed_ms": 2.209136000601575
+          }
+        ],
+        "recommendation": {
+          "action": "promote_candidate",
+          "approval": "pending",
+          "error": null,
+          "open_risk_ids": [],
+          "planner_action": "run_tests",
+          "planner_decision_id": "c6959774-af61-4dfc-b8f2-fa31ebb3eb2d",
+          "prior_rejection": false,
+          "results": [
+            {
+              "case_id": "7494f055-076a-4420-9a3d-5d06732128f3",
+              "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+              "status": "pass",
+              "test_id": "T01",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "the allowable settlement is 10 mm",
+                    "estimated": "The estimated settlement is 4 mm"
+                  }
+                },
+                "status": "pass"
+              }
+            }
+          ],
+          "source_refs": [
+            "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+          ]
+        },
+        "next_action": "promote_candidate",
+        "approval": "pending",
+        "human_decision": null,
+        "errors": []
+      }
+    },
+    {
+      "args": [
+        "memory",
+        "show",
+        "--project",
+        "demo"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1872.5608059903607,
+      "output": {
+        "active_policy": {
+          "id": "f7c1c8ea-162b-4754-8e65-5e296c89f3f3",
+          "project_id": "demo",
+          "revision": 1,
+          "status": "approved",
+          "supersedes_id": null,
+          "approved_at": "2026-10-27T11:29:02.664838+00:00",
+          "approved_by": "clean-environment-fictional-owner",
+          "created_at": "2026-10-27T11:29:02.662921+00:00",
+          "rules": {
+            "allow_null": true,
+            "allowed_test_ids": [
+              "T01",
+              "T02",
+              "T03",
+              "T04",
+              "T05",
+              "T06",
+              "T07",
+              "T08",
+              "T09",
+              "T10",
+              "T11",
+              "T12"
+            ],
+            "contradiction_action": "needs_clarification",
+            "evidence_rule": "Non-null measurements need nonempty supporting substrings in the original input after collapsing whitespace; null measurements have null evidence.",
+            "evidence_whitespace": "collapse",
+            "extra_fields_allowed": false,
+            "max_tests_per_review": 4,
+            "missing_value_rule": "Use null for an absent measurement and its evidence; never replace absence with zero.",
+            "numeric_absolute_tolerance_mm": 0.01,
+            "numeric_fields": [
+              "estimated_settlement_mm",
+              "allowable_settlement_mm"
+            ],
+            "numeric_relative_tolerance": 0.0,
+            "required_fields": [
+              "estimated_settlement_mm",
+              "allowable_settlement_mm",
+              "evidence"
+            ],
+            "required_test_ids": [
+              "T01"
+            ],
+            "source_instructions": "untrusted_data_only",
+            "supported_units": [
+              "mm"
+            ],
+            "unsupported_unit_action": "needs_clarification"
+          },
+          "source_ref": "policy:f7c1c8ea-162b-4754-8e65-5e296c89f3f3"
+        },
+        "history": {
+          "project_id": "demo",
+          "per_collection_limit": 10,
+          "truncated": {
+            "risks": false,
+            "failure_history": false,
+            "outcomes": false,
+            "human_decisions": false,
+            "policy_corrections": false,
+            "case_corrections": false
+          },
+          "risks": [],
+          "failure_history": [],
+          "outcomes": [
+            {
+              "id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+              "project_id": "demo",
+              "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+              "test_case_id": "7494f055-076a-4420-9a3d-5d06732128f3",
+              "operation_key": "graph:7cc5722f-5b84-41f8-9a82-0a3a07089d85:7494f055-076a-4420-9a3d-5d06732128f3",
+              "status": "pass",
+              "created_at": "2026-10-27T11:29:05.644337+00:00",
+              "case_key": "T01",
+              "validation": {
+                "discrepancies": [],
+                "parsed_json": {
+                  "allowable_settlement_mm": 10.0,
+                  "estimated_settlement_mm": 4.0,
+                  "evidence": {
+                    "allowable": "the allowable settlement is 10 mm",
+                    "estimated": "The estimated settlement is 4 mm"
+                  }
+                },
+                "status": "pass"
+              },
+              "tags": [
+                "smoke",
+                "integer"
+              ]
+            }
+          ],
+          "human_decisions": [],
+          "policy_corrections": [],
+          "case_corrections": [],
+          "source_refs": [
+            "execution:4caa504a-71b3-46a4-925e-72d7482f23fe"
+          ]
+        }
+      }
+    },
+    {
+      "args": [
+        "logs",
+        "show",
+        "--project",
+        "demo",
+        "--cycle",
+        "first-review"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1860.9929429949261,
+      "output": {
+        "project_id": "demo",
+        "cycle": "first-review",
+        "events": [
+          {
+            "id": "c764361f-5947-4517-b173-675aa998929d",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "cycle_created",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.510992+00:00",
+            "details": {}
+          },
+          {
+            "id": "c2170404-098b-4596-8e17-e5a6f7e4f181",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "review_requested",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.511454+00:00",
+            "details": {
+              "base_version_id": null,
+              "memory_enabled": true,
+              "mode": "replay",
+              "model": {
+                "max_attempts": 2,
+                "max_output_tokens": 2048,
+                "model_id": "module07-replay",
+                "seed": null,
+                "temperature": 0.0,
+                "timeout_ms": 20000
+              },
+              "replay_file": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/samples/replay/module07_reviews.json",
+              "replay_hash": "3b678190dfa391dcf914fe23f8f91f32ec88fca6330d76f161e703a69e2fa91b",
+              "replay_scenario": "pass_v3",
+              "version_id": "266a80b5-0d64-4921-b57f-0902ba099fa1"
+            }
+          },
+          {
+            "id": "ea240bb0-05c2-4659-80ad-1c030a45eae4",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "review_memory_read",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.540325+00:00",
+            "details": {
+              "source_refs": [
+                "policy:f7c1c8ea-162b-4754-8e65-5e296c89f3f3"
+              ],
+              "tool": "read_active_policy"
+            }
+          },
+          {
+            "id": "b220ac3d-8052-4da8-89d7-6a149f240236",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "cycle_status_changed",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.543006+00:00",
+            "details": {
+              "status": "running"
+            }
+          },
+          {
+            "id": "c30a0978-54f3-45be-a50c-497ce463242f",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_load_context",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.545684+00:00",
+            "details": {
+              "error": null,
+              "node": "load_context",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "be53ead0-164f-4f7b-ae3e-b2cff19550ae",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "review_source_read",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.572018+00:00",
+            "details": {
+              "source_refs": [
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+              ],
+              "tool": "read_git_prompt"
+            }
+          },
+          {
+            "id": "72cba165-5dbe-4f7b-a153-6b62c93e324e",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_read_sources",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.574401+00:00",
+            "details": {
+              "error": null,
+              "node": "read_sources",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "55a08727-3f08-4a67-a404-9d1c6d1adb8a",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "review_memory_read",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.588921+00:00",
+            "details": {
+              "source_refs": [],
+              "tool": "retrieve_memory"
+            }
+          },
+          {
+            "id": "28502159-87ce-454e-b2a7-1390aa162836",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_read_long_term_memory",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.591363+00:00",
+            "details": {
+              "error": null,
+              "node": "read_long_term_memory",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "e6ba8b35-ffb8-4e16-b08c-c58a351bd73e",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "tool_operation_started",
+            "ref_id": "3efc3478-8c74-46f1-9edb-e9b5e636cab3",
+            "created_at": "2026-10-27T11:29:05.596827+00:00",
+            "details": {}
+          },
+          {
+            "id": "d69cd2f9-36d5-47ab-ab2d-3a20f7c036d6",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "model_call_started",
+            "ref_id": "3efc3478-8c74-46f1-9edb-e9b5e636cab3",
+            "created_at": "2026-10-27T11:29:05.597336+00:00",
+            "details": {
+              "attempt": 1,
+              "mode": "replay",
+              "model_id": "module07-replay",
+              "purpose": "planner"
+            }
+          },
+          {
+            "id": "385d8dbb-56c6-483e-90b4-d9dae8b47ccb",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "planner_decision_recorded",
+            "ref_id": "c6959774-af61-4dfc-b8f2-fa31ebb3eb2d",
+            "created_at": "2026-10-27T11:29:05.600974+00:00",
+            "details": {}
+          },
+          {
+            "id": "fcc5c51e-ff74-4d21-b961-7a8102d182e1",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "tool_operation_completed",
+            "ref_id": "3efc3478-8c74-46f1-9edb-e9b5e636cab3",
+            "created_at": "2026-10-27T11:29:05.601927+00:00",
+            "details": {
+              "elapsed_ms": 0.9519480081507936,
+              "error_code": null,
+              "purpose": "planner"
+            }
+          },
+          {
+            "id": "55cf27d4-8bfc-4052-aed1-cbe1f29aaf84",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "model_call_completed",
+            "ref_id": "3efc3478-8c74-46f1-9edb-e9b5e636cab3",
+            "created_at": "2026-10-27T11:29:05.602346+00:00",
+            "details": {
+              "elapsed_ms": 0.9519480081507936,
+              "error_code": null,
+              "mode": "replay",
+              "model_id": "module07-replay",
+              "provider": "replay",
+              "purpose": "planner",
+              "usage": {}
+            }
+          },
+          {
+            "id": "2f3ce700-b179-448a-a0f9-fbd213139539",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_plan_tests",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.604785+00:00",
+            "details": {
+              "error": null,
+              "node": "plan_tests",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "a8ee6deb-1dee-4fb0-9d34-6041c4a00220",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_validate_plan",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.609205+00:00",
+            "details": {
+              "error": null,
+              "node": "validate_plan",
+              "selected_test_ids": [
+                "T01"
+              ]
+            }
+          },
+          {
+            "id": "2be9b214-9206-47dc-b5d5-ff26f78084ad",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "review_source_read",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.635926+00:00",
+            "details": {
+              "source_refs": [
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+              ],
+              "tool": "read_git_prompt"
+            }
+          },
+          {
+            "id": "d9fb8399-a764-4427-9d3e-f35735a1a7b6",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "tool_operation_started",
+            "ref_id": "c40b1063-d54f-4bbf-afd4-76905793bc5d",
+            "created_at": "2026-10-27T11:29:05.640507+00:00",
+            "details": {}
+          },
+          {
+            "id": "d8e8512d-a9cf-40bc-b1f1-e1dc99860302",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "model_call_started",
+            "ref_id": "c40b1063-d54f-4bbf-afd4-76905793bc5d",
+            "created_at": "2026-10-27T11:29:05.642101+00:00",
+            "details": {
+              "attempt": 1,
+              "mode": "replay",
+              "model_id": "module07-replay",
+              "provider": "replay",
+              "purpose": "candidate_execution"
+            }
+          },
+          {
+            "id": "e2525a98-4f03-49e9-8141-3f6c4546b392",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "tool_operation_completed",
+            "ref_id": "c40b1063-d54f-4bbf-afd4-76905793bc5d",
+            "created_at": "2026-10-27T11:29:05.645233+00:00",
+            "details": {
+              "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe"
+            }
+          },
+          {
+            "id": "700246b5-4a7c-4242-8171-6edc220b1a13",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "test_execution_recorded",
+            "ref_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+            "created_at": "2026-10-27T11:29:05.645387+00:00",
+            "details": {}
+          },
+          {
+            "id": "b2b5e173-0840-40c3-8bb7-7c3d9fb08c92",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "model_call_completed",
+            "ref_id": "c40b1063-d54f-4bbf-afd4-76905793bc5d",
+            "created_at": "2026-10-27T11:29:05.645939+00:00",
+            "details": {
+              "attempt": 1,
+              "elapsed_ms": 0.0,
+              "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+              "live_model_calls": 0,
+              "mode": "replay",
+              "model_id": "module07-replay",
+              "provider": "replay",
+              "purpose": "candidate_execution",
+              "usage": {}
+            }
+          },
+          {
+            "id": "72fc2b03-ddd7-440e-8193-50511ab66d80",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_run_tests",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.649122+00:00",
+            "details": {
+              "error": null,
+              "node": "run_tests",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "99b65eb6-de67-415d-986f-9fa78fcd0f6f",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_validate_outputs",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.658293+00:00",
+            "details": {
+              "error": null,
+              "node": "validate_outputs",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "af4163cc-9a61-4bdf-938a-056191d1f814",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_reconcile_failures",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.663923+00:00",
+            "details": {
+              "error": null,
+              "node": "reconcile_failures",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "105fdb94-edae-4726-a144-b085f2913849",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_memory_written",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.668265+00:00",
+            "details": {
+              "executed": [
+                "T01"
+              ],
+              "risk_changes": [],
+              "selected": [
+                "T01"
+              ]
+            }
+          },
+          {
+            "id": "b0cab69c-fdfa-40ed-b020-d0dd731063ab",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_write_memory_and_audit",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.670772+00:00",
+            "details": {
+              "error": null,
+              "node": "write_memory_and_audit",
+              "selected_test_ids": []
+            }
+          },
+          {
+            "id": "fbe5f0fc-ee60-4fda-8b4b-08cb8e570a07",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "cycle_status_changed",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.674570+00:00",
+            "details": {
+              "status": "completed"
+            }
+          },
+          {
+            "id": "415ed476-d19d-4eec-a3f9-5322a1541840",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_recommendation",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.678805+00:00",
+            "details": {
+              "action": "promote_candidate",
+              "approval": "pending",
+              "error": null,
+              "open_risk_ids": [],
+              "planner_action": "run_tests",
+              "planner_decision_id": "c6959774-af61-4dfc-b8f2-fa31ebb3eb2d",
+              "prior_rejection": false,
+              "results": [
+                {
+                  "case_id": "7494f055-076a-4420-9a3d-5d06732128f3",
+                  "execution_id": "4caa504a-71b3-46a4-925e-72d7482f23fe",
+                  "status": "pass",
+                  "test_id": "T01",
+                  "validation": {
+                    "discrepancies": [],
+                    "parsed_json": {
+                      "allowable_settlement_mm": 10.0,
+                      "estimated_settlement_mm": 4.0,
+                      "evidence": {
+                        "allowable": "the allowable settlement is 10 mm",
+                        "estimated": "The estimated settlement is 4 mm"
+                      }
+                    },
+                    "status": "pass"
+                  }
+                }
+              ],
+              "source_refs": [
+                "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+              ]
+            }
+          },
+          {
+            "id": "61c94666-9606-4e61-b02d-a0e341a0c26b",
+            "project_id": "demo",
+            "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "event_type": "graph_node_prepare_recommendation",
+            "ref_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+            "created_at": "2026-10-27T11:29:05.683932+00:00",
+            "details": {
+              "error": null,
+              "node": "prepare_recommendation",
+              "selected_test_ids": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "args": [
+        "telemetry",
+        "show",
+        "--project",
+        "demo",
+        "--cycle",
+        "first-review"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1883.803284013993,
+      "output": {
+        "project_id": "demo",
+        "cycle_id": "7cc5722f-5b84-41f8-9a82-0a3a07089d85",
+        "cycle_status": "completed",
+        "MODEL_CALLS": 2,
+        "LIVE_MODEL_CALLS": 0,
+        "MODEL_CALLS_BY_PURPOSE": {
+          "planner": 1,
+          "candidate_execution": 1
+        },
+        "RECEIVED_PROVIDER_RESPONSES": 2,
+        "FAILED_MODEL_CALLS": 0,
+        "UNKNOWN_INFLIGHT_OPERATIONS": 0,
+        "LOGICAL_LATENCY_MS": 3.1610840087523684,
+        "MISSING_PLANNER_LATENCY_RECORDS": 0,
+        "PROVIDER_RESPONSE_LATENCY_MS": 0.0,
+        "ATTEMPT_LATENCY_MS": 0.9519480081507936,
+        "MISSING_ATTEMPT_LATENCY_RECORDS": 1,
+        "latency_note": "Observed sums, not end-to-end wall time; old missing failure timings remain unknown.",
+        "TOKEN_USAGE": {
+          "prompt_token_count": null,
+          "candidates_token_count": null,
+          "thoughts_token_count": null,
+          "total_token_count": null
+        },
+        "TOKEN_USAGE_UNKNOWN_RESPONSES": {
+          "prompt_token_count": 2,
+          "candidates_token_count": 2,
+          "thoughts_token_count": 2,
+          "total_token_count": 2
+        },
+        "provider_modes": [
+          "replay"
+        ],
+        "failure_details": [],
+        "COMPLETED_TESTS": 1,
+        "DUPLICATE_ACTIONS": 0,
+        "call_status_note": "Received responses can contain invalid plans. Failed-call audit events include output-validation failures; neither proves successful agency.",
+        "duplicate_definition": "Extra completed results per operation key plus extra human decisions per cycle; not HTTP exactly-once billing.",
+        "APPROXIMATE_COST": null,
+        "cost_note": "No verified price configured; replay has no measured provider tokens/cost.",
+        "LOCAL_STORAGE_BYTES": {
+          "domain": 266240,
+          "checkpoint": 143360
+        }
+      }
+    }
+  ],
+  "installed_versions": {
+    "Jinja2": "3.1.6",
+    "MarkupSafe": "3.0.4",
+    "PyYAML": "6.0.3",
+    "Pygments": "2.21.0",
+    "aiosqlite": "0.22.1",
+    "altair": "6.3.0",
+    "annotated-types": "0.8.0",
+    "anyio": "4.15.1",
+    "attrs": "26.1.0",
+    "certifi": "2026.10.23",
+    "cffi": "2.1.1",
+    "charset-normalizer": "3.5.2",
+    "click": "8.5.0",
+    "cryptography": "50.0.2",
+    "distro": "1.9.0",
+    "google-auth": "2.62.0",
+    "google-genai": "2.33.0",
+    "h11": "0.16.0",
+    "httpcore": "1.0.9",
+    "httpcore2": "2.16.0",
+    "httpx": "0.28.1",
+    "httpx2": "2.16.0",
+    "idna": "3.20",
+    "iniconfig": "2.3.1",
+    "itsdangerous": "2.2.0",
+    "jsonpatch": "1.37",
+    "jsonpointer": "3.5",
+    "jsonschema": "4.26.0",
+    "jsonschema-specifications": "2025.9.1",
+    "langchain-core": "1.7.0",
+    "langchain-protocol": "0.0.20",
+    "langgraph": "1.2.17",
+    "langgraph-checkpoint": "4.3.0",
+    "langgraph-checkpoint-sqlite": "3.1.2",
+    "langgraph-prebuilt": "1.1.1",
+    "langgraph-sdk": "0.4.9",
+    "langsmith": "0.14.12",
+    "narwhals": "2.27.1",
+    "numpy": "2.5.4",
+    "orjson": "3.13.0",
+    "ormsgpack": "1.13.0",
+    "packaging": "26.3",
+    "pandas": "3.1.0",
+    "pillow": "13.0.0",
+    "pip": "25.1.1",
+    "pluggy": "1.7.0",
+    "promptpatch": "0.1.0",
+    "protobuf": "7.36.2",
+    "pyarrow": "26.0.0",
+    "pyasn1": "0.6.4",
+    "pyasn1_modules": "0.4.2",
+    "pycparser": "3.12",
+    "pydantic": "2.14.1",
+    "pydantic_core": "2.50.1",
+    "pydeck": "0.9.3",
+    "pytest": "9.1.1",
+    "python-dateutil": "3.0.0",
+    "python-multipart": "0.0.32",
+    "referencing": "0.37.0",
+    "requests": "2.34.2",
+    "requests-toolbelt": "1.0.0",
+    "rpds-py": "2026.9.1",
+    "setuptools": "84.2.1",
+    "six": "1.17.0",
+    "sniffio": "1.3.1",
+    "sqlite-vec": "0.1.9",
+    "starlette": "1.10.0",
+    "streamlit": "1.66.1",
+    "tenacity": "9.1.4",
+    "truststore": "0.10.5",
+    "typing-inspection": "0.4.4",
+    "typing_extensions": "4.16.0",
+    "tzdata": "2026.5",
+    "urllib3": "2.8.0",
+    "uuid_utils": "0.18.0",
+    "uvicorn": "0.54.0",
+    "watchdog": "6.0.0",
+    "websockets": "17.3",
+    "xxhash": "4.0.2",
+    "zstandard": "0.25.0"
+  },
+  "mode": "offline-replay",
+  "live_model_calls": 0,
+  "duplicate_actions": 0,
+  "note": "No credential configured; examples executed from a different working directory. Actual model intelligence is not claimed for replay."
+}

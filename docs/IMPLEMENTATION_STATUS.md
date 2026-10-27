@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-27 (Asia/Karachi).
-Authorized scope: **Modules 00–10**. Module 11 requires separate explicit authorization.
+Authorized scope: **Modules 00–11**, including the user-requested Streamlit UI.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Module 10 is verified; next approval required: `START MODULE 11`.
+- Modules 00–11 are verified. Final stop: no further implementation, push or submission inferred.
 
 ## Module checklist
 
@@ -29,7 +29,7 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 08 | Three cycles and full process restart | DONE | 2026-10-26 | 206 tests; three real live cycles; approved policy correction; fresh process and no reseed; verified artifacts | Historical HTTP failures retained; actual v3 release approval recorded in Module 10 |
 | 09 | Reliability, security, isolation, retries | DONE | 2026-10-27 | 232 tests; 26 reproducible controls; one real malicious-input check; zero duplicate results; credential/telemetry verification | Formal evaluation recorded in Module 10; teacher approval unverified |
 | 10 | Ten scenarios, three memory comparisons, measurements | DONE | 2026-10-27 | 249 tests; 10/10 offline scenarios; six live attempts; 1/3 vs 1/3; 5/5 facts; retry duplicates 0 | Quota limited two live arms; only one pair completed without provider errors; evidence retained |
-| 11 | Reproducibility, report, submission and demo docs | PENDING | — | Not run | Report/demo/package pending; no publishing authorized |
+| 11 | Reproducibility, report, submission, demo docs and Streamlit UI | DONE | 2026-10-27 | 259 clean-environment tests; 10 UI checks; 11 CLI commands; 10 scenarios; three-cycle replay/restart; final verifier | Local UI only; student/teacher/pagination/rehearsal checks remain; no ZIP or push |
 
 Current approval state: the user approved the successful demo v3 release in Module 10. Teacher approval remains unverified. Older pending-approval statements below describe historical module snapshots.
 
@@ -1321,3 +1321,103 @@ from commits. No unrelated files, credentials or databases staged. Nothing pushe
 explicitly reported rather than marked passing comparisons.
 
 MODULE 10 COMPLETE — STOPPED. Awaiting: START MODULE 11
+
+
+## Module 11 — UI, reproducibility and final deliverables — 2026-10-27
+
+Status: **DONE** for implementation and automated verification. The user explicitly
+authorized Module 11 **including Streamlit UI** and previously authorized local
+commits. All planned implementation modules are complete. No Module 12 exists;
+no further work, Git push, ZIP, public deployment or submission is inferred.
+
+### Implemented
+
+- Polished the CLI with read-only `review list --project ... --limit ...`, showing
+  recent cycle/version/state, next action and authoritative human approval. Added
+  `views.py` read-only project inventories reused by UI, with scoped history queries.
+- Added Streamlit **1.66.1** as an optional `[ui]` extra, retaining every existing
+  dependency pin. Updated the complete development/UI lock with installed versions.
+- Added `ui.py`, `ui_launcher.py`, `scripts/run_ui.py`, `promptpatch-ui` entry point
+  and static `.streamlit/config.toml`. Local dashboard includes main-project default,
+  project/mode/version/cycle selectors, review form, actual results/reasons/evidence,
+  telemetry, safe resume, human approval/rejection, memory/feedback, policy history
+  and recent audit activity. Existing backend services own all review/decision rules.
+- Browsing/rendering/refresh performs no model call or domain mutation. Live
+  submission/resume requires an explicit checkbox/action. Replay is visibly labeled.
+  Fixed CSS contains no dynamic data; source/model/comment values use safe text,
+  structured tables or JSON. No private key input/display or public hosting added.
+- Launcher binds **127.0.0.1** only, disables usage statistics/file watching, and
+  optionally parses an explicitly named env file as data (six recognized variables,
+  64 KiB bound, no shell evaluation). Process settings take precedence. A misplaced
+  credential in another config field is rejected without displaying values.
+- The supplied `--recorded-demo` option opens the original ignored Module 08 store
+  without reimporting/reseeding. Its real successful v3 approval is shown separately
+  from the historical recommendation. No existing release/policy decision changed.
+- Rewrote README for fresh setup, UI/CLI commands, config, correction/approval,
+  replay/live/restart/evaluation distinctions and actual limits. Added safe template
+  **`config/.env.example`** instead of restoring the user's pre-existing root template
+  deletion. The root `.env.example` deletion remains unstaged and untouched.
+- Added architecture/diagram, detailed twelve-table memory/lifecycle document,
+  evaluation interpretation, **2289-word five-page-section technical report draft**
+  with four explicit print breaks, planned **nine-minute** demo and submission
+  checklist. Updated requirement mapping and AI/dependency/fictional-data disclosure.
+  No PDF pagination, teacher approval, student understanding or rehearsal is invented.
+- Added `scripts/check_submission.py` to verify final files, local links, schema
+  integrity, evidence refs, original limits, test results and configured credentials.
+  Final artifacts are separate from original live/demo/evaluation evidence.
+
+### Actual verification and fixes
+
+| Command/check actually executed | Observed result |
+|---|---|
+| Install Streamlit with original lock as constraints | PASS: 1.66.1 plus compatible dependencies; existing versions retained |
+| Main and fresh virtual environment editable `.[dev,ui]` install, `pip check` | PASS; fresh full lock installation and no broken requirements |
+| Initial `.venv/bin/python -m pytest tests/test_ui.py -q` | 6 passed, 4 failed: alphabetical project ordering selected isolation by default |
+| Main-project default correction; repeated UI suite | PASS: **10 tests in 9.77 s**; original approval/isolation assertions retained |
+| Clean-env `python -m pytest -q --junitxml=/tmp/promptpatch-module11-full.xml` | PASS: **259 tests in 210.04 s**, zero failed/skipped, one existing SDK deprecation warning |
+| Fresh-env CLI quickstart from a different unused working directory | PASS: **11 commands**, real init/seed/replay/list/status/resume/memory/log/telemetry; **0 live requests**, **0 duplicates**, **0 release decisions** |
+| Final replay `run_three_cycles.py prepare` then `finish --approve-policy ...` | PASS: three complete cycles, confirmed process restart and stable source imports, explicit synthetic correction, revise/revise/promotion candidate |
+| `python -m scripts.run_scenarios --runtime data/module11/scenarios --artifacts artifacts/final/scenarios` | PASS: **10/10** offline controls, real evidence/CSV/JSON |
+| `python scripts/run_ui.py --env-file .env --recorded-demo` | Running locally at **http://127.0.0.1:8501**; no automatic external request |
+| Local HTTP root and `/_stcore/health` | PASS: 200 and valid bodies |
+| Actual recorded live store rendered with AppTest + live-call guard | PASS: successful v3 shown **approved**; all original domain counts unchanged; **0** provider calls |
+| Final submission/evidence verifier and actual configured-key scan | PASS: deliverables, original 1/3-vs-1/3 quota limitations, links, SQLite integrity/FKs, required refs, no configured key in artifacts/runtime/source/docs |
+| Compileall, pip check, UI/list help, Git whitespace checks | PASS |
+| Original demo/evaluation Git diff, master-plan SHA | PASS: original evidence unchanged; master plan hash remains ba9243312bc06b48c42888000e863c7acace520ffffa8e51f03947a7a214af63 |
+
+The four initial UI failures were corrected, not skipped. A temporary clean-env
+verification wrapper initially failed to import its artifact-writing helper after
+all CLI commands passed; its own path setup was fixed and the entire walkthrough
+rerun from a different fresh directory. The public CLI/package did not require
+that workaround. The final clean-env report records the successful complete run.
+
+Artifacts: `artifacts/final/README.md`, `verification.json`,
+`clean_environment.json`, `tests/full_suite.junit.xml`, `tests/ui.junit.xml`,
+`ui_initial_check.json`, `ui_http.json`, `ui_recorded_demo.json`,
+`demo_replay/` and `scenarios/`. Tests use Streamlit AppTest for actual widget/state
+execution and a real HTTP server for serving/health. No browser screenshot is
+claimed. The UI server is left running locally; Ctrl+C stops it. Restart command
+is in README; runtime files are regenerated separately when unavailable.
+
+### Limits and remaining student actions
+
+- The actual Module 10 score remains **1/3 on versus 1/3 off**, with two quota-limited
+  arms and only one error-free pair. Final replay/testing does not erase those errors
+  or establish statistical superiority. No further live Gemini inference occurred.
+- Teacher approval remains **unverified**. Student author details, original course
+  PDF/rule check, code understanding, report pagination if exported and measured
+  8–10 minute rehearsal remain explicit student actions, not implementation blockers.
+- Five-page-section Markdown is a report draft with intended print breaks;
+  no PDF/export submission or measured rehearsal duration is claimed.
+- Local owner only: actor attribution is not login; one worker per cycle; trusted
+  checkpoints; recognized-key detection is bounded; no automatic erasure or
+  exactly-once provider billing guarantee.
+- No ZIP requested, so none created. No API key, runtime DB, `.env`, raw personal
+  file or temporary wrapper is committed. Root `.env.example` deletion preserved.
+
+**Implemented/tested:** All Modules 00–11, including requested Streamlit UI,
+required report/demo/schema/architecture/checklist and reproducibility evidence.
+**Blocked:** No implementation/test blocker. Student/external checks above remain
+accurately pending. Nothing pushed or submitted.
+
+MODULE 11 COMPLETE — STOPPED.

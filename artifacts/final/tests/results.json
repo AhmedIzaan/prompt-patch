@@ -1,0 +1,20 @@
+{
+  "full_suite": {
+    "tests": 259,
+    "passed": 259,
+    "failed": 0,
+    "skipped": 0,
+    "stdout_elapsed_seconds": 210.04,
+    "environment": "Fresh /tmp/promptpatch-module11-clean virtual environment, locked dependencies and editable .[dev,ui] install",
+    "command": "env -u GEMINI_API_KEY -u GOOGLE_API_KEY /tmp/promptpatch-module11-clean/bin/python -m pytest -q --junitxml=/tmp/promptpatch-module11-full.xml"
+  },
+  "ui_focused": {
+    "tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "elapsed_seconds": 9.77
+  },
+  "warning": "One existing Google SDK _UnionGenericAlias Python deprecation warning; no test skipped.",
+  "initial_ui_failures": "See ../ui_initial_check.json; default project fixed before final successful checks.",
+  "new_live_gemini_calls": 0
+}
