@@ -1,0 +1,114 @@
+{
+  "approval": {
+    "id": "7c70c883-f2cd-4f9a-9642-afc9f56414d4",
+    "project_id": "demo",
+    "prompt_version_id": "3824fc91-3ea7-4feb-80a1-023616c5e5bc",
+    "cycle_id": "c85283fa-25bf-402e-aade-57fb802e5fde",
+    "decision": "approved",
+    "comments": "User explicitly granted prompt release approval in the Module 10 request on 2026-10-27. Applies to the successful tested v3 review; no deployment or push requested.",
+    "actor": "developer",
+    "created_at": "2026-10-27T10:45:58.823608+00:00"
+  },
+  "audit_events": [
+    {
+      "id": "df6e1f5f-f460-4b4b-8999-f514d355127f",
+      "project_id": "demo",
+      "cycle_id": "c85283fa-25bf-402e-aade-57fb802e5fde",
+      "event_type": "human_decision_recorded",
+      "ref_id": "7c70c883-f2cd-4f9a-9642-afc9f56414d4",
+      "details_json": "{\"actor\":\"developer\",\"decision\":\"approved\"}",
+      "created_at": "2026-10-27T10:45:58.824087+00:00"
+    }
+  ],
+  "cycle_id": "c85283fa-25bf-402e-aade-57fb802e5fde",
+  "prior_recommendation": {
+    "action": "promote_candidate",
+    "approval": "pending",
+    "error": null,
+    "open_risk_ids": [],
+    "planner_action": "run_tests",
+    "planner_decision_id": "3a4fea07-85ef-450b-b46d-e0c01e4296c9",
+    "prior_rejection": false,
+    "results": [
+      {
+        "case_id": "c96a9e75-a73e-4064-9579-ea0c4b14defc",
+        "execution_id": "c24790ee-c6b2-4e28-9d0c-41d1826ca500",
+        "status": "pass",
+        "test_id": "T01",
+        "validation": {
+          "discrepancies": [],
+          "parsed_json": {
+            "allowable_settlement_mm": 10.0,
+            "estimated_settlement_mm": 4.0,
+            "evidence": {
+              "allowable": "10 mm",
+              "estimated": "4 mm"
+            }
+          },
+          "status": "pass"
+        }
+      },
+      {
+        "case_id": "984b65cb-00d5-4783-be62-2cfe7ee600a2",
+        "execution_id": "14585773-0a39-4fda-beba-f650e310f525",
+        "status": "pass",
+        "test_id": "T05",
+        "validation": {
+          "discrepancies": [],
+          "parsed_json": {
+            "allowable_settlement_mm": null,
+            "estimated_settlement_mm": 2.75,
+            "evidence": {
+              "allowable": null,
+              "estimated": "2.75 mm"
+            }
+          },
+          "status": "pass"
+        }
+      },
+      {
+        "case_id": "3a481e4c-2365-42a5-80ad-30788994ec26",
+        "execution_id": "4d33b638-1d19-47c1-86eb-e1b59de590c1",
+        "status": "pass",
+        "test_id": "T07",
+        "validation": {
+          "discrepancies": [],
+          "parsed_json": {
+            "allowable_settlement_mm": 10.0,
+            "estimated_settlement_mm": 0.0,
+            "evidence": {
+              "allowable": "10.00 mm",
+              "estimated": "0.00 mm"
+            }
+          },
+          "status": "pass"
+        }
+      },
+      {
+        "case_id": "00a08951-32fa-4770-8fbc-f40e91c9077a",
+        "execution_id": "655e0652-2e94-438f-af8b-634feaaf0902",
+        "status": "pass",
+        "test_id": "T12",
+        "validation": {
+          "discrepancies": [],
+          "parsed_json": {
+            "allowable_settlement_mm": 15,
+            "estimated_settlement_mm": null,
+            "evidence": {
+              "allowable": "15 mm",
+              "estimated": null
+            }
+          },
+          "status": "pass"
+        }
+      }
+    ],
+    "source_refs": [
+      "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt",
+      "git:e1e119c53028325d0dbd63deb4cf353b918ba644:settlement_prompt.txt",
+      "git:1fed5a700edb94ddff2568531ee3f80f76f42ddc:settlement_prompt.txt"
+    ]
+  },
+  "authorization": "User explicitly granted prompt release approval in the Module 10 request on 2026-10-27.",
+  "scope": "Human acceptance of tested v3 only; no deployment/push. Historical exports retain their then-pending state."
+}

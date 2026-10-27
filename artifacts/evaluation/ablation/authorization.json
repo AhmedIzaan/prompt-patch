@@ -1,0 +1,8 @@
+{
+  "decision": "approved",
+  "user_response": "Approve these six Gemini reviews",
+  "destination": "https://generativelanguage.googleapis.com",
+  "payload": "Fictional settlement cases, seeded demo prompts/diffs, approved evaluation policy, and synthetic history; no key in prompt context.",
+  "scope": "Six current reviews only, each bounded by frozen protocol. No deployment, push, or approval of hypothetical outcomes.",
+  "prior_automatic_review": "Initially rejected because external payload/destination required explicit consent; user subsequently approved the exact request."
+}

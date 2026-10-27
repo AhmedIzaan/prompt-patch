@@ -1,0 +1,55 @@
+{
+  "telemetry": {
+    "project_id": "demo",
+    "cycle_id": "93876806-ec29-4db2-9e7c-33974396e95f",
+    "cycle_status": "completed",
+    "MODEL_CALLS": 5,
+    "LIVE_MODEL_CALLS": 5,
+    "MODEL_CALLS_BY_PURPOSE": {
+      "planner": 1,
+      "candidate_execution": 4
+    },
+    "RECEIVED_PROVIDER_RESPONSES": 5,
+    "FAILED_MODEL_CALLS": 0,
+    "UNKNOWN_INFLIGHT_OPERATIONS": 0,
+    "LOGICAL_LATENCY_MS": 15732.973796009901,
+    "MISSING_PLANNER_LATENCY_RECORDS": 0,
+    "PROVIDER_RESPONSE_LATENCY_MS": 15377.285357986693,
+    "ATTEMPT_LATENCY_MS": 9734.349759994075,
+    "MISSING_ATTEMPT_LATENCY_RECORDS": 4,
+    "latency_note": "Observed sums, not end-to-end wall time; old missing failure timings remain unknown.",
+    "TOKEN_USAGE": {
+      "prompt_token_count": 5424,
+      "candidates_token_count": 766,
+      "thoughts_token_count": null,
+      "total_token_count": 6190
+    },
+    "TOKEN_USAGE_UNKNOWN_RESPONSES": {
+      "prompt_token_count": 0,
+      "candidates_token_count": 0,
+      "thoughts_token_count": 5,
+      "total_token_count": 0
+    },
+    "provider_modes": [
+      "live"
+    ],
+    "failure_details": [],
+    "COMPLETED_TESTS": 4,
+    "DUPLICATE_ACTIONS": 0,
+    "call_status_note": "Received responses can contain invalid plans. Failed-call audit events include output-validation failures; neither proves successful agency.",
+    "duplicate_definition": "Extra completed results per operation key plus extra human decisions per cycle; not HTTP exactly-once billing.",
+    "APPROXIMATE_COST": null,
+    "cost_note": "No verified price configured; replay has no measured provider tokens/cost.",
+    "LOCAL_STORAGE_BYTES": {
+      "domain": 339968,
+      "checkpoint": 192512
+    }
+  },
+  "wall_elapsed_ms": 20767.420228003175,
+  "local_cpu_seconds": 0.9430249999999996,
+  "process_peak_rss_kib": 108308,
+  "scope": "Live A01 memory-on current review only. Conditioning excluded from cycle model counts; RSS cumulative process high water.",
+  "evidence_ref": "ablation/A01_memory_on.json",
+  "approximate_cost": null,
+  "cost_note": "No verified price used. Actual known token counters and measured local CPU/storage reported instead."
+}

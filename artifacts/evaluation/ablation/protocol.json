@@ -1,0 +1,59 @@
+{
+  "protocol_version": 1,
+  "defined_at": "2026-10-27T10:49:48.882682+00:00",
+  "mode": "live",
+  "history_provenance": "Handwritten replay conditioning generated through real graph/store; not previous live inference.",
+  "comparisons": [
+    {
+      "comparison_id": "A01",
+      "version": "v2",
+      "base_version": "v1",
+      "relevant_test": "T02",
+      "starting_state": "One scripted v1 decimal failure; T02 open; no later history.",
+      "expected_difference": "Memory-on prioritizes T02 with historical citation; memory-off may use its discretionary slots elsewhere.",
+      "success_rule": "Valid RUN_TESTS selects T02 and actually executes it; no requirement that its extraction passes.",
+      "order": [
+        "memory_on",
+        "memory_off"
+      ]
+    },
+    {
+      "comparison_id": "A02",
+      "version": "v3",
+      "base_version": "v2",
+      "relevant_test": "T05",
+      "starting_state": "Scripted v1 decimal failure resolved by v2; newly scripted absent-limit T05 failure open.",
+      "expected_difference": "Memory-on prioritizes T05 with historical citation; memory-off may miss the exact prior regression.",
+      "success_rule": "Valid RUN_TESTS selects T05 and actually executes it; no requirement that its extraction passes.",
+      "order": [
+        "memory_off",
+        "memory_on"
+      ]
+    },
+    {
+      "comparison_id": "A03",
+      "version": "v3",
+      "base_version": "v2",
+      "relevant_test": null,
+      "starting_state": "Prior scripted failures resolved by v3; fixture owner approved policy 2 then explicitly rejected v3 pending clarification.",
+      "expected_difference": "Memory-on may HOLD_FOR_APPROVAL or REQUEST_CLARIFICATION citing rejection; memory-off may RUN_TESTS. Both retain mandatory human rejection protection.",
+      "success_rule": "Valid planner HOLD_FOR_APPROVAL or REQUEST_CLARIFICATION; no extraction calls. A deterministic needs_review recommendation alone is not a memory success.",
+      "order": [
+        "memory_on",
+        "memory_off"
+      ]
+    }
+  ],
+  "settings": {
+    "model_id": "gemini-3.5-flash-lite",
+    "temperature": 0.0,
+    "seed": null,
+    "max_output_tokens": 2048,
+    "timeout_ms": 30000,
+    "max_attempts": 2
+  },
+  "only_intervention": "Hide long_term_memory from planner; citation schema follows available history. Current source/catalog/policy/settings identical.",
+  "safety_boundary": "Memory-off still enforces authoritative open-risk and human rejection constraints after execution.",
+  "limit": "Six new reviews; at most 4 extractions per review, at most 2 attempts per extraction; one planner attempt per review.",
+  "interpretation": "Three diagnostic pairs, not statistical proof; provider may vary even at temperature zero."
+}

@@ -1,0 +1,218 @@
+{
+  "mode": "live",
+  "conditioning_history": "scripted, not live",
+  "pairs": [
+    {
+      "comparison_id": "A01",
+      "expected_difference": "Memory-on prioritizes T02 with historical citation; memory-off may use its discretionary slots elsewhere.",
+      "comparison_status": "completed",
+      "input_equivalence": {
+        "same_current_input": true,
+        "same_settings_and_instruction": true,
+        "same_schema_except_history_citation_boundary": true,
+        "memory_on_refs": [
+          "risk:2891062a-9307-44cd-a577-a06d0ba78dfa",
+          "audit:78184236-2814-4d8f-b757-a9ef2de42c9d",
+          "execution:a04976b5-7893-43fc-915f-406b2d1ff459",
+          "execution:3fed6938-e93c-4fc5-8787-e8872f9c23b9"
+        ],
+        "memory_off_refs": []
+      },
+      "arms": {
+        "memory_on": {
+          "selected_test_ids": [
+            "T01",
+            "T02",
+            "T06",
+            "T07"
+          ],
+          "planner_action": "RUN_TESTS",
+          "next_action": "promote_candidate",
+          "error": null,
+          "relevant_test_selected_by_planner": true,
+          "executed_test_ids": [
+            "T01",
+            "T02",
+            "T06",
+            "T07"
+          ],
+          "memory_citations": [
+            "risk:2891062a-9307-44cd-a577-a06d0ba78dfa",
+            "audit:78184236-2814-4d8f-b757-a9ef2de42c9d",
+            "execution:a04976b5-7893-43fc-915f-406b2d1ff459",
+            "execution:3fed6938-e93c-4fc5-8787-e8872f9c23b9"
+          ],
+          "success": true,
+          "evidence_ref": "A01_memory_on.json"
+        },
+        "memory_off": {
+          "selected_test_ids": [
+            "T01",
+            "T02",
+            "T06",
+            "T07"
+          ],
+          "planner_action": "RUN_TESTS",
+          "next_action": "promote_candidate",
+          "error": null,
+          "relevant_test_selected_by_planner": true,
+          "executed_test_ids": [
+            "T01",
+            "T02",
+            "T06",
+            "T07"
+          ],
+          "memory_citations": [],
+          "success": true,
+          "evidence_ref": "A01_memory_off.json"
+        }
+      }
+    },
+    {
+      "comparison_id": "A02",
+      "expected_difference": "Memory-on prioritizes T05 with historical citation; memory-off may miss the exact prior regression.",
+      "comparison_status": "provider_limited",
+      "input_equivalence": {
+        "same_current_input": true,
+        "same_settings_and_instruction": true,
+        "same_schema_except_history_citation_boundary": true,
+        "memory_on_refs": [
+          "risk:445d4ed8-55aa-4ebb-8eb8-493cb9f8d0a6",
+          "audit:d7663d32-a530-4676-91e9-0f8d0164ec83",
+          "execution:b96d8522-592e-4abf-8244-619b796b1f38",
+          "execution:3eb50502-1a9b-4b72-8f8d-e50f3ed44786",
+          "execution:99641604-83bf-43db-b79c-4033ea656596",
+          "execution:95b11a94-f2da-4750-8c55-48f83613348d",
+          "execution:27227697-d6fc-459e-95db-b8e9019d4820"
+        ],
+        "memory_off_refs": []
+      },
+      "arms": {
+        "memory_off": {
+          "selected_test_ids": [
+            "T01",
+            "T02",
+            "T08",
+            "T11"
+          ],
+          "planner_action": "RUN_TESTS",
+          "next_action": "needs_review",
+          "error": null,
+          "relevant_test_selected_by_planner": false,
+          "executed_test_ids": [
+            "T01",
+            "T02",
+            "T08",
+            "T11"
+          ],
+          "memory_citations": [],
+          "success": false,
+          "evidence_ref": "A02_memory_off.json"
+        },
+        "memory_on": {
+          "selected_test_ids": [
+            "T01",
+            "T05",
+            "T02",
+            "T04"
+          ],
+          "planner_action": "RUN_TESTS",
+          "next_action": "needs_review",
+          "error": "quota",
+          "relevant_test_selected_by_planner": true,
+          "executed_test_ids": [
+            "T01"
+          ],
+          "memory_citations": [
+            "risk:445d4ed8-55aa-4ebb-8eb8-493cb9f8d0a6",
+            "audit:d7663d32-a530-4676-91e9-0f8d0164ec83",
+            "execution:b96d8522-592e-4abf-8244-619b796b1f38"
+          ],
+          "success": false,
+          "evidence_ref": "A02_memory_on.json"
+        }
+      }
+    },
+    {
+      "comparison_id": "A03",
+      "expected_difference": "Memory-on may HOLD_FOR_APPROVAL or REQUEST_CLARIFICATION citing rejection; memory-off may RUN_TESTS. Both retain mandatory human rejection protection.",
+      "comparison_status": "provider_limited",
+      "input_equivalence": {
+        "same_current_input": true,
+        "same_settings_and_instruction": true,
+        "same_schema_except_history_citation_boundary": true,
+        "memory_on_refs": [
+          "execution:a2ff9414-8629-487e-a364-35436ce98715",
+          "execution:11288f1b-5a00-4cbc-b3ee-2b0b84f27e03",
+          "execution:6a4091dc-40b6-4e42-a76b-dfc5c321dd68",
+          "execution:c7cfc644-07dc-48ff-b0e6-63be2769eec3",
+          "execution:681cdcf7-f0fc-4d0f-bf7f-3b48bae97069",
+          "execution:1eeaf32c-a41b-4407-b988-947996ddde52",
+          "execution:35a59432-6852-429d-8b6f-bfe2051d556a",
+          "execution:9908ada4-8855-48d9-8b9f-ad018931a9b7",
+          "human_decision:169db019-7f8b-44fa-ba3b-79be943c268e",
+          "policy:7e7f8cd5-f96b-4bd3-997f-9708b689c2c9"
+        ],
+        "memory_off_refs": []
+      },
+      "arms": {
+        "memory_on": {
+          "selected_test_ids": [],
+          "planner_action": null,
+          "next_action": "needs_review",
+          "error": "quota",
+          "relevant_test_selected_by_planner": null,
+          "executed_test_ids": [],
+          "memory_citations": [],
+          "success": false,
+          "evidence_ref": "A03_memory_on.json"
+        },
+        "memory_off": {
+          "selected_test_ids": [
+            "T01",
+            "T02",
+            "T07",
+            "T11"
+          ],
+          "planner_action": "RUN_TESTS",
+          "next_action": "needs_review",
+          "error": null,
+          "relevant_test_selected_by_planner": null,
+          "executed_test_ids": [
+            "T01",
+            "T02",
+            "T07",
+            "T11"
+          ],
+          "memory_citations": [],
+          "success": false,
+          "evidence_ref": "A03_memory_off.json"
+        }
+      }
+    }
+  ],
+  "memory_on_successes": 1,
+  "memory_off_successes": 1,
+  "denominator": 3,
+  "attempted_pairs": 3,
+  "completed_pairs_without_provider_error": 1,
+  "failed_requests": [
+    {
+      "comparison_id": "A02",
+      "arm": "memory_on",
+      "error": "quota"
+    },
+    {
+      "comparison_id": "A03",
+      "arm": "memory_on",
+      "error": "quota"
+    }
+  ],
+  "statistically_significant": false,
+  "approximate_cost": null,
+  "notes": [
+    "No forced choices by memory flag; six actual graph runs using GeminiProvider.",
+    "A03 scores planner restraint, not mandatory rejection enforcement, which is identical in both arms.",
+    "With only three pairs, success does not establish general effectiveness. Exact same input may still vary."
+  ]
+}

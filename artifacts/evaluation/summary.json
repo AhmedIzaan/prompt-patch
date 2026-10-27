@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-10-27T11:01:07.745600+00:00",
+  "passed_scenarios": 10,
+  "total_scenarios": 10,
+  "overall_pass_rate": 1.0,
+  "scenario_mode": "offline-replay/control",
+  "memory_on_successes": 1,
+  "memory_off_successes": 1,
+  "ablation_denominator": 3,
+  "ablation_status": "executed",
+  "attempted_pairs": 3,
+  "completed_pairs_without_provider_error": 1,
+  "ablation_mode": "live current reviews, scripted conditioning history",
+  "factual_claims_correct": 5,
+  "factual_claims_sampled": 5,
+  "retry_duplicate_actions": 0,
+  "retry_measurement_scope": "S07 replay timeout injection; actual SQL over persisted results.",
+  "failed_scenarios": [],
+  "not_run_scenarios": [],
+  "failed_ablation_requests": [
+    {
+      "comparison_id": "A02",
+      "arm": "memory_on",
+      "error": "quota"
+    },
+    {
+      "comparison_id": "A03",
+      "arm": "memory_on",
+      "error": "quota"
+    }
+  ],
+  "failed_ablation_criteria": [
+    {
+      "comparison_id": "A02",
+      "arm": "memory_off"
+    },
+    {
+      "comparison_id": "A02",
+      "arm": "memory_on"
+    },
+    {
+      "comparison_id": "A03",
+      "arm": "memory_on"
+    },
+    {
+      "comparison_id": "A03",
+      "arm": "memory_off"
+    }
+  ],
+  "historical_failure_examples": [
+    {
+      "ref": "../demo/cycle_1.json",
+      "outcome": "Real v1 T02/T06 extraction failures; revise."
+    },
+    {
+      "ref": "../demo/cycle_3_observed_failure.json",
+      "outcome": "Earlier v3 planner deadline failure; no extraction or successful review."
+    }
+  ],
+  "teacher_approval": "unverified",
+  "release_approval": "approved",
+  "statistical_significance_claimed": false,
+  "limits": [
+    "Ten scenarios measure controls with scripted provider, not live accuracy.",
+    "Three pairs are diagnostic; no statistical or broad superiority claim.",
+    "Conditioning history is scripted replay; current comparison model requests are live.",
+    "Source/diffs may independently identify regressions even without history.",
+    "Human rejection/open-risk enforcement remains active in both arms.",
+    "Costs unknown; one worker/cycle; no exactly-once remote billing guarantee."
+  ]
+}

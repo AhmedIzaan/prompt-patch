@@ -4,12 +4,13 @@ PromptPatch is a persistent memory-driven agent for testing settlement
 measurement extraction prompts across versions. This fictional domain example
 is for regression testing, not engineering judgment.
 
-**Current status: Modules 00–09 complete.** The package includes the persistent
+**Current status: Modules 00–10 complete.** The package includes the persistent
 SQLite domain store, curated Git fixtures, audited tools, real Gemini execution,
 and a single LangGraph coordinator with SQLite checkpoints. A typed planner
 chooses actual tests; deterministic guards validate the selection and score
-results. Developer release approval remains separate and pending.
-The full regression suite passes **232 tests** (one existing SDK deprecation
+results. The developer approved the successful demo v3 review; release decisions
+remain separate from agent recommendations.
+The full regression suite passes **249 tests** (one existing SDK deprecation
 warning). The review CLI supports explicit approvals/rejections, policy corrections,
 status/memory/log views, and checkpoint resume. The full three-cycle
 live demonstration, explicit restart and approved policy correction are verified.
@@ -491,7 +492,7 @@ Replay's plans and responses are handwritten in
 approvals are distinct from actual developer decisions. Live outcomes can differ;
 recommendations follow observed validator results, not the expected narrative.
 See the live and replay artifact READMEs for actual observations. Formal
-reliability/scenario/ablation work awaits Modules 09–10.
+reliability/scenario/ablation evidence is recorded in Modules 09–10.
 
 
 ## Reliability/security checks and telemetry (Module 09)
@@ -519,5 +520,27 @@ Read the [control and retention semantics](docs/RELIABILITY_CONTROLS.md) and
 [actual evidence](artifacts/reliability/README.md). Offline mocks/replay are clearly
 separate from the one real adversarial extraction check. Local actor strings are
 not authentication, old data is not automatically erased, and this is not a
-claim of universal injection/secret protection. Formal Module 10 evaluation is
-still pending.
+claim of universal injection/secret protection. Module 10 evaluation follows below.
+
+
+## Formal evaluation (Module 10)
+
+The [scenario protocol](docs/TEST_SCENARIOS.md) documents reproducible commands
+and the [measured results](artifacts/evaluation/RESULTS.md) link machine-readable
+evidence. All **10/10 offline control scenarios** passed; **5/5 factual claims**
+were checked against sources and **0 duplicate logical actions** occurred under
+the replay retry injection. These are not live accuracy claims.
+
+Six live Gemini reviews attempted three memory-on/off pairs from identical
+paired snapshots with scripted conditioning histories. The predeclared combined
+selection/execution criterion scored **1/3 with memory and 1/3 without memory**.
+Quota errors limited A02/A03 memory-on; only one pair completed without provider
+errors. A02 memory-on selected historical T05 while memory-off did not, but the
+quota prevented its execution. No statistical advantage is claimed and errors
+remain in the reports. Completed/failed arms are reused without resampling.
+
+Actual v3 release approval is recorded separately in
+[the approval receipt](artifacts/evaluation/release_approval.json); the earlier
+Module 08 exports retain their historically pending state. Teacher approval
+remains unverified. Module 11's report, packaging and viva script require
+separate authorization; nothing has been pushed.

@@ -1,0 +1,60 @@
+{
+  "runtime": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation",
+  "protocol_sha256": "35dfeb9be0cbe644712eb0043ea3a098d96678e45070f43809fea6a82c269015",
+  "pairs": {
+    "A01": {
+      "cycle_id": "93876806-ec29-4db2-9e7c-33974396e95f",
+      "repo": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A01/baseline/git",
+      "base_version_id": "df94eb22-cf48-46f3-9085-f7d259b59a74",
+      "arms": {
+        "memory_on": {
+          "db": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A01/memory_on/domain.sqlite3",
+          "checkpoint": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A01/memory_on/checkpoints.sqlite3",
+          "sha256_before_run": "c0e27246ee497be6496121607920d2e9e5c877abf0ec2cc405bc02484ff2a4cd"
+        },
+        "memory_off": {
+          "db": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A01/memory_off/domain.sqlite3",
+          "checkpoint": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A01/memory_off/checkpoints.sqlite3",
+          "sha256_before_run": "c0e27246ee497be6496121607920d2e9e5c877abf0ec2cc405bc02484ff2a4cd"
+        }
+      },
+      "starting_state_digest": "9f4036a5ed5eba4da438c0091218abbc0391e92ac5497f5780d90f805861aff0"
+    },
+    "A02": {
+      "cycle_id": "056b9088-971a-41e5-a094-487568d70a84",
+      "repo": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A02/baseline/git",
+      "base_version_id": "3b93e9f2-4499-4c77-8136-634b05aba2d7",
+      "arms": {
+        "memory_on": {
+          "db": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A02/memory_on/domain.sqlite3",
+          "checkpoint": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A02/memory_on/checkpoints.sqlite3",
+          "sha256_before_run": "a6311ac92de6b9fff2a15534ea3a7bc79f4e4f2af588930fdf2e10933cc7d001"
+        },
+        "memory_off": {
+          "db": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A02/memory_off/domain.sqlite3",
+          "checkpoint": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A02/memory_off/checkpoints.sqlite3",
+          "sha256_before_run": "a6311ac92de6b9fff2a15534ea3a7bc79f4e4f2af588930fdf2e10933cc7d001"
+        }
+      },
+      "starting_state_digest": "a0c80b0e891f20743af40b1c2448b7847552eb8a448fd88e6dcb731987d45c96"
+    },
+    "A03": {
+      "cycle_id": "71fdc4e2-8d81-4872-89f1-51ffb38516ec",
+      "repo": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A03/baseline/git",
+      "base_version_id": "9d9ba5fc-f180-4849-aa6d-e257ab43bbb6",
+      "arms": {
+        "memory_on": {
+          "db": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A03/memory_on/domain.sqlite3",
+          "checkpoint": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A03/memory_on/checkpoints.sqlite3",
+          "sha256_before_run": "e03b6b9ffcfa337290c134b1e4f7e0c6619999a6b24a7c561f065f1d8752d152"
+        },
+        "memory_off": {
+          "db": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A03/memory_off/domain.sqlite3",
+          "checkpoint": "/mnt/data2/Documents/6thSem/agentic/ass2/promptpatch/data/module10/ablation/A03/memory_off/checkpoints.sqlite3",
+          "sha256_before_run": "e03b6b9ffcfa337290c134b1e4f7e0c6619999a6b24a7c561f065f1d8752d152"
+        }
+      },
+      "starting_state_digest": "d73d0b763f05bc19c47b6f583e2ce547e03d615bbac66286b858759e05afa2b9"
+    }
+  }
+}

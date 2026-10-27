@@ -1,0 +1,21 @@
+{
+  "full_suite_tests": 249,
+  "full_suite_failures": 0,
+  "full_suite_skipped": 0,
+  "full_suite_elapsed_seconds": 194.607,
+  "focused_tests_before_final_addition": {
+    "passed": 16,
+    "elapsed_seconds": 27.69
+  },
+  "additional_paired_context_guard": {
+    "passed": 1,
+    "elapsed_seconds": 3.55
+  },
+  "warning": "One existing Google SDK Python _UnionGenericAlias deprecation warning.",
+  "command": ".venv/bin/python -m pytest -q --junitxml=/tmp/promptpatch-module10-final.xml",
+  "after_csv_lf_normalization": {
+    "test": "tests/test_scenarios.py::test_scenario_exports_and_pass_rate_are_measured",
+    "passed": 1,
+    "elapsed_seconds": 8.98
+  }
+}

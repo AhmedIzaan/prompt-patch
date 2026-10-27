@@ -1,7 +1,7 @@
 # PromptPatch implementation status
 
 Last updated: 2026-10-27 (Asia/Karachi).
-Authorized scope: **Modules 00–09**. Modules 10–11 require separate explicit authorization.
+Authorized scope: **Modules 00–10**. Module 11 requires separate explicit authorization.
 The user authorized local commits from Module 01 onward; the user will push.
 
 ## Execution contract
@@ -10,7 +10,7 @@ The user authorized local commits from Module 01 onward; the user will push.
 - Inspect → explain intent → edit → run required checks → inspect results → record evidence → stop.
 - Preserve existing work; no commits, pushes, submission, or unrelated changes without explicit approval.
 - Record actual results only. Distinguish implemented, tested, pending, and blocked work.
-- Stop after each module. Module 09 is verified; next approval required: `START MODULE 10`.
+- Stop after each module. Module 10 is verified; next approval required: `START MODULE 11`.
 
 ## Module checklist
 
@@ -26,10 +26,12 @@ Allowed statuses: `PENDING`, `IN_PROGRESS`, `DONE`, `BLOCKED`. A `DONE` entry re
 | 05 | Provider adapter, executor, deterministic validator | DONE | 2026-10-25 | 158 tests passed; actual Gemini request and SQLite result verified; fresh-process reuse makes no additional call | Live `gemini-3.5-flash-lite` v3/T02 passed; see follow-up evidence below |
 | 06 | LLM planner and persistent LangGraph workflow | DONE | 2026-10-25 | 180 tests; real planner and selected executions; matched live memory diagnostic; strict SQLite checkpoints and fresh-process reuse | Live planner verified; approval pending; see evidence below |
 | 07 | Workflow CLI, approvals, corrections | DONE | 2026-10-25 | 200 tests; real live CLI and fresh-process reuse; offline approval/correction and atomic-request tests | Live approval pending; full Module 08 demo not started |
-| 08 | Three cycles and full process restart | DONE | 2026-10-26 | 206 tests; three real live cycles; approved policy correction; fresh process and no reseed; verified artifacts | Earlier HTTP failures retained; prompt release approval pending; Module 09 not started |
-| 09 | Reliability, security, isolation, retries | DONE | 2026-10-27 | 232 tests; 26 reproducible controls; one real malicious-input check; zero duplicate results; credential/telemetry verification | Formal Module 10 evaluation pending; no release/teacher approval claimed |
-| 10 | Ten scenarios, three memory comparisons, measurements | PENDING | — | Not run | No evaluation results claimed |
+| 08 | Three cycles and full process restart | DONE | 2026-10-26 | 206 tests; three real live cycles; approved policy correction; fresh process and no reseed; verified artifacts | Historical HTTP failures retained; actual v3 release approval recorded in Module 10 |
+| 09 | Reliability, security, isolation, retries | DONE | 2026-10-27 | 232 tests; 26 reproducible controls; one real malicious-input check; zero duplicate results; credential/telemetry verification | Formal evaluation recorded in Module 10; teacher approval unverified |
+| 10 | Ten scenarios, three memory comparisons, measurements | DONE | 2026-10-27 | 249 tests; 10/10 offline scenarios; six live attempts; 1/3 vs 1/3; 5/5 facts; retry duplicates 0 | Quota limited two live arms; only one pair completed without provider errors; evidence retained |
 | 11 | Reproducibility, report, submission and demo docs | PENDING | — | Not run | Report/demo/package pending; no publishing authorized |
+
+Current approval state: the user approved the successful demo v3 release in Module 10. Teacher approval remains unverified. Older pending-approval statements below describe historical module snapshots.
 
 ## Module 00 findings
 
@@ -1190,3 +1192,132 @@ rather than arbitrary-secret detection, and no automatic erasure of legacy data.
 **Blocked:** None within Module 09. Nothing pushed.
 
 MODULE 09 COMPLETE — STOPPED. Awaiting: START MODULE 10
+
+
+## Module 10 — Formal evaluation — 2026-10-27
+
+Status: **DONE** for evaluation implementation, executed measurements and honest
+evidence reporting. User explicitly authorized Module 10, local commits, the
+successful v3 release approval, and subsequently the six live Gemini reviews
+with their exact fictional payload/destination. Module 11 was not started.
+
+### Implemented and verified
+
+- Added `scripts/evaluation_support.py`, `run_scenarios.py`, `run_ablation.py`
+  and `evaluate_evidence.py`. No production planner, evaluator, policy, schema,
+  provider or dependency version was changed to obtain a favorable result.
+- Ten distinct isolated scenario/control workflows execute real Git/SQLite/graph
+  code with an explicitly handwritten replay provider. JSON/CSV contain all
+  required columns. Per-scenario exports retain actual states, domain rows,
+  operation attempts, timestamps and audit events. Tests intentionally inject a
+  failing scenario and verify it stays FAIL rather than inflating the score.
+- S03 launches two actual subprocesses: first exits, second has a different PID,
+  reloads strict checkpoints and historical risk, skips completed calls, and
+  continues without reseeding. Original case IDs and 13 import events remain.
+- S04 tests identical 4.505 output against 4.5: pass at 0.01 mm, fail at 0.001 mm
+  after separate explicit fixture-owner approval; pending/old/new policy retained.
+- S07 records timeout and successful retry, re-entry without additional calls,
+  one logical extraction and SQL duplicate count 0. Replay attempts are not
+  represented as an actual Gemini outage. S10 shows remembered synthetic
+  rejection preventing later promotion despite passing extraction.
+- Protocol expectations and metrics were frozen before comparison requests.
+  Each pair starts from byte-identical SQLite backups. Current prompt/diff,
+  catalog/source IDs, approved policy, model/settings/instructions are equivalent;
+  only long-term planner history and its derived citation schema differ.
+- Histories are explicitly scripted conditioning, never presented as live prior
+  inference. All six current comparison attempts use real Gemini. Exact planner
+  instructions/context/schema, settings, raw responses, execution evidence and
+  error metadata are exported. No memory-flag-based test-choice branch exists.
+- Added `docs/TEST_SCENARIOS.md`, 17 formal/measurement/guard tests, and generated
+  `artifacts/evaluation/RESULTS.md` plus JSON/CSV, claims, telemetry, JUnit and
+  verification. README now links actual measured results and current approval.
+
+### Actual results, including failures
+
+| Measurement | Observed |
+|---|---|
+| Scenario/control pass rate | **10/10 (100%)**, offline replay; not live extraction accuracy |
+| Memory-on combined selection/execution success | **1/3** |
+| Memory-off combined selection/execution success | **1/3** |
+| Paired reviews attempted / pairs without provider error | **6 arms / 3 pairs**, only **1** fully provider-error-free pair |
+| Five factual claims | **5/5** correct against immutable output/source/event and real Git read |
+| Duplicate logical actions under retry | **0**, measured SQL and telemetry |
+| Representative live A01 memory-on | **5** actual model calls; **6190** tokens; **15732.974 ms** summed logical latency; **20767.420 ms** wall time; **0.943 s** local CPU |
+| Cost / thinking token count | unknown / unknown; not fabricated as zero |
+| Cached driver rerun | All six original exports reused; **0** extra model starts/results |
+
+A01 both arms selected/executed T01,T02,T06,T07 and passed the predeclared metric.
+A02 memory-on selected T01,T05,T02,T04, while memory-off selected T01,T02,T08,T11.
+The memory-on arm executed only T01 before quota errors exhausted bounded retries
+for T05. Selecting T05 alone did not meet the predeclared execution criterion.
+A03 memory-on's planner returned quota; no planner decision or restraint is
+invented. Memory-off selected T01,T02,T07,T11 and needed review. A03's metric
+checks actual planner HOLD/CLARIFICATION, not the mandatory rejection guard that
+remains active in both arms. Neither arm met it. Quota-limited arms stay in the
+three-case denominator, with failed-request and incomplete-pair details explicit.
+No calls were resampled to improve the score, and no statistical superiority is
+claimed. These provider limitations are evaluation findings; all application
+regression/scenario tests pass. Earlier live v1 failures and v3 deadline failures
+remain linked as real failure examples.
+
+### Actual approval and disclosure
+
+User release approval was persisted as human decision
+`7c70c883-f2cd-4f9a-9642-afc9f56414d4`, actor `developer`, at
+`2026-10-27T10:45:58.823608+00:00`, for successful v3 cycle
+`module08-c3-timeout-30000`. Read-only workflow status now shows `approved`.
+The historical Module 08 JSON snapshots still correctly show then-pending state;
+`artifacts/evaluation/release_approval.json` exports the current immutable receipt
+and audit event. No deployment, prompt edit or Git push occurred. Fixture-owner
+approvals/rejections and the prior actual tolerance correction are separate.
+Teacher approval remains **unverified**.
+
+Automatic review initially rejected external requests because it required explicit
+payload/destination approval. The user then selected **“Approve these six Gemini
+reviews”** for the fictional cases/demo prompts/policy/synthetic history sent to
+`generativelanguage.googleapis.com`. That resolved the rejection; consent is
+recorded separately in `ablation/authorization.json`. Only the six bounded
+reviews ran. A safe temporary wrapper parsed two allowlisted `.env` values as
+configuration data without printing or sourcing the file. Secrets, wrappers and
+runtime DBs remain uncommitted. Codex assisted with evaluation code/docs; the
+student still needs to review and understand the methods and limitations.
+
+### Commands/checks actually executed
+
+| Command/check | Result |
+|---|---|
+| `.venv/bin/python -m scripts.run_scenarios` | PASS: **10/10**, actual per-scenario JSON/CSV and domain evidence |
+| `.venv/bin/python -m pytest tests/test_scenarios.py -q` before final added guard | PASS: **16 tests in 27.69 s** |
+| Dedicated paired-context/rejection-guard test | PASS: **1 test in 3.55 s**; same actual current context and rejection enforcement in both arms |
+| `.venv/bin/python -m scripts.run_ablation prepare --model gemini-3.5-flash-lite` | PASS: predeclared protocol; three initially identical paired snapshots; no API calls |
+| Authorized safe wrapper → `scripts.run_ablation run` | All six live attempts recorded; quota on A02/A03 memory-on retained; **1/3 vs 1/3** |
+| Same driver re-entry with saved exports | PASS: reused results, **0** extra calls or result rows |
+| `.venv/bin/python -m scripts.evaluate_evidence` | PASS: actual reports, **5/5 facts**, representative telemetry and honest failures |
+| First full suite before final added guard | PASS: **248 tests in 195.66 s** |
+| Final `.venv/bin/python -m pytest -q --junitxml=/tmp/promptpatch-module10-final.xml` | PASS: **249 tests**, elapsed recorded below; one existing SDK warning; zero failed/skipped |
+| Independent evidence verifier | PASS: scenario refs/IDs, 5 facts, frozen protocol hash, initial paired hashes, SQLite integrity/FKs/duplicates, configured key absent from exports/runtime |
+| `.venv/bin/python -m pip check` | PASS: no broken requirements |
+| `.venv/bin/python -m compileall -q src scripts tests` | PASS |
+| `git diff --check`, unchanged master-plan SHA-256 | PASS |
+
+The first staged whitespace check flagged the CSV writer's default CRLF line
+endings. The writer and exported CSV were normalized to LF, preserving all data;
+the export test (1 passed in 8.98 s) and staged check were rerun successfully.
+
+Final full-suite elapsed: **194.61 seconds**.
+JUnit and measured results are preserved in `artifacts/evaluation/tests/`.
+
+**Implemented/tested:** Module 10 evidence tooling, ten controls, six live
+comparison attempts with paired equivalence, explicit outcomes/errors, sampled
+claims, retry count, representative actual resources and full regression suite.
+**Known limitations:** only one complete provider-error-free pair; no demonstrated
+advantage in the predeclared aggregate score; no A03 live memory-on decision due
+to quota; diagnostic sample size; synthetic conditioning; costs/teacher approval
+unknown. Further empirical runs were not silently added to the six-review grant.
+**Pending:** Module 11 report/reproducibility/package/viva deliverables and teacher
+approval. Existing unstaged `.env.example` deletion is preserved and excluded
+from commits. No unrelated files, credentials or databases staged. Nothing pushed.
+**Blocked:** No implementation/test blocker; observed provider limits remain
+explicitly reported rather than marked passing comparisons.
+
+MODULE 10 COMPLETE — STOPPED. Awaiting: START MODULE 11

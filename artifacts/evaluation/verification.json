@@ -1,0 +1,359 @@
+{
+  "scenario_rows": 10,
+  "passing_scenarios": 10,
+  "correct_factual_claims": 5,
+  "credential_scan": "PASS; configured key absent, values never printed",
+  "sqlite_checks": [
+    {
+      "path": "data/module10/scenarios/S07/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S07/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S03/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S03/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S04/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S04/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S10/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S10/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S08/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S08/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S02/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S02/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S05/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S05/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S01/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S01/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S06/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S06/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios/S09/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios/S09/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S07/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S07/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S03/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S03/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S04/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S04/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S10/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S10/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S08/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S08/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S02/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S02/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S05/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S05/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S01/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S01/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S06/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S06/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/scenarios-dev/S09/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/scenarios-dev/S09/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A01/memory_off/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A01/memory_off/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A01/memory_on/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A01/memory_on/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A01/baseline/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A01/baseline/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A03/memory_off/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A03/memory_off/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A03/memory_on/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A03/memory_on/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A03/baseline/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A03/baseline/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A02/memory_off/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A02/memory_off/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A02/memory_on/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A02/memory_on/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    },
+    {
+      "path": "data/module10/ablation/A02/baseline/domain.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": 0
+    },
+    {
+      "path": "data/module10/ablation/A02/baseline/checkpoints.sqlite3",
+      "integrity": "ok",
+      "foreign_key_errors": 0,
+      "duplicate_results": null
+    }
+  ],
+  "ablation_protocol_hash_verified": true,
+  "pairs_initially_identical": true,
+  "ablation_run_status": "executed"
+}

@@ -1,0 +1,32 @@
+{
+  "cached_driver_reentry": "PASS",
+  "new_model_call_starts": 0,
+  "new_execution_rows": 0,
+  "per_arm_current_counts": {
+    "A01_memory_on": {
+      "model_call_starts": 5,
+      "all_results": 6
+    },
+    "A01_memory_off": {
+      "model_call_starts": 5,
+      "all_results": 6
+    },
+    "A02_memory_on": {
+      "model_call_starts": 5,
+      "all_results": 6
+    },
+    "A02_memory_off": {
+      "model_call_starts": 5,
+      "all_results": 9
+    },
+    "A03_memory_on": {
+      "model_call_starts": 1,
+      "all_results": 8
+    },
+    "A03_memory_off": {
+      "model_call_starts": 5,
+      "all_results": 12
+    }
+  },
+  "method": "Reran driver with completed exports; actual DB counts equal immutable first-arm exported counts. Initial export itself was not overwritten."
+}
